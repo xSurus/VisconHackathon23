@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/material": "^5.10.9",
+    "@mui/styles": "^5.10.9",
+    "@mui/system": "^5.10.9",
     "@reduxjs/toolkit": "^1.8.6",
     "formik": "^2.2.9",
     "next": "12.3.1",
