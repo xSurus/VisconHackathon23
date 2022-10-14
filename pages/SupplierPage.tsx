@@ -1,13 +1,9 @@
 import * as React from 'react';
 import {makeStyles} from "@mui/styles";
 import {Grid} from "@mui/material";
+import TopBar from "../source/components/SupplierComponents/TopBar";
 
 const useStyles =  makeStyles({
-    container: {
-    },
-    btn: {
-
-    }
 })
 
 const SupplierPage = () => {
@@ -15,13 +11,7 @@ const SupplierPage = () => {
     const classes = useStyles();
 
     return (
-        <Grid container>
-            <Grid item>
-                <div className={classes.container}>
-                    TEST
-                </div>
-            </Grid>
-        </Grid>
+        <TopBar/>
     )
 }
 
