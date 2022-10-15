@@ -3,21 +3,25 @@ import {Button, Grid, IconButton} from '@mui/material'
 import * as React from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {useRouter} from 'next/router';
+import { textAlign } from '@mui/system';
 
 const useStyles = makeStyles({
     container: {
         backgroundColor: 'white',
         padding: '0px'
+        
     },
     button: {
         color: 'black',
-        padding: '2em',
-        fontSize: '18px'
+        padding: '1em',
+        fontSize: '18px',
+        textAlign: 'center'
     },
     button_inactive: {
         color: 'gray',
-        padding: '2em',
-        fontSize: '18px'
+        padding: '1em',
+        fontSize: '18px',
+        textAlign: 'center'
     }
 });
 
