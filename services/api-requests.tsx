@@ -28,9 +28,3 @@ export const SendSupplierRegistration = (data: any) => {
     console.log('lol');
     return result;
 }
-
-
-export const FetchCategories = async () => {
-  const result = await axios.get('/api/category');
-  return result.data;
-}

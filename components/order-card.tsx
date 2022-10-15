@@ -52,16 +52,8 @@ const OrderCard = (props: OrderCardProps) => {
                     <Typography gutterBottom variant="h5" component="div" style={{}}>
                         Order Number: {`${orderNumber}`}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed est finibus eros iaculis
-                        pellentesque.
-                        Nulla facilisi. Quisque a quam ac nisi tristique laoreet. Aliquam eget eros vitae turpis
-                        sagittis rutrum vitae et justo.
-                        Morbi et nisl euismod, dignissim urna vel, rhoncus magna. Curabitur justo neque, cursus eu lorem
-                        id, vehicula sagittis ligula.
-                    </Typography>
                     <Typography gutterBottom variant="h5" component="div">
-                        {`${seeker}`}
+                        Ordered by {`${seeker}`}
                     </Typography>
                     <Chip 
                         label= { orderStatusMessage.label } 
