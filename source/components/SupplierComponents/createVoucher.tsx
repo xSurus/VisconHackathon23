@@ -16,12 +16,13 @@ const CreateVoucher = () =>{
 	    name: "",
         description:"",
 	    price_per_voucher: 0,
+        available:0,
 	    /** Can vanish in the future */
 	    supplier: ({} as Supplier),
 	    /** Can be empty of course, check */
 	    categories: []
     })
-
+    
     const [open, setOpen] = React.useState(false);
     const allCategories = [
         'Pog',
@@ -135,16 +136,16 @@ const CreateVoucher = () =>{
         aria-label="description" 
         placeholder='Description'/>
         
-        {/*
+        
         <FormControl required sx={{ m: 2, width: '20ch' }} >
           <InputLabel> Amount </InputLabel>
           <OutlinedInput
-            value={offer.amount}
+            value={offer.available}
             label="Amount"
-            onChange = {handleChange('amount')}
+            onChange = {handleChange('available')}
           />
         </FormControl>
-    */}
+
         <FormControl required sx={{ m: 2, width: '20ch' }} >
           <InputLabel> Price per Voucher </InputLabel>
           <OutlinedInput
@@ -160,7 +161,7 @@ const CreateVoucher = () =>{
             <input form="voucher" hidden accept="image/*"  type="file" />
         </Button>
 
-        <Button type="submit" onClick={handleSubmit} sx={{m:3}} variant="contained">
+        <Button onClick={handleSubmit} sx={{m:3}} variant="contained">
             Sumbmit
         </Button>
 
