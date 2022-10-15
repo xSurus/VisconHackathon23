@@ -8,7 +8,7 @@ type DeleteQuery = { id: number };
 type PutQuery = { id: number };
 
 function isGetQuery(query: any): query is GetQuery {
-    return (!query || (typeof query.id === 'string' && !isNaN(query.id)));
+    return (!Object.keys(query).length || (typeof query.id === 'string' && !isNaN(query.id)));
 }
 
 function isDeleteQuery(query: any): query is DeleteQuery {
@@ -32,7 +32,7 @@ export default async function handler(
         case 'GET':
             if (!isGetQuery(query)) break;
             try {
-                let result: Seeker[] = (!query
+                let result: Seeker[] = (!Object.keys(query).length
                     ? await db.query("SELECT * FROM Seeker")
                     : await db.query("SELECT * FROM Seeker WHERE id = $1::integer", [query.id])).rows;
                 if (result.length == 0) return res.status(404).json(undefined);
