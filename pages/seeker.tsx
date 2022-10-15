@@ -1,28 +1,20 @@
-import {Button, Grid, Icon, IconButton } from "@mui/material";
-import { useState } from "react";
+import {Button, Grid, Icon, IconButton} from "@mui/material";
+import {useState} from "react";
+import SeekerOffers from "../components/seeker-offers";
 import SeekerOrders from "../components/seeker-orders";
+import CompanyVoucher from "../components/offer-card";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LoginForm from "../components/login-form";
 import styled from "@emotion/styled";
-import SeekerOffers from "../components/seeker-offers";
-//
-// const useStyles = makeStyles({
-//     container_content: {
-//         margin: 2,
-//     },
-//     btn: {
-//         margin: 10,
-//     },
-//     headertext: {
-//         fontSize: 20,
-//         fontWeight: 600,
-//         textAlign: 'center',
-//     },
-//     body : {
-//         backgroundColor: '#f7f7f7',
-//         padding: 20,
-//     },
-// })
+
+const SeparatorBar = styled(Grid)`
+  color: #696969;
+  opacity: 0.5;
+  margin-bottom: 0.3em;
+  margin-right: 1em;
+  margin-left: 1em;
+`
+
 const Seeker = () => {
 
     const [page, showPage] = useState(<SeekerOrders/>);
@@ -46,32 +38,57 @@ const Seeker = () => {
         margin-right: 0.5em;
     `
     return (
-        <Grid>
-            <HeaderM container >
-                <HeaderText item xs={4} >
+        <Grid container>
+            <Grid item container justifyContent={'center'} alignItems={'center'} style={{backgroundColor: 'darkgrey'}}>
+                <Grid>
                     <Button
-                        onClick={() => {showPage(<SeekerOrders/>); setWhichPage(1)}}
-                        style={{color: whichPage == 1 ? 'darkred' : 'rgba(0,0,0,1)', cursor:'pointer', display: 'inline', fontSize: '1.5em'}}>
+                        onClick={() => {
+                            showPage(<SeekerOrders/>);
+                            setWhichPage(1)
+                        }}
+                        style={{
+                            color: whichPage === 1 ? 'darkred' : 'rgba(0,0,0,1)',
+                            cursor: 'pointer',
+                            display: 'inline',
+                            fontSize: '1.5em'
+                        }}>
                         Orders
                     </Button>
-                </HeaderText>
-                <HeaderText item xs={4}>
-                <Button
-                    onClick={() => {showPage(<SeekerOffers/>); setWhichPage(2)}}
-                    style={{color: whichPage == 2 ? 'darkred' : 'rgba(0,0,0,1)', cursor:'pointer', display: 'inline', fontSize: '1.5em'}}>
-                    Offers
-                </Button>
-                </HeaderText>
-                <HeaderText item xs={4}>
+                </Grid>
+                <SeparatorBar>
+                    |
+                </SeparatorBar>
+                <Grid item>
+                    <Button
+                        onClick={() => {
+                            showPage(<SeekerOffers/>);
+                            setWhichPage(2)
+                        }}
+                        style={{
+                            color: whichPage === 2 ? 'darkred' : 'rgba(0,0,0,1)',
+                            cursor: 'pointer',
+                            display: 'inline',
+                            fontSize: '1.5em'
+                        }}>
+                        Offers
+                    </Button>
+                </Grid>
+                <SeparatorBar>
+                    |
+                </SeparatorBar>
+                <Grid item>
                     <IconButton
-                        onClick={() => {showPage(<LoginForm/>); setWhichPage(3)}}
-                        style={{color: whichPage == 3 ? 'darkred' : 'rgba(0,0,0,1)', cursor:'pointer', display: 'inline', fontSize: '1.5em'}}>
-                        <AccountBoxIcon />
+                        onClick={() => {
+                            showPage(<LoginForm/>);
+                            setWhichPage(3)
+                        }}
+                        style={{color: whichPage === 3 ? 'darkred' : 'rgba(0,0,0,1)', fontSize: '1.5em'}}>
+                        <AccountBoxIcon/>
                     </IconButton>
-                </HeaderText>
-            </HeaderM>
-            <Grid container>
-            { page }
+                </Grid>
+            </Grid>
+            <Grid container style={{marginTop: whichPage === 3 ? '-3em' : 0}}>
+                {page}
             </Grid>
         </Grid>
     )
