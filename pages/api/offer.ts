@@ -22,6 +22,7 @@ type PostQuery = {
 	supplier_id: number;
 	/** categories of the offer */
 	categories: Category[];
+	description: string;
 	/** Value of each voucher */
 	price: number;
 	/** Amount of vouchers in the offer */
@@ -66,72 +67,75 @@ function isDeleteQuery(query: any): query is DeleteQuery {
 
 type Data = Offer[] | undefined;
 
+export async function getOfferById(id: number): Promise<Offer | undefined> {
+	await db.query("BEGIN");
+	let res_offer = await db.query(
+		"SELECT * FROM Offer AS O, Supplier AS S, Address as A, Billing as B WHERE O.id = $1::integer AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing",
+		[id]
+	);
+	console.log(res_offer);
+	let res_categories = await db.query(
+		"SELECT category_name FROM Offer_Category WHERE offer_id = $1::integer",
+		[id]
+	);
+
+	let res_price = await db.query(
+		"SELECT price FROM Voucher WHERE offer_id = $1::integer LIMIT 1",
+		[id]
+	);
+	const price_per_voucher = res_price.rows[0].price;
+	await db.query("COMMIT");
+
+	console.log(res_offer.rows[0]);
+
+	if (res_offer.rowCount === 0) return undefined;
+	const row = res_offer.rows[0];
+	const categories = res_categories.rows.map((r) => r.category_name);
+	return {
+		description: row.description,
+		name: row.name,
+		categories,
+		id: row.id,
+		price_per_voucher,
+		supplier: {
+			img: row.img,
+			name: row.name,
+			homepage: row.homepage,
+			email: row.email,
+			id: row.supplier_id,
+			address: {
+				id: row.address_id,
+				street: row.street,
+				cap: row.cap,
+				city: row.city,
+				country: row.country,
+			},
+			billing: {
+				id: row.billing,
+				billing_address: row.billing_address,
+				iban: row.iban,
+			},
+		},
+	};
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<Data>
 ) {
 	const query = req.query;
-	const body = req.body;
 
 	switch (req.method) {
 		case "GET":
 			if (isGetIdQuery(query)) {
 				try {
-					await db.query("BEGIN");
-					let res_offer = await db.query(
-						"SELECT * FROM Offer AS O, Supplier AS S, Address as A, Billing as B WHERE O.id = $1::integer AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing",
-						[query.id]
-					);
-					console.log(res_offer);
-					let res_categories = await db.query(
-						"SELECT category_name FROM Offer_Category WHERE offer_id = $1::integer",
-						[query.id]
-					);
-
-					let res_price = await db.query(
-						"SELECT price FROM Voucher WHERE offer_id = $1::integer LIMIT 1",
-						[query.id]
-					);
-					const price_per_voucher = res_price.rows[0].price;
-					await db.query("COMMIT");
-
-					console.log(res_offer.rows[0]);
-
-					if (res_offer.rowCount === 0)
-						return res.status(404).send(undefined);
-					const row = res_offer.rows[0];
-					const categories = res_categories.rows.map(
-						(r) => r.category_name
-					);
-					const offers: [Offer] = [
-						{
-							name: row.name,
-							categories,
-							id: row.id,
-							price_per_voucher,
-							supplier: {
-								img: row.img,
-								name: row.name,
-								homepage: row.homepage,
-								email: row.email,
-								id: row.supplier_id,
-								address: {
-									id: row.address_id,
-									street: row.street,
-									cap: row.cap,
-									city: row.city,
-									country: row.country,
-								},
-								billing: {
-									id: row.billing,
-									billing_address: row.billing_address,
-									iban: row.iban,
-								},
-							},
-						},
-					];
-
-					return res.status(200).json(offers);
+					const offer = await getOfferById(query.id);
+					if (offer) {
+						const offers = [offer];
+						return res.status(200).json(offers);
+					} else {
+						return res.status(404).send([]);
+					}
 				} catch (e) {
 					console.error(e);
 				}
@@ -145,7 +149,7 @@ export default async function handler(
 				// then join with every Offer_Category to retrieve every category of each offer
 				let result = await db.query(
 					`SELECT * FROM
-					(SELECT O.id, O.name,  O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+					(SELECT O.id, O.name, O.description, O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
 						A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
 					WHERE OC.category_name = ANY( $1::text[] ) AND O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R
 					INNER JOIN Offer_Category as OCC ON OCC.offer_id = R.id`,
@@ -164,6 +168,7 @@ export default async function handler(
 
 					if (!offer) {
 						offer = {
+							description: o.description,
 							name: o.name,
 							categories: [o.category_name],
 							id: o.id,
@@ -200,7 +205,7 @@ export default async function handler(
 				try {
 					let result = await db.query(
 						`SELECT * FROM
-						(SELECT O.id, O.supplier_id, O.name, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+						(SELECT O.id, O.description, O.supplier_id, O.name, OC.category_name, S.name as supplier_name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
 							A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
 						WHERE O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R`
 					);
@@ -217,13 +222,14 @@ export default async function handler(
 
 						if (!offer) {
 							offer = {
+								description: o.description,
 								name: o.name,
 								categories: [o.category_name],
 								id: o.id,
 								price_per_voucher,
 								supplier: {
 									img: o.img,
-									name: o.name,
+									name: o.supplier_name,
 									homepage: o.homepage,
 									email: o.email,
 									id: o.supplier_id,
@@ -260,8 +266,8 @@ export default async function handler(
 			try {
 				console.log("BALL");
 				let result = await db.query(
-					`INSERT INTO Offer (supplier_id) VALUES ($1::integer) RETURNING id AS offer_id`,
-					[query.supplier_id]
+					`INSERT INTO Offer (supplier_id, name, description) VALUES ($1::integer, $2::text, $3::text) RETURNING id AS offer_id`,
+					[query.supplier_id, query.name, query.description]
 				);
 				const { offer_id } = result.rows[0];
 				console.log("COCK");
