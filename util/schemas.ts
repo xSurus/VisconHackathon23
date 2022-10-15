@@ -1,6 +1,10 @@
 /** Type alias. A category is simply a string. Case sensitive! */
 export type Category = string;
 
+export function isCategory(o: any): o is Category {
+    return o && typeof o === 'string'
+}
+
 /** An address (for seekers and suppliers) containing various fields */
 export type Address = {
     id: number,
@@ -10,11 +14,19 @@ export type Address = {
     country: string,
 };
 
+export function isAddress(o: any): o is Category {
+    return o && typeof o.street === 'string' && typeof o.cap === 'string' && !isNaN(o.cap) && typeof o.city === 'string' && typeof o.country === 'string'
+}
+
 export type Billing = {
     id: number;
     billing_address: string;
     iban: string;
 };
+
+export function isBilling(o: any): o is Billing {
+    return o && typeof o.id === 'string' && !isNaN(o.id) && typeof o.billing_address === 'string' && typeof o.iban === 'string'
+}
 
 /** The voucher has a price and a unique id. Plus stuff. Read */
 export type Voucher = {
