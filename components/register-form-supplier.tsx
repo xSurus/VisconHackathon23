@@ -1,6 +1,7 @@
 import { Grid, Paper } from '@mui/material';
 import {makeStyles} from "@mui/styles";
 import { Formik, Field, Form, FormikHelpers } from 'formik';
+import { TextField, Button, Card } from '@mui/material';
 
 interface Values {
     username: string;
@@ -8,30 +9,11 @@ interface Values {
 }
 
 
-const useStyles = makeStyles({
-  center: {
-    alightItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    spacing: 0,
-  },
-  btn: {
-    backgroundColor: 'lime',
-  },
-  paper: {
-    height:'70vh',
-    width:500, 
-    margin:"20px auto",
-  },
-})
-
 const RegisterFormSupplier = () => {
   
-  const classes = useStyles();
 
   return (
     <div> 
-        <h1> Dio </h1>
         <Formik
         initialValues={{
             username: '',
@@ -49,12 +31,14 @@ const RegisterFormSupplier = () => {
         }}
 
         >
-        <Form>
-            <Field className="form-control" id="username" name="username" placeholder="Username"/>
+        <Card variant="outlined">
+            <Form>
+                <TextField className="form-control" id="username" name="username" placeholder="Username"/>
 
-            <Field className="form-control"  id="password" name="password" placeholder="Password" />
-            <button type="submit" className={classes.btn}>Login</button>
-        </Form>
+                <TextField className="form-control"  id="password" name="password" placeholder="Password" />
+                <Button type="submit">Register</Button>
+            </Form>
+        </Card>
         </Formik>
     </div>
   );

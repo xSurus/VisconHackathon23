@@ -1,4 +1,4 @@
-import { Grid, Paper, Avatar, Typography, Link, Button, TextField, Card, CardHeader, CardContent, FormControl, CardActions, InputLabel, } from '@mui/material';
+import { Grid, Paper, Avatar, Typography, Link, Button, TextField} from '@mui/material';
 import { makeStyles } from "@mui/styles";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Formik, Field, Form, FormikHelpers, useFormik} from 'formik';
@@ -7,11 +7,10 @@ import * as Yup from 'yup';
 
 const useStyles = makeStyles({
   center: {
-    /*spacing: 0,
+    spacing: 0,
     alignItems: "center",
     justifyContent: "center",
-    padding: '10px',*/
-    justifyContent: 'center',
+    padding: '10px',
   },
   btn: {
     backgroundColor:'#7c7f65',
@@ -30,22 +29,11 @@ const useStyles = makeStyles({
   formcontrol: {
     width: '90%',
     height: '50px',
-  },
-  padding: {
-    padding: '10px',
-  },
-  button: {
-    margin:'10px',
-  },
+  }
 })
 interface Values {
   username: string;
   password: string;
-}
-
-const initialValues = {
-  userName: "",
-  password: "",
 }
 
 const lowercaseRegEx = /(?=.*[a-z])/
@@ -71,12 +59,7 @@ let validationSchema = Yup.object().shape({
 })
 
 const LoginForm = () => {
-
-  const classes = useStyles();
-
-  const onSubmit = (values: any) => {
-    console.log(values)
-  }
+  
   const formik = useFormik({
     initialValues: {
       email: 'foobar@example.com',
@@ -87,61 +70,36 @@ const LoginForm = () => {
     },
   });
 
+  const classes = useStyles();
 
   return (
-    <Grid container className={classes.center} spacing={1}>
-      <Grid item md={6}>
-        <Card className={classes.padding}>
-          <CardHeader title="REGISTER FORM"></CardHeader>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}>
-            {({ dirty, isValid, values, handleChange, handleBlur }) => {
-              return (
-                <Form>
-                  <CardContent>
-                    <Grid item container className={classes.center}>
-                      <Grid item xs={12} sm={6} md={6}>
-                        <Field
-                          label="Username"
-                          variant="outlined"
-                          fullWidth
-                          name="userName"
-                          value={values.userName}
-                          component={TextField}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={6}>
-                        <Field
-                          label="Password"
-                          variant="outlined"
-                          fullWidth
-                          name="password"
-                          value={values.password}
-                          type="password"
-                          component={TextField}
-                        />
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-{/*                   <CardActions>
-                    <Button
-                      disabled={!dirty || !isValid}
-                      variant="contained"
-                      color="primary"
-                      type="Submit"
-                      className={classes.button}>
-                      <Button>
-                      REGISTER
-                    </Button>
-                  </CardActions> */}
-                </Form>
-              )
-            }}
-          </Formik>
-        </Card>
-      </Grid>
+    <Grid className={classes.center}>
+      <Paper elevation={10} className={classes.paper}>
+        <h2>Login</h2>
+        <Formik
+          initialValues={{
+            username: '',
+            password: '',
+          }}
+
+          onSubmit={(
+            values: Values,
+            { setSubmitting }: FormikHelpers<Values>
+          ) => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }, 500);
+          }}
+        >
+          <Form>
+            <TextField className={classes.formcontrol} id="username" name="username" placeholder="Username"/>
+            <TextField className={classes.formcontrol} id="password" name="password" placeholder="Password"/>
+            <Button type="submit" className={classes.btn}>Login</Button>
+            <Link href="/Registration"><Button className={classes.btn}>Registration</Button></Link>
+          </Form>
+        </Formik>
+      </Paper>
     </Grid>
   );
 };
