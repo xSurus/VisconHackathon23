@@ -11,10 +11,17 @@ export const FetchOffers = async () => {
 
 export const SendLogin = () => {
   const result = axios(
-    '/api/offer',
+    '/api/seeker',
   );
   return result;
 }
+export const SendLoginSup = () => {
+  const result = axios(
+    '/api/supplier',
+  );
+  return result;
+}
+
 export const FetchOrders = async (seeker_id : number) => {
   const result = await axios.get(
     '/api/order', { params: {seeker_id} }

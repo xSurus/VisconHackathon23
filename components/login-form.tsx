@@ -5,10 +5,18 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
 import Link from "next/link";
-import { SendLogin } from '../services/api-requests';
+import { SendLogin, SendLoginSup } from '../services/api-requests';
+import { Seeker, Supplier } from '../util/schemas';
+import { useState, useEffect, useRef } from "react";
+import Router from "next/router";
+
+
 
 const LoginForm = () => {
-
+    const [password, setPassword] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [seeker, setSeeker] = useState<Seeker[]>([]);
+    const [supplier, setSupplier] = useState<Supplier[]>([]);
     const LoginButton = styled(Button)`
       color: #fff;
       font-weight: bold;
@@ -50,7 +58,26 @@ const LoginForm = () => {
     const handleGoogleAuth = () => {
 
     }
-
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value);
+    }
+    const handleChangePw = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+    }
+    const onSubmitHandler = () => {
+        SendLogin().then((res) => {
+            setSeeker(res.data);
+        })
+        console.log(seeker);
+        const have_email = seeker?.filter(x => x.email === email).length > 0;
+        if (have_email) 
+        SendLoginSup().then((res) => {
+            setSupplier(res.data);
+        })
+        const have_email_sup = supplier?.filter(x => x.email === email).length > 0;
+        if (have_email_sup) {Router.push('/seeker')}
+        else {alert('Account not found')};
+    }
     return (
         <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
             <Grid item>
@@ -69,19 +96,23 @@ const LoginForm = () => {
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth sx={{m: 1}} variant="standard">
-                                <InputLabel htmlFor="email-field">Email</InputLabel>
+                                <InputLabel htmlFor="email-field" required>Email</InputLabel>
                                 <Input
                                     type="email"
                                     id="email-field"
+                                    value={email}
+                                    onChange={handleChange}
                                 />
                             </FormControl>
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth sx={{m: 1}} variant="standard">
-                                <InputLabel htmlFor="password-field">Password</InputLabel>
+                                <InputLabel htmlFor="password-field" required>Password</InputLabel>
                                 <Input
                                     type="password"
                                     id="password-field"
+                                    value={password}
+                                    onChange={handleChangePw}
                                 />
                             </FormControl>
                         </Grid>
@@ -89,9 +120,7 @@ const LoginForm = () => {
                             <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
                                 <Grid container justifyContent={'center'} alignItems={'center'}>
                                     <Grid item>
-                                        <LoginButton onClick={() => {console.log('hi'); SendLogin({
-                                                                                                    email: 'giofffvanni',
-                                                                                                    password: 'f'})}}>
+                                        <LoginButton onClick={onSubmitHandler}>
                                             Access
                                             <LoginIcon style={{marginLeft: '0.5em'}}/>
                                         </LoginButton>
