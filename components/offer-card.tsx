@@ -85,6 +85,7 @@ const OfferCard = (props: OfferCardProps) => {
                     width="100%"
                     image={companyImageUrl}
                     alt={companyName}
+                    sx={{maxHeight: '8em'}}
                 />
                 { content }
             </CardActionArea>

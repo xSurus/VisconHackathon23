@@ -16,9 +16,7 @@ const SeekerOffers = () => {
     },[])
 
     return (
-        <div>
-        <h1>All our offers</h1>
-        {<Grid container style={{display: 'flex'}} justifyContent={'end'}>
+        <Grid container style={{display: 'flex', maxHeight: '8em'}} justifyContent={'end'}>
             <Grid item style={{marginRight: '3em', marginTop: '2em'}}>
                 <Filter/>
             </Grid>
