@@ -1,14 +1,29 @@
 import {FormControl, Grid, Input, InputLabel, Paper, Button} from '@mui/material';
 import Typography from "@mui/material/Typography";
-import GoogleIcon from '@mui/icons-material/Google';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
-import Link from "next/link";
-import { Axios } from 'axios';
-import { SendSupplierRegistration } from '../services/api-requests';
-import Seeker from '../pages/seeker';
+import {SendSupplierRegistration} from '../services/api-requests';
+import {useState} from "react";
+import {PostQuery} from "../pages/api/supplier";
+
+
 const RegisterFormSupplier = () => {
+
+    const registerModel: PostQuery = {
+        img: '',
+        cap: 0,
+        city: '',
+        country: '',
+        iban: '',
+        email: '',
+        name: '',
+        street: '',
+        billing_address: '',
+        homepage: ''
+    }
+
+    const [model, setModel] = useState<any>(registerModel);
+
     const CustomButton = styled(Button)`
       color: #fff;
       font-weight: bold;
@@ -17,18 +32,7 @@ const RegisterFormSupplier = () => {
       width: 15em;
       margin-right: 0.1em;
       height: 3em;
-      :hover {
-        background-color: black;
-      }
-    `
-    const UploadButton = styled(Button)`
-      color: #fff;
-      font-weight: bold;
-      background-color: gray;
-      border-radius: 0;
-      width: 15em;
-      margin-right: 0.1em;
-      height: 3em;
+
       :hover {
         background-color: black;
       }
@@ -40,9 +44,10 @@ const RegisterFormSupplier = () => {
       border-radius: 1em;
       background-color: #d0cece;
     `
-    const handleGoogleAuth = () => {
-
+    const handleClickButton = () => {
+        SendSupplierRegistration(model)
     }
+
     return (
         <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
             <Grid item>
@@ -65,6 +70,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="name"
                                     id="name-field"
+                                    value={model.name}
+                                    onChange={(e) => setModel({...model, ['name']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -74,6 +81,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="email"
                                     id="email-field"
+                                    value={model.email}
+                                    onChange={(e) => setModel({...model, ['email']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -83,6 +92,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="password"
                                     id="password-field"
+                                    value={model.password}
+                                    onChange={(e) => setModel({...model, ['password']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -92,6 +103,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="street"
                                     id="street-field"
+                                    value={model.street}
+                                    onChange={(e) => setModel({...model, ['street']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -101,6 +114,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="cap"
                                     id="cap-field"
+                                    value={model.cap}
+                                    onChange={(e) => setModel({...model, ['cap']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -110,6 +125,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="city"
                                     id="city-field"
+                                    value={model.city}
+                                    onChange={(e) => setModel({...model, ['city']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -119,6 +136,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="country"
                                     id="country-field"
+                                    value={model.country}
+                                    onChange={(e) => setModel({...model, ['country']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -128,6 +147,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="iban"
                                     id="iban-field"
+                                    value={model.iban}
+                                    onChange={(e) => setModel({...model, ['iban']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -135,42 +156,22 @@ const RegisterFormSupplier = () => {
                             <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
                                 <Grid container justifyContent={'center'} alignItems={'center'}>
                                     <Grid item>
-                                        <input
-                                            accept="image/*"
-                                            style={{ display: 'none' }}
-                                            id="raised-button-file"
-                                            multiple
-                                            type="file"
-                                            color='red'
-                                        />
-                                        <label htmlFor="raised-button-file">
-                                            <Button component="span" style={{
-                                                color: 'white',
-                                                backgroundColor: 'black',
-                                                fontWeight: 'bold',
-                                                borderRadius: 0,
-                                                width: '15em',
-                                                height: '3em',
-                                                marginRight: '0.1em',
-                                            }}>
-                                                Upload Logo
-                                            </Button>
-                                        </label>
+
                                     </Grid>
                                 </Grid>
                             </Paper>
                         </Grid>
                         <Grid item>
-                            <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em', marginBottom: '2em'}}>
+                            <Paper style={{
+                                borderRadius: 0,
+                                width: '13em',
+                                marginTop: '1.3em',
+                                marginLeft: '1em',
+                                marginBottom: '2em'
+                            }}>
                                 <Grid container justifyContent={'center'} alignItems={'center'}>
                                     <Grid item>
-                                        <CustomButton onClick={() => {console.log('hi'); SendSupplierRegistration({
-                                            name: 'giofffvanni',
-                                            img: 'strsdfgng',
-                                            email: 'stdfging',
-                                            street: 'sasdfgring', cap: 20121, city: 'strfasding', country: 'striasdfg',
-                                            billing_address: 'Address', iban: 'strasdfing',
-                                            homepage: 'strasdfing',})}}>
+                                        <CustomButton onClick={handleClickButton}>
                                             Register
                                             <LoginIcon style={{marginLeft: '0.5em'}}/>
                                         </CustomButton>
