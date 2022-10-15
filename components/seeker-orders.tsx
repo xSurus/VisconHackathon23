@@ -4,13 +4,13 @@ import Filter from "./filter";
 import OrderCard from "./order-card";
 import type { Order } from '../util/schemas';
 import { FetchOrders } from '../services/api-requests';
-
+import type {Seeker} from '../util/schemas';
 
 const SeekerOrders = () => {
     const [orders, setOrders] = useState<Order[]>();
 
     useEffect(() => {
-        FetchOrders().then(res => {
+        FetchOrders(1).then(res => {
             setOrders(res.data)
         })
     }, [])
