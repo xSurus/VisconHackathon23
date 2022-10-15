@@ -1,9 +1,9 @@
 import { Grid } from '@mui/material';
 import type {NextPage} from 'next'
 import Head from 'next/head'
-import LoginForm from "../components/login-form";
-import CompanyVoucher from '../components/voucher-company';
-const Home: NextPage = () => {
+import LoginForm from '../components/login-form';
+
+const Landing: NextPage = () => {
     return (
         <Grid container>
             <Head>  
@@ -16,4 +16,4 @@ const Home: NextPage = () => {
     )
 }
 
-export default Home
+export default Landing
