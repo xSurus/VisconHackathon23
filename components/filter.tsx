@@ -16,29 +16,45 @@ import ListItemText from '@mui/material/ListItemText';
 import {Grid} from "@mui/material";
 import axios from 'axios';
 
-
-type Element = {
+type DialogSelectProps = {
+    categories: FilterElement[],
+    setCategories: React.Dispatch<React.SetStateAction<FilterElement[]>>,
+}
+export type FilterElement = {
     cat: string,
     checked: boolean
 }
 
-export default function DialogSelect() {
+export default function DialogSelect(props: DialogSelectProps) {
+    
+    
     const [open, setOpen] = React.useState(false);
-    const [categories, setCategories] = React.useState<Element[]>([]);
 
     React.useEffect(() => {
-    axios.get("/api/category").then(x => setCategories(x.data.categories.map((y) => {return {cat: y, checked: true};})));
+    axios.get("/api/category").then(x => props.setCategories(x.data.categories.map((y) => {return {cat: y, checked: true};})));
     }, []);
 
     const handleClickOpen = () => {
         setOpen(true)
     }
 
-    const handleChange = (event: SelectChangeEvent<typeof categories>) => {
+    const handleChange = (event: SelectChangeEvent<typeof props.categories>) => {
         const {
             target: {value},
         } = event;
-        console.log(value);
+        //@ts-ignore
+        let changed = value.pop();
+        //@ts-ignore
+        let updated = value.map(x => {
+            if (x.cat === changed) {
+                return {cat: x.cat, checked: !x.checked};
+            } else {
+                return {cat: x.cat, checked: x.checked};
+            }
+        })
+        //onsole.log(changed);
+        //console.log(value);
+        props.setCategories(updated);
     };
 
     const handleClose = (event: React.SyntheticEvent<unknown>, reason?: string) => {
@@ -62,12 +78,12 @@ export default function DialogSelect() {
                                 labelId="categories"
                                 id="categories"
                                 multiple
-                                value={categories}
+                                value={props.categories}
                                 onChange={handleChange}
                                 input={<OutlinedInput label="Tag"/>}
-                                renderValue={(selected) => selected.map(x => x.cat).join(', ')}
+                                renderValue={(selected) => selected.filter(x => x.checked).map(x => x.cat).join(', ')}
                             >
-                                {categories.map((category) => (
+                                {props.categories.map((category) => (
                                     <MenuItem key={category.cat} value={category.cat}>
                                         <Checkbox checked={category.checked}/>
                                         <ListItemText primary={category.cat}/>

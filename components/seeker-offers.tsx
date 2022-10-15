@@ -5,10 +5,11 @@ import OfferCard from "./offer-card";
 import Filter from "./filter";
 import {Offer} from "../util/schemas";
 import Typography from "@mui/material/Typography";
-
+import { FilterElement } from "./filter";
 
 const SeekerOffers = () => {
     const [vouchers, setVouchers] = useState<Offer[]>();
+    const [categories, setCategories] = useState<FilterElement[]>([]);
 
     useEffect(() => {
         FetchOffers().then(res => {
@@ -22,11 +23,13 @@ const SeekerOffers = () => {
                 <Typography style={{marginLeft: '3em', marginTop: '1.6em', fontSize: '1.3em', fontWeight: 'bold'}}>ALL OUR OFFERS</Typography>
             </Grid>
             <Grid item style={{marginRight: '3em', marginTop: '2em'}}>
-                <Filter/>
+                <Filter categories={categories} setCategories={setCategories} />
             </Grid>
             <Grid container spacing={3} alignItems={'center'}
                   style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '6em', marginTop: '0.3em'}}>
-                {vouchers?.map((offer: Offer) => {
+                {vouchers?.filter(x => 
+                    x.categories.filter(value => categories.map(x => x.cat).includes(value)).length > 0
+                ).map((offer: Offer) => {
                     return <Grid item xs={12} sm={6} md={6} lg={4} key={offer.id}>
                         <OfferCard companyName={offer.name} voucherPrice={offer.price_per_voucher}
                                    companyImageUrl={offer.supplier ? offer.supplier.img : ''}
