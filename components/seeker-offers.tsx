@@ -30,7 +30,8 @@ const SeekerOffers = () => {
                     </Grid>
                 })}
             </Grid>
-        </Grid>
+        </Grid>}
+        </div>
     );
 };
 

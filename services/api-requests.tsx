@@ -7,3 +7,10 @@ export const FetchOffers = async () => {
     );
     return result;
 }
+
+export const FetchOrders = async () => {
+  const result = await axios(
+    '/api/order',
+  );
+  return result;
+}
