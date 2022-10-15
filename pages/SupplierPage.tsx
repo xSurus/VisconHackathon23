@@ -11,7 +11,7 @@ const SupplierPage = () => {
     const classes = useStyles();
 
     return (
-        <TopBar/>
+        <TopBar index={2} />
     )
 }
 
