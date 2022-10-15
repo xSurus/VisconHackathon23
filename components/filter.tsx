@@ -66,7 +66,8 @@ export default function DialogSelect(props: DialogSelectProps) {
     return (
         <Grid>
             <Grid item>
-                <Button style={{color: 'black', backgroundColor: 'rgba(0,0,0,0.15)', fontSize: '1em'}} onClick={handleClickOpen}><FilterAltIcon/> Filter</Button>
+                <Button style={{color: 'black', backgroundColor: 'rgba(0,0,0,0.15)', fontSize: '1em'}}
+                        onClick={handleClickOpen}><FilterAltIcon/> Filter</Button>
             </Grid>
             <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
                 <DialogTitle>Filter by (multichoice)</DialogTitle>
