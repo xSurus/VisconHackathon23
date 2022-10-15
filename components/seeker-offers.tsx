@@ -6,10 +6,17 @@ import Filter from "./filter";
 import {Offer} from "../util/schemas";
 import Typography from "@mui/material/Typography";
 import { FilterElement } from "./filter";
+import axios from 'axios';
 
 const SeekerOffers = () => {
     const [vouchers, setVouchers] = useState<Offer[]>();
     const [categories, setCategories] = useState<FilterElement[]>([]);
+
+    useEffect(() => {
+        axios.get("/api/category").then((x) => x.data.categories.map((y: any) => {
+            return {cat: y, checked: true};
+        })).then(setCategories);
+    }, []);
 
     useEffect(() => {
         FetchOffers().then(res => {
@@ -28,7 +35,7 @@ const SeekerOffers = () => {
             <Grid container spacing={3} alignItems={'center'}
                   style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '6em', marginTop: '0.3em'}}>
                 {vouchers?.filter(x => 
-                    x.categories.filter(value => categories.map(x => x.cat).includes(value)).length > 0
+                    categories.filter(x => x.checked).map(x => x.cat).filter(value => x.categories.includes(value)).length > 0
                 ).map((offer: Offer) => {
                     return <Grid item xs={12} sm={6} md={6} lg={4} key={offer.id}>
                         <OfferCard companyName={offer.name} voucherPrice={offer.price_per_voucher}

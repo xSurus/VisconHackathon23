@@ -32,17 +32,13 @@ export default function DialogSelect(props: DialogSelectProps) {
 
     const [open, setOpen] = React.useState(false);
 
-    React.useEffect(() => {
-        axios.get("/api/category").then((x) => setCategories(x.data.categories.map((y: any) => {
-            return {cat: y, checked: true};
-        })));
-    }, []);
+
 
     const handleClickOpen = () => {
         setOpen(true)
     }
 
-    const handleChange = (event: SelectChangeEvent<typeof props.categories>) => {
+    const handleChange = (event: SelectChangeEvent<typeof categories>) => {
         const {
             target: {value},
         } = event;
@@ -58,7 +54,7 @@ export default function DialogSelect(props: DialogSelectProps) {
         })
         //onsole.log(changed);
         //console.log(value);
-        props.setCategories(updated);
+        setCategories(updated);
     };
 
     const handleClose = (event: React.SyntheticEvent<unknown>, reason?: string) => {
