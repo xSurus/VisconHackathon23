@@ -27,4 +27,4 @@ export const PostOffer = async (offer : Offer) => {
     offer
   );
   return result;
-}
+};
