@@ -5,6 +5,7 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
 import Link from "next/link";
+import { SendLogin } from '../services/api-requests';
 
 const LoginForm = () => {
 
@@ -88,7 +89,9 @@ const LoginForm = () => {
                             <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
                                 <Grid container justifyContent={'center'} alignItems={'center'}>
                                     <Grid item>
-                                        <LoginButton>
+                                        <LoginButton onClick={() => {console.log('hi'); SendLogin({
+                                                                                                    email: 'giofffvanni',
+                                                                                                    password: 'f'})}}>
                                             Access
                                             <LoginIcon style={{marginLeft: '0.5em'}}/>
                                         </LoginButton>

@@ -8,6 +8,13 @@ export const FetchOffers = async () => {
     return result;
 }
 
+export const SendLogin = () => {
+  const result = axios(
+    '/api/offer',
+  );
+  return result;
+}
+
 export const SendSupplierRegistration = (data: any) => {
   const params = new URLSearchParams();
   for (const key in data) {
