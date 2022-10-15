@@ -5,7 +5,8 @@ import CreateVoucher from '../source/components/SupplierComponents/createVoucher
 const Supplier = () => {
 
 
-    const [activeIndex, setActiveIndex] = React.useState<number>(1);
+    const [page, showPage] = useState(<SeekerOrders/>);
+    const [whichPage, setWhichPage] = useState<number>(1);
 
     return (
         <Grid container>
