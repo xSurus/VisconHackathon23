@@ -47,7 +47,7 @@ export default function DialogSelect() {
     };
 
     return (
-        <Grid container justifyContent={'center'} alignItems={'center'}>
+        <Grid>
             <Grid item>
                 <Button style={{color: 'black', backgroundColor: 'rgba(0,0,0,0.15)', fontSize: '1em'}} onClick={handleClickOpen}><FilterAltIcon/> Filter</Button>
             </Grid>
