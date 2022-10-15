@@ -14,16 +14,20 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import {Grid} from "@mui/material";
-import { FetchCategories } from '../services/api-requests';
 import axios from 'axios';
 
 
+type Element = {
+    cat: string,
+    checked: boolean
+}
+
 export default function DialogSelect() {
     const [open, setOpen] = React.useState(false);
-    const [categories, setCategories] = React.useState<string[]>([]);
+    const [categories, setCategories] = React.useState<Element[]>([]);
 
     React.useEffect(() => {
-    axios.get("/api/category").then(x => setCategories(x.data.categories));
+    axios.get("/api/category").then(x => setCategories(x.data.categories.map((y) => {return {cat: y, checked: true};})));
     }, []);
 
     const handleClickOpen = () => {
@@ -34,10 +38,7 @@ export default function DialogSelect() {
         const {
             target: {value},
         } = event;
-        setCategories(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
+        console.log(value);
     };
 
     const handleClose = (event: React.SyntheticEvent<unknown>, reason?: string) => {
@@ -64,12 +65,12 @@ export default function DialogSelect() {
                                 value={categories}
                                 onChange={handleChange}
                                 input={<OutlinedInput label="Tag"/>}
-                                renderValue={(selected) => selected.join(', ')}
+                                renderValue={(selected) => selected.map(x => x.cat).join(', ')}
                             >
                                 {categories.map((category) => (
-                                    <MenuItem key={category} value={category}>
-                                        <Checkbox checked={categories.indexOf(category) > -1}/>
-                                        <ListItemText primary={category}/>
+                                    <MenuItem key={category.cat} value={category.cat}>
+                                        <Checkbox checked={category.checked}/>
+                                        <ListItemText primary={category.cat}/>
                                     </MenuItem>
                                 ))}
                             </Select>
