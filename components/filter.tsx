@@ -62,10 +62,10 @@ export default function DialogSelect() {
     return (
         <Grid container justifyContent={'center'} alignItems={'center'}>
             <Grid item>
-                <Button onClick={handleClickOpen}><FilterAltIcon/> Filter</Button>
+                <Button style={{color: 'black', backgroundColor: 'rgba(0,0,0,0.15)', fontSize: '1em'}} onClick={handleClickOpen}><FilterAltIcon/> Filter</Button>
             </Grid>
             <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-                <DialogTitle>Set Filters</DialogTitle>
+                <DialogTitle>Filter by (multichoice)</DialogTitle>
                 <DialogContent>
                     <Box component="form" sx={{display: 'flex', flexWrap: 'wrap'}}>
                         <FormControl sx={{m: 1, minWidth: 120}}>
