@@ -1,19 +1,19 @@
-import {useState, useEffect} from "react";
-import {Grid} from '@mui/material';
-import {FetchOffers} from '../services/api-requests';
+import { useState, useEffect } from "react";
+import { Grid } from '@mui/material';
+import { FetchOffers } from '../services/api-requests';
 import OfferCard from "./offer-card";
 import Filter from "./filter";
 import {Offer} from "../util/schemas";
 
 
 const SeekerOffers = () => {
-    const [vouchers, setVouchers] = useState<Offer[]>();
+    const [offers, setOffers] = useState<Offer[]>();
 
     useEffect(() => {
-        FetchOffers().then(res => {
-            setVouchers(res.data)
+        FetchOffers().then((res:any) => {
+          setOffers(res.data)
         })
-    }, [])
+    },[])
 
     return (
         <div>
@@ -22,15 +22,14 @@ const SeekerOffers = () => {
             <Grid item style={{marginRight: '3em', marginTop: '2em'}}>
                 <Filter/>
             </Grid>
-            <Grid item container spacing={3}
-                  style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '3em', marginTop: '0.3em'}}>
-                {vouchers?.map((voucher: Offer) => {
-                    return <Grid item xs={5} sm={4}>
-                        <OfferCard      companyName={voucher.name} voucherPrice={voucher.price_per_voucher}
-                                        companyImageUrl={voucher.supplier ? voucher.supplier.img : ''}
-                                        key={voucher.id}/>
-                    </Grid>
-                })}
+            <Grid item container spacing={3} style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '3em', marginTop: '0.3em'}}>
+                    {offers?.map((offer : Offer) => {
+                        return <Grid key={offer.id} item xs={5} sm={4}>
+                        <OfferCard companyName={offer.name} voucherPrice={offer.price_per_voucher}
+                                        companyImageUrl={offer.supplier ? offer.supplier.img : ''}
+                                        key={offer.id}/>
+                        </Grid>
+                    })}
             </Grid>
         </Grid>}
         </div>

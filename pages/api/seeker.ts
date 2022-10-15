@@ -23,6 +23,46 @@ let isDeleteQuery = isId;
 
 type Data = Seeker[] | undefined;
 
+function rowToSeeker(x: any): Seeker {
+	return {
+		id: x.sid,
+		name: x.sname,
+		img: x.sigm,
+		email: x.semail,
+		homepage: x.shomepage,
+		address: {
+			id: x.aid,
+			street: x.astreet,
+			cap: x.acap,
+			city: x.acity,
+			country: x.acountry,
+		},
+	};
+}
+
+export async function getSeekers(): Promise<Seeker[]> {
+	const res = await db.query(
+		"SELECT S.id as sid, S.name as sname, S.img as simg, S.email as semail, S.homepage as shomepage, A.id as aid, A.street as astreet, A.cap as acap, A.city as acity, A.country as acountry FROM Seeker as S, Address as A WHERE S.address_id=A.id"
+	);
+	const seekers = res.rows.map(rowToSeeker);
+	return seekers;
+}
+
+export async function getSeekerById(id: number): Promise<Seeker | null> {
+	const res = await db.query(
+		"SELECT S.id as sid, S.name as sname, S.img as simg, S.email as semail, S.homepage as shomepage, A.id as aid, A.street as astreet, A.cap as acap, A.city as acity, A.country as acountry FROM Address AS A, Seeker AS S WHERE S.id = $1::integer AND S.address_id=A.id",
+		// @ts-ignore
+		[id]
+	);
+
+	if (res.rows.length) {
+		const x = res.rows[0];
+		const seeker = rowToSeeker(x);
+
+		return seeker;
+	} else return null;
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<Data>
@@ -33,35 +73,15 @@ export default async function handler(
 		case "GET":
 			if (!isGetQuery(query)) break;
 			try {
-				let result: any[] = (
-					isEmptyObj(query)
-						? await db.query(
-								"SELECT S.id as sid, S.name as sname, S.img as simg, S.email as semail, S.homepage as shomepage, A.id as aid, A.street as astreet, A.cap as acap, A.city as acity, A.country as acountry FROM Seeker as S, Address as A WHERE S.address_id=A.id"
-						  )
-						: await db.query(
-								"SELECT S.id as sid, S.name as sname, S.img as simg, S.email as semail, S.homepage as shomepage, A.id as aid, A.street as astreet, A.cap as acap, A.city as acity, A.country as acountry FROM Address AS A, Seeker AS S WHERE S.id = $1::integer AND S.address_id=A.id",
-								// @ts-ignore
-								[query.id]
-						  )
-				).rows;
-				let tmp = result.map((x) => {
-					return {
-						id: x.sid,
-						name: x.sname,
-						img: x.sigm,
-						email: x.semail,
-						homepage: x.shomepage,
-						address: {
-							id: x.aid,
-							street: x.astreet,
-							cap: x.acap,
-							city: x.acity,
-							country: x.acountry,
-						},
-					};
-				});
-				if (result.length == 0) return res.status(404).json(undefined);
-				else return res.status(200).json(tmp);
+				if ("id" in query) {
+					// Fuck the type system, it doesn't even infer correctly from a type guard...................................................................................................................................
+					const seeker = await getSeekerById((query as any).id);
+					if (!seeker) return res.status(404).json(undefined);
+					else return res.status(200).json([seeker]);
+				} else {
+					const seekers = await getSeekers();
+					return res.status(200).json(seekers);
+				}
 			} catch (e) {
 				console.log(e);
 				return res.status(500).send(undefined);
@@ -77,13 +97,16 @@ export default async function handler(
 		case "POST":
 			//if (!isPostQuery(query)) break;
 			try {
-				let addr_id = await db.query(
-					"INSERT INTO Address (street, cap, city, country) VALUES ($1::text, $2::integer, $3::text, $4::text) RETURNING",
-					[query.street, query.cap, query.city, query.country]
-				);
+				await db.query("BEGIN");
+				let addr_id = (
+					await db.query(
+						"INSERT INTO Address (street, cap, city, country) VALUES ($1::text, $2::integer, $3::text, $4::text) RETURNING id",
+						[query.street, query.cap, query.city, query.country]
+					)
+				).rows[0].id;
 				console.log(addr_id);
 				let result = await db.query(
-					"INSERT INTO Seeker (name, img, email, address_id, homepage) VALUES ($1::text, $2::text, $3::integer, $4::text",
+					"INSERT INTO Seeker (name, img, email, address_id, homepage) VALUES ($1::text, $2::text, $3::text, $4::integer, $5::text)",
 					[
 						query.name,
 						query.img,
