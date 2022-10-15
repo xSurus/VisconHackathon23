@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Grid } from '@mui/material';
-import { FetchOffers } from '../services/api-requests';
+import {useState, useEffect} from "react";
+import {Grid} from '@mui/material';
+import {FetchOffers} from '../services/api-requests';
 import OfferCard from "./offer-card";
 import Filter from "./filter";
 import {Offer} from "../util/schemas";
@@ -8,13 +8,13 @@ import Typography from "@mui/material/Typography";
 
 
 const SeekerOffers = () => {
-    const [offers, setOffers] = useState<Offer[]>();
+    const [vouchers, setVouchers] = useState<Offer[]>();
 
     useEffect(() => {
-        FetchOffers().then((res:any) => {
-          setOffers(res.data)
+        FetchOffers().then(res => {
+            setVouchers(res.data)
         })
-    },[])
+    }, [])
 
     return (
         <Grid container style={{display: 'flex', maxHeight: '8em'}} justifyContent={'space-between'}>
