@@ -4,9 +4,16 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import {CardActionArea} from '@mui/material';
-type Props = { companyName: string, voucherPrice: number }
 
-const CompanyVoucher = (props: Props) => {
+interface CompanyVoucherProps {
+    companyName: string,
+    voucherPrice: number,
+    companyImageUrl: string
+}
+
+const CompanyVoucher = (props: CompanyVoucherProps) => {
+
+    const {companyName, voucherPrice, companyImageUrl} = props;
 
     return (
         <Card elevation={3}>
@@ -14,12 +21,12 @@ const CompanyVoucher = (props: Props) => {
                 <CardMedia
                     component="img"
                     width="100%"
-                    image="/migros.svg.png"
-                    alt={props.companyName}
+                    image={companyImageUrl}
+                    alt={companyName}
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {`${props.companyName}`}
+                    <Typography gutterBottom variant="h5" component="div" style={{}}>
+                        {`${companyName}`}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed est finibus eros iaculis
@@ -30,7 +37,7 @@ const CompanyVoucher = (props: Props) => {
                         id, vehicula sagittis ligula.
                     </Typography>
                     <Typography gutterBottom variant="h5" component="div">
-                        {`${props.voucherPrice}`}
+                        {`${voucherPrice}`}
                     </Typography>
                 </CardContent>
             </CardActionArea>
