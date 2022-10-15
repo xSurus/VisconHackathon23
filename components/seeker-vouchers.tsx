@@ -30,12 +30,12 @@ const SeekerVouchers = () => {
 
     return (
         <div>
-            <Filter />
+            {/*<Filter /> */}
             <Grid container className={classes.container_content}>
-                    { vouchers.map((voucher : Voucher) => {
+                    {vouchers.map((voucher : Voucher) => {
                         return <Grid item xs={5} sm={4}>
-                                    <CompanyVoucher companyName = {voucher.name} voucherPrice = {voucher.price} key={voucher.id}/>
-                                </Grid>
+                            <CompanyVoucher companyName = {voucher.name} voucherPrice = {voucher.price} key={voucher.id}/>
+                        </Grid>
                     })}
                 { console.log(JSON.stringify(vouchers)) }
             </Grid> 
