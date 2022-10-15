@@ -4,6 +4,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
+import Link from "next/link";
 
 const LoginForm = () => {
 
@@ -14,28 +15,53 @@ const LoginForm = () => {
       border-radius: 0;
       width: 15em;
       margin-right: 0.1em;
+      height: 3em;
       :hover {
         background-color: black;
       }
     `
+    const PaperGoogle = styled(Paper)`
+      padding: 0.5em 1.5em;
+      margin-top: 2em;
+      border-radius: 2em;
+      background-color: #000000;
+      :hover {
+        cursor: pointer;
+      }
+    `
+    const PaperEmail = styled(Paper)`
+      padding: 0.5em 1.5em;
+      margin-top: 1em;
+      border-radius: 2em;
+      background-color: #000000;
+      margin-bottom: 3.5em;
+      :hover {
+        cursor: pointer;
+      }
+    `
+    const PaperContainer = styled(Paper)`
+      height: auto;
+      width: 500px;
+      margin-top: 1em;
+      border-radius: 1em;
+      background-color: #d0cece;
+    `
+    const handleGoogleAuth = () => {
+
+    }
 
     return (
         <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
             <Grid item>
-                <Paper elevation={10} style={{
-                    height: '70vh',
-                    width: 500,
-                    backgroundColor: "#cabac8",
-                    borderRadius: '1.5em'
-                }}>
+                <PaperContainer elevation={10}>
                     <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}
                           style={{display: 'flex'}}>
                         <Grid item>
                             <Typography style={{
                                 marginTop: '1.5em',
+                                marginBottom: '0.5em',
                                 fontSize: '1.5em',
                                 fontWeight: 'bold',
-                                backgroundColor: 'rgba(100,100,100,0.2)',
                                 padding: '0.5em',
                                 borderRadius: '0.5em'
                             }}>LOGIN</Typography>
@@ -60,16 +86,12 @@ const LoginForm = () => {
                         </Grid>
                         <Grid item>
                             <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
-                                <Grid container justifyContent={'center'} alignItems={'center'}
-                                      style={{backgroundColor: 'white'}}>
+                                <Grid container justifyContent={'center'} alignItems={'center'}>
                                     <Grid item>
                                         <LoginButton>
                                             Access
                                             <LoginIcon style={{marginLeft: '0.5em'}}/>
                                         </LoginButton>
-                                    </Grid>
-                                    <Grid item>
-
                                     </Grid>
                                 </Grid>
                             </Paper>
@@ -84,15 +106,7 @@ const LoginForm = () => {
                             <div/>
                         </Grid>
                         <Grid item>
-                            <Paper style={{
-                                paddingTop: '0.5em',
-                                paddingBottom: '0.5em',
-                                paddingLeft: '1.5em',
-                                paddingRight: '1.5em',
-                                marginTop: '2em',
-                                borderRadius: '2em',
-                                backgroundColor: '#007dff'
-                            }}>
+                            <PaperGoogle onClick={handleGoogleAuth}>
                                 <Grid container justifyContent={'start'} alignItems={'center'}>
                                     <Grid item style={{marginRight: '1em', marginTop: '0.2em'}}>
                                         <GoogleIcon style={{color: 'white'}}/>
@@ -101,28 +115,22 @@ const LoginForm = () => {
                                         Continue with Google
                                     </Typography>
                                 </Grid>
-                            </Paper>
-                            <Paper style={{
-                                paddingTop: '0.5em',
-                                paddingBottom: '0.5em',
-                                paddingLeft: '1.5em',
-                                paddingRight: '1.5em',
-                                marginTop: '1em',
-                                borderRadius: '2em',
-                                backgroundColor: 'red'
-                            }}>
-                                <Grid container justifyContent={'start'} alignItems={'center'}>
-                                    <Grid item style={{marginRight: '1em'}}>
-                                        <VpnKeyIcon fontSize={'medium'} style={{marginTop: '0.2em', color: 'white'}}/>
+                            </PaperGoogle>
+                            <Link href={'/registration'}>
+                                <PaperEmail>
+                                    <Grid container justifyContent={'start'} alignItems={'center'}>
+                                        <Grid item style={{marginRight: '1em'}}>
+                                            <VpnKeyIcon fontSize={'medium'} style={{marginTop: '0.2em', color: 'white'}}/>
+                                        </Grid>
+                                        <Typography style={{color: 'white'}}>
+                                            Register using e-mail
+                                        </Typography>
                                     </Grid>
-                                    <Typography style={{color: 'white'}}>
-                                        Register using e-mail
-                                    </Typography>
-                                </Grid>
-                            </Paper>
+                                </PaperEmail>
+                            </Link>
                         </Grid>
                     </Grid>
-                </Paper>
+                </PaperContainer>
             </Grid>
         </Grid>
     );
