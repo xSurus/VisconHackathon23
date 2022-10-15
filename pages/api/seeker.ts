@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../util/db";
 import type { Seeker, Id, Address } from "../../util/schemas";
 import { isSeeker, addId, isEmptyObj, isId } from "../../util/schemas";
+import { Axios } from "axios";
 
 type GetQuery = Id | {};
 type PostQuery = Omit<Seeker, "id">;
@@ -74,13 +75,27 @@ export default async function handler(
 		//     return res.status(200).send(undefined);
 
 		case "POST":
-			if (!isPostQuery(query)) break;
+			//if (!isPostQuery(query)) break;
 			try {
-				let result = await db.query(
-					"INSERT INTO Seeker (name, email, address_id, homepage) VALUES ($1::text, $2::text, $3::integer, $4::text",
-					[query.name, query.email, query.address.id, query.homepage]
+				let addr_id = await db.query(
+					"INSERT INTO Address (street, cap, city, country) VALUES ($1::text, $2::integer, $3::text, $4::text) RETURNING",
+					[query.street, query.cap, query.city, query.country]
 				);
-			} catch (e) {}
+				console.log(addr_id);
+				let result = await db.query(
+					"INSERT INTO Seeker (name, img, email, address_id, homepage) VALUES ($1::text, $2::text, $3::integer, $4::text",
+					[
+						query.name,
+						query.img,
+						query.email,
+						addr_id,
+						query.homepage,
+					]
+				);
+				await db.query("COMMIT");
+			} catch (e) {
+				console.log(e);
+			}
 			return res.status(200).send(undefined);
 
 		case "DELETE":

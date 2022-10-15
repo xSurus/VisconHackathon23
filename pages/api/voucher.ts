@@ -2,16 +2,18 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../util/db";
 import type { Voucher } from "../../util/schemas";
 
-type GetQuery = { id: number } | undefined;
-type DeleteQuery = { id: number };
-type PutQuery = { id: number };
+type GetQuery = { id: string } | undefined;
+type DeleteQuery = { id: string };
+type PutQuery = { id: string };
 
 function isGetQuery(query: any): query is GetQuery {
-	return !Object.keys(query).length || (query && typeof query.id === "string" && !isNaN(query.id));
+	return (
+		!Object.keys(query).length || (query && typeof query.id === "string")
+	);
 }
 
 function isDeleteQuery(query: any): query is DeleteQuery {
-	return query && typeof query.id === "string" && !isNaN(query.id);
+	return query && typeof query.id === "string";
 }
 
 type Data = Voucher[] | undefined;
