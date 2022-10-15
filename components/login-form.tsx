@@ -59,7 +59,7 @@ const LoginForm = () => {
 
     return (
         <Grid container direction={'row'} justifyContent={'center'} alignItems={'center'} style={{height:'100vh'}}>
-            <Grid item style={{marginRight: '3em'}}>
+            <Grid item style={{marginRight: '3em'}} lg={3}>
                 <Grid item container direction={'column'}>
                     <Grid item>
                          <Typography style={{lineHeight: '2em', letterSpacing: '0.2em'}}>
@@ -77,7 +77,7 @@ const LoginForm = () => {
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid item>
+            <Grid item lg={6}>
                 <Grid item container justifyContent={'center'} alignItems={'center'}>
                     <PaperContainer elevation={10}>
                         <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}
