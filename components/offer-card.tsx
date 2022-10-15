@@ -12,12 +12,13 @@ import styled from "@emotion/styled";
 interface OfferCardProps {
     companyName: string,
     voucherPrice: number,
-    companyImageUrl: string
+    companyImageUrl: string,
+    offerDescription: string
 }
 
 const OfferCard = (props: OfferCardProps) => {
 
-    const {companyName, voucherPrice, companyImageUrl} = props;
+    const {companyName, voucherPrice, companyImageUrl, offerDescription} = props;
     const [active, setActive] = useState(false);
 
     const BuyVoucherButton = styled(Button)`
@@ -35,27 +36,22 @@ const OfferCard = (props: OfferCardProps) => {
                 <Grid item container direction={'column'}>
                     <Grid item>
                         <Typography gutterBottom variant="h5" component="div">
-                            {`${companyName}`}
+                            {companyName}
                         </Typography>
                     </Grid>
-                    <Grid item>
+                    <Grid item style={{minHeight: '3em'}}>
                         <Typography variant="body2" color="text.secondary" sx={{
                             display: '-webkit-box',
                             overflow: 'hidden',
                             WebkitBoxOrient: 'vertical',
                             WebkitLineClamp: 6,
                         }}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed est finibus eros iaculis
-                            pellentesque.
-                            Nulla facilisi. Quisque a quam ac nisi tristique laoreet. Aliquam eget eros vitae turpis
-                            sagittis rutrum vitae et justo.
-                            Morbi et nisl euismod, dignissim urna vel, rhoncus magna. Curabitur justo neque, cursus eu lorem
-                            id, vehicula sagittis ligula.
+                            {offerDescription}.
                         </Typography>
                     </Grid>
                     <Grid item style={{marginTop: '1em'}}>
                         <Typography gutterBottom variant="h6" component="div">
-                            {`${voucherPrice}`} CHF / Voucher
+                            {voucherPrice} CHF / Voucher
                         </Typography>
                     </Grid>
                     <Grid item>
