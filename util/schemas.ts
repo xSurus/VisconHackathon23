@@ -154,6 +154,7 @@ export function isOrder(o: any): o is Order {
 
 export type Offer = {
 	id: number;
+	name: string;
 	price_per_voucher: number;
 	/** Can vanish in the future */
 	supplier?: Supplier;

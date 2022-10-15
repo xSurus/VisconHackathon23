@@ -105,6 +105,7 @@ export default async function handler(
 					);
 					const offers: [Offer] = [
 						{
+							name: row.name,
 							categories,
 							id: row.id,
 							price_per_voucher,
@@ -144,7 +145,7 @@ export default async function handler(
 				// then join with every Offer_Category to retrieve every category of each offer
 				let result = await db.query(
 					`SELECT * FROM
-					(SELECT O.id, O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+					(SELECT O.id, O.name,  O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
 						A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
 					WHERE OC.category_name = ANY( $1::text[] ) AND O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R
 					INNER JOIN Offer_Category as OCC ON OCC.offer_id = R.id`,
@@ -163,6 +164,7 @@ export default async function handler(
 
 					if (!offer) {
 						offer = {
+							name: o.name,
 							categories: [o.category_name],
 							id: o.id,
 							price_per_voucher,
@@ -198,7 +200,7 @@ export default async function handler(
 				try {
 					let result = await db.query(
 						`SELECT * FROM
-						(SELECT O.id, O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+						(SELECT O.id, O.supplier_id, O.name, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
 							A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
 						WHERE O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R`
 					);
@@ -215,6 +217,7 @@ export default async function handler(
 
 						if (!offer) {
 							offer = {
+								name: o.name,
 								categories: [o.category_name],
 								id: o.id,
 								price_per_voucher,
@@ -255,25 +258,29 @@ export default async function handler(
 		case "POST":
 			if (!isPostQuery(query)) break;
 			try {
+				console.log("BALL");
 				let result = await db.query(
 					`INSERT INTO Offer (supplier_id) VALUES ($1::integer) RETURNING id AS offer_id`,
 					[query.supplier_id]
 				);
-
 				const { offer_id } = result.rows[0];
-
+				console.log("COCK");
 				for (let i = 0; i < query.stock; i++) {
 					const res = await db.query(
 						"INSERT INTO Voucher (name, price, supplier_id, offer_id) VALUES ($1::text, $2::integer, $3::integer, $4::integer)",
 						[query.name, query.price, query.supplier_id, offer_id]
 					);
-				}
 
+					if (res.rowCount) console.log(`Inserted Voucher`);
+				}
 				for (const c of query.categories) {
 					const res = await db.query(
 						"INSERT INTO Offer_Category (offer_id, category_name) VALUES ($1::integer, $2::text)",
 						[offer_id, c]
 					);
+					if (res.rowCount) {
+						console.log("inserted category");
+					}
 				}
 			} catch (e) {}
 			return res.status(201).send(undefined);
