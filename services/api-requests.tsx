@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PostQuery } from "../pages/api/order";
+import { PostQuery } from "../pages/api/offer";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
 
@@ -42,3 +42,11 @@ export const SendSupplierRegistration = (data: any) => {
     console.log('lol');
     return result;
 }
+
+export const PostOffer = async (offer : PostQuery) => {
+  const result = await axios.post(
+    'api/offer',
+    offer
+  );
+  return result;
+};
