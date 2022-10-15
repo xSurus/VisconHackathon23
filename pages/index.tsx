@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import type {NextPage} from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import SupplierPage from "./SupplierPage";
+import LoginForm from "../components/login-form";
 
 const Home: NextPage = () => {
     return (

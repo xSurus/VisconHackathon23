@@ -1,7 +1,6 @@
 import RegisterFormSupplier from '../components/register-form-supplier';
 import RegisterFormSeeker from '../components/register-form-seeker';
 import { useState } from "react";
-import { FormControl, InputLabel, Input, FormHelperText } from '@mui/material';
 
 const Registration = () => {
 
