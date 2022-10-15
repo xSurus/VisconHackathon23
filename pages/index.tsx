@@ -1,10 +1,8 @@
 import { Grid } from '@mui/material';
 import type {NextPage} from 'next'
 import Head from 'next/head'
-import Link from 'next/link';
-import LoginForm from '../components/login-form';
-import RegisterFormSupplier from '../components/register-form-supplier';
-import Supplier from "./supplier";
+import styles from '../styles/Home.module.css'
+import SupplierPage from "./SupplierPage";
 
 const Home: NextPage = () => {
     return (
