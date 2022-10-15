@@ -31,3 +31,7 @@ TODO: Complete
 ## Seeker
 
 ## Offer
+- `GET`: Get info about an offer
+- `POST`: Create a new offer
+- `PUT or PATCH`: Edit an offer
+- `DELETE`: Delete an offer 
