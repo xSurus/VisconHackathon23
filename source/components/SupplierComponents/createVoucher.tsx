@@ -1,4 +1,4 @@
-import { Button, InputLabel, OutlinedInput, TextareaAutosize, TextField } from "@mui/material";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, SelectChangeEvent, TextareaAutosize, TextField } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -6,6 +6,8 @@ import * as React from 'react';
 import Image from 'next/image';
 import { Offer, Supplier } from "../../../util/schemas";
 import { PostOffer } from "../../../services/api-requests";
+import Filter from "../../../components/filter";
+
 
 
 const CreateVoucher = () =>{
@@ -19,6 +21,31 @@ const CreateVoucher = () =>{
 	    /** Can be empty of course, check */
 	    categories: []
     })
+
+    const [open, setOpen] = React.useState(false);
+    const allCategories = [
+        'Pog',
+        'PogPog'
+    ];
+
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleCategoryChange = (event: SelectChangeEvent<typeof offer.categories>) => {
+        const {
+            target: {value},
+        } = event;
+        setValues({...offer, ['categories']: typeof value === 'string' ? value.split(',') : value}
+            
+        );
+    };
+
+    const handleClose = (event: React.SyntheticEvent<unknown>, reason?: string) => {
+        if (reason !== 'backdropClick') {
+            setOpen(false);
+        }
+    };
     const [imagePath, setImagePath] = React.useState<string>("/public/brain.png");
 
     const handleChange = (prop: keyof Offer) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,8 +76,9 @@ const CreateVoucher = () =>{
     >
         <div style={{justifyContent:'space around'}}>
         <Stack direction='row' >
-        <Image style={{margin:5}} height={80} width={60}  src="/public/static/brain.png"/>
-
+        {//<Image style={{margin:5}} height={80} width={60}  src="/public/static/brain.png"/>
+        }
+        
         <FormControl required sx={{ m: 2, width: '50ch' }} >
           <InputLabel> Title </InputLabel>
           <OutlinedInput
@@ -61,6 +89,37 @@ const CreateVoucher = () =>{
 
           />
         </FormControl>
+        <Button style={{color: 'black', backgroundColor: 'rgba(0,0,0,0.15)', fontSize: '1em'}} onClick={handleClickOpen}> Categories</Button>
+        <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
+                <DialogTitle>Select all applying categories</DialogTitle>
+                <DialogContent>
+                    
+                        <FormControl sx={{m: 1, minWidth: 120}}>
+                            <InputLabel htmlFor="demo-dialog-native">Categories</InputLabel>
+                            <Select
+                                labelId="categories"
+                                id="categories"
+                                multiple
+                                value={offer.categories}
+                                onChange={handleCategoryChange}
+                                input={<OutlinedInput label="categories"/>}
+                                renderValue={(selected) => selected.join(', ')}
+                            >
+                                {allCategories.map((category) => (
+                                    <MenuItem key={category} value={category}>
+                                        <Checkbox checked={offer.categories.indexOf(category) > -1}/>
+                                        <ListItemText primary={category}/>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                  
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Ok</Button>
+                </DialogActions>
+            </Dialog>
+            
         </Stack>
         
 
