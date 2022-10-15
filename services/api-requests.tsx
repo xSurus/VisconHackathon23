@@ -1,4 +1,5 @@
 import axios from "axios";
+import { PostQuery } from "../pages/api/order";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
 

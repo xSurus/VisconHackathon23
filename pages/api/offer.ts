@@ -18,7 +18,7 @@ type GetIdQuery = { id: number };
 type GetAllQuery = {};
 
 /** Create {stock} vouchers with {name} and {price}. Offer has categories and a supplier id */
-type PostQuery = {
+export type PostQuery = {
 	/** supplier id of whoever posts the offer */
 	supplier_id: number;
 	/** categories of the offer */

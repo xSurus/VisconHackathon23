@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Button, Grid} from "@mui/material";
+import CreateVoucher from '../source/components/SupplierComponents/createVoucher';
 
 const Supplier = () => {
 
@@ -9,6 +10,7 @@ const Supplier = () => {
     return (
         <Grid container>
             <Grid item>
+                <CreateVoucher/>
                 <div>
                     TEST
                 </div>
