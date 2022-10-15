@@ -30,7 +30,7 @@ const SeekerVouchers = () => {
 
     return (
         <div>
-            {/*<Filter /> */}
+            {<Filter /> }
             <Grid container className={classes.container_content}>
                     {vouchers.map((voucher : Voucher) => {
                         return <Grid item xs={5} sm={4}>

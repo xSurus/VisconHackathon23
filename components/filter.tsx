@@ -14,11 +14,16 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 
+const allCategories = [
+    'Pog',
+    'PogPog'
+  ];
+
 export default function DialogSelect() {
   const [open, setOpen] = React.useState(false);
   const [categories, setCategories] = React.useState<string[]>([]);
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const handleChange = (event: SelectChangeEvent<typeof categories>) => {
     const {
       target: { value },
     } = event;
@@ -38,11 +43,6 @@ export default function DialogSelect() {
     }
   };
 
-  const allCategories = [
-    'Pog',
-    'PogPog'
-  ];
-
   return (
     <div>
       <Button onClick={handleClickOpen}><FilterAltIcon /> Filter</Button>
@@ -51,23 +51,22 @@ export default function DialogSelect() {
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel htmlFor="demo-dialog-native">Age</InputLabel>
+              <InputLabel htmlFor="demo-dialog-native">Categories</InputLabel>
               <Select
-                 labelId="demo-multiple-checkbox-label"
-                 id="demo-multiple-checkbox"
+                 labelId="categories"
+                 id="categories"
                  multiple
-                 value={personName}
+                 value={categories}
                  onChange={handleChange}
                  input={<OutlinedInput label="Tag" />}
                  renderValue={(selected) => selected.join(', ')}
-                 MenuProps={MenuProps} />}
               >
-                {categories.map((category) => (
-                <MenuItem key={category} value={category}>
-                <Checkbox checked={categories.indexOf(category) > -1} />
-                <ListItemText primary={category} />
-            </MenuItem>
-          ))}
+                {allCategories.map((category) => (
+                    <MenuItem key={category} value={category}>
+                        <Checkbox checked={categories.indexOf(category) > -1} />
+                        <ListItemText primary={category} />
+                    </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
