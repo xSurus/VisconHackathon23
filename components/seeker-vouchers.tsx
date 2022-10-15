@@ -16,13 +16,17 @@ const SeekerVouchers = () => {
     },[])
 
     return (
-        <Grid container>
-                {vouchers.map((voucher : Voucher) => {
-                    return <Grid item xs={5} sm={4}>
-                        <CompanyVoucher companyName = {voucher.name} voucherPrice = {voucher.price} key={voucher.id}/>
-                    </Grid>
-                })}
-        </Grid>
+        <div>
+            {<Filter /> }
+            <Grid container className={classes.container_content}>
+                    {vouchers.map((voucher : Voucher) => {
+                        return <Grid item xs={5} sm={4}>
+                            <CompanyVoucher companyName = {voucher.name} voucherPrice = {voucher.price} key={voucher.id}/>
+                        </Grid>
+                    })}
+                { console.log(JSON.stringify(vouchers)) }
+            </Grid> 
+        </div>
     );
 };
 
