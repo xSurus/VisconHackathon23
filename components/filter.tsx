@@ -73,34 +73,40 @@ export default function DialogSelect(props: DialogSelectProps) {
                 <Button style={{color: 'black', backgroundColor: 'rgba(0,0,0,0.15)', fontSize: '1em'}}
                         onClick={handleClickOpen}><FilterAltIcon/> Filter</Button>
             </Grid>
-            <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-                <DialogTitle>Filter by (multichoice)</DialogTitle>
-                <DialogContent>
-                    <Box component="form" sx={{display: 'flex', flexWrap: 'wrap'}}>
-                        <FormControl sx={{m: 1, minWidth: 120}}>
-                            <InputLabel htmlFor="demo-dialog-native">Categories</InputLabel>
-                            <Select
-                                labelId="categories"
-                                id="categories"
-                                multiple
-                                value={props.categories}
-                                onChange={handleChange}
-                                input={<OutlinedInput label="Tag"/>}
-                                renderValue={(selected) => selected.filter(x => x.checked).map(x => x.cat).join(', ')}
-                            >
-                                {props.categories?.map((category) => (
-                                    <MenuItem key={category.cat} value={category.cat}>
-                                        <Checkbox checked={category.checked}/>
-                                        <ListItemText primary={category.cat}/>
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Ok</Button>
-                </DialogActions>
+            <Dialog disableEscapeKeyDown open={open} onClose={handleClose} fullWidth maxWidth="sm" sx={{left: 10, top: 50}}>
+                <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'} sx={{marginTop: '2em', marginBottom: '2em'}}>
+                    <DialogTitle>Filter by (multichoice)</DialogTitle>
+                    <DialogContent>
+                        <Box component="form" sx={{display: 'flex', flexWrap: 'wrap'}}>
+                            <FormControl sx={{m: 1, minWidth: 120}}>
+                                <InputLabel htmlFor="demo-dialog-native" sx={{
+                                    '& .MuiInputBase-input:focus': {
+                                        backgroundColor: 'white',
+                                    },
+                                }}>Categories</InputLabel>
+                                <Select
+                                    labelId="categories"
+                                    id="categories"
+                                    multiple
+                                    value={props.categories}
+                                    onChange={handleChange}
+                                    input={<OutlinedInput label="Tag"/>}
+                                    renderValue={(selected) => selected.filter(x => x.checked).map(x => x.cat).join(', ')}
+                                >
+                                    {props.categories?.map((category) => (
+                                        <MenuItem key={category.cat} value={category.cat}>
+                                            <Checkbox checked={category.checked}/>
+                                            <ListItemText primary={category.cat}/>
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Ok</Button>
+                    </DialogActions>
+                </Grid>
             </Dialog>
         </Grid>
     );

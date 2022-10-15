@@ -28,7 +28,7 @@ const SeekerOrders = () => {
                 }}>ALL ORDERS</Typography>
             </Grid>
             <Grid item style={{marginRight: '3em', marginTop: '2em'}}>
-                <Filter/>
+                {/*<Filter/>*/}
             </Grid>
             <Grid item container spacing={2}
                   style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '3em', marginTop: '0.3em'}}>
