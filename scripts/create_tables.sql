@@ -21,9 +21,10 @@ CREATE TABLE IF NOT EXISTS Address (
 );
 
 INSERT INTO
-    Address (street, cap, city, country)
+    Address (id, street, cap, city, country)
 VALUES
     (
+        1,
         'Leonhardstrasse 12',
         8001,
         'Zurich',
@@ -36,6 +37,20 @@ CREATE TABLE IF NOT EXISTS Billing (
     iban TEXT NOT NULL
 );
 
+INSERT INTO
+    Billing (id, billing_address, iban)
+VALUES
+    (
+        1,
+        'billing del porcoddio',
+        '123456712345678235678'
+    ),
+    (
+        2,
+        'billing della madonna bestia',
+        '98173659872469245'
+    );
+
 CREATE TABLE IF NOT EXISTS Supplier (
     id SERIAL PRIMARY KEY,
     name text UNIQUE NOT NULL,
@@ -45,6 +60,18 @@ CREATE TABLE IF NOT EXISTS Supplier (
     billing SERIAL REFERENCES Billing(id) NOT NULL
 );
 
+INSERT INTO
+    Supplier (id, name, email, homepage, address_id, billing)
+VALUES
+    (
+        1,
+        'Oceano',
+        'oceano@troie.com',
+        'oceano.balls',
+        1,
+        1
+    );
+
 CREATE TABLE IF NOT EXISTS Seeker (
     id SERIAL PRIMARY KEY,
     name text UNIQUE NOT NULL,
@@ -53,14 +80,10 @@ CREATE TABLE IF NOT EXISTS Seeker (
     homepage text
 );
 
-CREATE TABLE IF NOT EXISTS Voucher (
-    id SERIAL PRIMARY KEY,
-    name text NOT NULL,
-    uuid uuid NOT NULL,
-    price money NOT NULL,
-    supplier_id SERIAL REFERENCES Supplier(id),
-    offer_id SERIAL REFERENCES Offer(id)
-);
+INSERT INTO
+    Seeker (id, name, email, address_id, homepage)
+VALUES
+    (1, 'VIS', 'vis@ethz.ch', 1, 'vis.ethz.ch');
 
 CREATE TABLE IF NOT EXISTS Ordine (
     id SERIAL PRIMARY KEY,
@@ -71,20 +94,56 @@ CREATE TABLE IF NOT EXISTS Ordine (
         NULL
 );
 
+INSERT INTO
+    Ordine (id, status, seeker_id)
+VALUES
+    (1, 0, 1);
+
+CREATE TABLE IF NOT EXISTS Voucher (
+    id SERIAL PRIMARY KEY,
+    name text NOT NULL,
+    uuid uuid NOT NULL,
+    price money NOT NULL,
+    supplier_id SERIAL REFERENCES Supplier(id),
+    offer_id SERIAL REFERENCES Offer(id)
+);
+
+INSERT INTO
+    Voucher (id, name, uuid, price, supplier_id, offer_id)
+VALUES
+    (
+        1,
+        '40min cbt session',
+        uuid_generate_v4(),
+        40,
+        1,
+        1
+    );
+
 CREATE TABLE IF NOT EXISTS Voucher_Order (
     ordine_id SERIAL REFERENCES Ordine(id) NOT NULL,
     voucher_id SERIAL REFERENCES Voucher(id) NOT NULL,
     PRIMARY KEY(ordine_id, voucher_id)
 );
 
+INSERT INTO
+    Voucher_Order (ordine_id, voucher_id)
+VALUES
+    (1, 1);
+
 CREATE TABLE IF NOT EXISTS Offer (
     id SERIAL PRIMARY KEY,
     supplier_id SERIAL REFERENCES Supplier(id)
 );
 
+INSERT INTO
+    Offer (id, supplier_id)
+VALUES
+    (1, 1);
+
 -- Many Category <> One Offer map table.
 CREATE TABLE IF NOT EXISTS Offer_Category (
-    offer_id REFERENCES Offer(id) NOT NULL,
-    category_name REFERENCES Category(name) NOT NULL,
+    offer_id SERIAL REFERENCES Offer(id) NOT NULL,
+    category_name text REFERENCES Category(name) NOT NULL,
     PRIMARY KEY (offer_id, category_name)
 );
