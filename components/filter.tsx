@@ -32,11 +32,7 @@ export default function DialogSelect(props: DialogSelectProps) {
 
     const [open, setOpen] = React.useState(false);
 
-    React.useEffect(() => {
-        axios.get("/api/category").then((x) => x.data.categories.map((y: any) => {
-            return {cat: y, checked: true};
-        })).then(setCategories);
-    }, []);
+
 
     const handleClickOpen = () => {
         setOpen(true)

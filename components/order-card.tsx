@@ -1,29 +1,25 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import {CardActionArea, Grid} from '@mui/material';
+import { editOrder } from '../services/api-requests';
+import { OrderStatus} from '../util/schemas';
 
 interface OrderCardProps {
     orderNumber: number,
     orderStatus: number,
-    seeker: string
+    seeker: string,
+    setOrderStatus: (id: number, status: number) => void,
 }
 
 const OrderCard = (props: OrderCardProps) => {
 
     const {orderNumber, orderStatus, seeker} = props;
 
-    const getLabel = (orderStatus: number) => {
-        switch (orderStatus) {
-            case 0: return 'Pending';
-            case 1: return 'Confirmed';
-            case 2: return 'Declined';
-            case 3: return 'Paid';
-            default: return '';
-        }
-    }
+    const getLabel = (orderStatus: OrderStatus) => OrderStatus[orderStatus]
 
     const getColor = (orderStatus: number) => {
         switch (orderStatus) {
@@ -33,6 +29,13 @@ const OrderCard = (props: OrderCardProps) => {
             case 3: return 'success';
             default: return undefined;
         }
+    }
+
+    const setStatusAPI = (order_id : number) => {
+        editOrder(order_id, 0).then( res => {
+            console.log('Diomerda')
+            props.setOrderStatus(order_id, 0)
+        })
     }
 
     return (
@@ -55,6 +58,11 @@ const OrderCard = (props: OrderCardProps) => {
                                     label={getLabel(orderStatus)}
                                     color={getColor(orderStatus)}
                                 />
+                                <Button 
+                                    onClick = {() => setStatusAPI(orderNumber)}
+                                >
+                                    Set status to paid
+                                </Button>
                             </Grid>
                         </Grid>
                     </CardContent>

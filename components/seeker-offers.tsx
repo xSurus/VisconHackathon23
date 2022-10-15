@@ -6,10 +6,17 @@ import Filter from "./filter";
 import {Offer} from "../util/schemas";
 import Typography from "@mui/material/Typography";
 import { FilterElement } from "./filter";
+import axios from 'axios';
 
 const SeekerOffers = () => {
     const [vouchers, setVouchers] = useState<Offer[]>();
     const [categories, setCategories] = useState<FilterElement[]>([]);
+
+    useEffect(() => {
+        axios.get("/api/category").then((x) => x.data.categories.map((y: any) => {
+            return {cat: y, checked: true};
+        })).then(setCategories);
+    }, []);
 
     useEffect(() => {
         FetchOffers().then(res => {

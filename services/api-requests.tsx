@@ -1,6 +1,7 @@
 import axios from "axios";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
+import { resourceLimits } from "worker_threads";
 
 export const FetchOffers = async () => {
     const result = await axios.get(
@@ -27,4 +28,12 @@ export const SendSupplierRegistration = (data: any) => {
     });
     console.log('lol');
     return result;
+}
+
+
+export const editOrder = async (id : number, status : number) => {
+  const res = await axios.patch(
+    '/api/order', null, { params: {id, status} }
+  );
+  return res;
 }
