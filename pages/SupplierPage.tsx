@@ -1,9 +1,12 @@
 import * as React from 'react';
 import {makeStyles} from "@mui/styles";
-import {Grid} from "@mui/material";
+import {Button, Grid} from "@mui/material";
 
 const useStyles =  makeStyles({
     container: {
+        backgroundColor: 'blue',
+    },
+    btn: {
         backgroundColor: 'red',
     }
 })
@@ -18,6 +21,8 @@ const SupplierPage = () => {
                 <div className={classes.container}>
                     TEST
                 </div>
+                <Button className={classes.btn}>TEST</Button>
+                
             </Grid>
         </Grid>
     )
