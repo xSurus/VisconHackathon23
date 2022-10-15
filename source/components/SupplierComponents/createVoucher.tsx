@@ -7,12 +7,12 @@ import Image from 'next/image';
 import { Offer, Supplier } from "../../../util/schemas";
 import { PostOffer } from "../../../services/api-requests";
 import Filter from "../../../components/filter";
-
+import {PostQuery} from "../../../pages/api/offers";
 
 
 const CreateVoucher = () =>{
     const [offer, setValues] = React.useState<Offer>({
-        id: 0,
+        id: 99,
 	    name: "",
         description:"",
 	    price_per_voucher: 0,
@@ -22,7 +22,7 @@ const CreateVoucher = () =>{
 	    /** Can be empty of course, check */
 	    categories: []
     })
-    
+
     const [open, setOpen] = React.useState(false);
     const allCategories = [
         'Pog',
@@ -51,6 +51,12 @@ const CreateVoucher = () =>{
 
     const handleChange = (prop: keyof Offer) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({...offer, [prop]:event.target.value});
+        console.log(offer);
+    }
+
+    const [postQuery, setPostQuery] =React.useState<PostQuery>{
+
+
     }
 
     const handleSubmit = () =>{
@@ -62,6 +68,7 @@ const CreateVoucher = () =>{
             alert("enter a non-negative price");
 
         }else{
+            
             PostOffer(offer);
         }
 
