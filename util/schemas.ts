@@ -45,9 +45,8 @@ export function isBilling(o: any): o is Billing {
 
 /** The voucher has a price and a unique id. Plus stuff. Read */
 export type Voucher = {
-	id: number;
+	id: string;
 	name: string;
-	uuid: string;
 	/** Price in CHF */
 	price: number;
 	/** can be null, as a supplier might stop existing later on. */
@@ -78,6 +77,7 @@ export function isVoucher(o: any): o is Voucher {
 export type Seeker = {
 	id: number;
 	name: string;
+	img: string;
 	email: string;
 	address: Address;
 	homepage?: string;
@@ -89,6 +89,7 @@ export function isSeeker(o: any): o is Seeker {
 		typeof o.id === "string" &&
 		!isNaN(o.id) &&
 		typeof o.name === "string" &&
+		typeof o.img === "string" &&
 		typeof o.email === "string" &&
 		isAddress(o.address) &&
 		(typeof o.homepage === "string" || !o.homepage)
@@ -99,6 +100,7 @@ export function isSeeker(o: any): o is Seeker {
 export type Supplier = {
 	id: number;
 	name: string;
+	img: string;
 	email: string;
 	address: Address;
 	billing: Billing;
@@ -111,6 +113,7 @@ export function isSupplier(o: any): o is Supplier {
 		typeof o.id === "string" &&
 		!isNaN(o.id) &&
 		typeof o.name === "string" &&
+		typeof o.img === "string" &&
 		typeof o.email === "string" &&
 		isAddress(o.address) &&
 		isBilling(o.billing) &&
@@ -151,6 +154,7 @@ export function isOrder(o: any): o is Order {
 
 export type Offer = {
 	id: number;
+	price_per_voucher: number;
 	/** Can vanish in the future */
 	supplier?: Supplier;
 	/** Can be empty of course, check */
@@ -166,4 +170,18 @@ export function isOffer(o: any): o is Offer {
 		Array.isArray(o.categories) &&
 		o.categories.every((x: any) => isCategory(x))
 	);
+}
+
+export function isEmptyObj(o: any): o is {} {
+	return !Object.keys(o).length;
+}
+
+export type Id = { id: number };
+
+export function isId(o: any): o is { id: number } {
+	return o && typeof o.id === "string" && !isNaN(o.id);
+}
+
+export function addId<G>(o: G): G & { id: number } {
+	return { id: 0, ...o };
 }
