@@ -25,7 +25,7 @@ const SeekerOffers = () => {
                 {vouchers?.map((voucher: Offer) => {
                     return <Grid item xs={5} sm={4}>
                         <CompanyVoucher companyName={voucher.name} voucherPrice={voucher.price_per_voucher}
-                                        companyImageUrl={voucher.supplier?.img}
+                                        companyImageUrl={voucher.supplier ? voucher.supplier.img : ''}
                                         key={voucher.id}/>
                     </Grid>
                 })}
