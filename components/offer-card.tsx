@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import {CardActionArea, Grid} from '@mui/material';
 import {useState} from "react";
 import styled from "@emotion/styled";
+import { useTheme } from "@mui/material";
+import {useMediaQuery} from "@mui/material";
 
 interface OfferCardProps {
     companyName: string,
@@ -39,14 +41,14 @@ const OfferCard = (props: OfferCardProps) => {
                             {companyName}
                         </Typography>
                     </Grid>
-                    <Grid item style={{minHeight: '3em'}}>
+                    <Grid item style={{minHeight: '3em', maxHeight: '5em'}}>
                         <Typography variant="body2" color="text.secondary" sx={{
                             display: '-webkit-box',
                             overflow: 'hidden',
                             WebkitBoxOrient: 'vertical',
                             WebkitLineClamp: 6,
                         }}>
-                            {offerDescription}.
+                            {offerDescription}
                         </Typography>
                     </Grid>
                     <Grid item style={{marginTop: '1em'}}>
@@ -121,8 +123,17 @@ const OfferCard = (props: OfferCardProps) => {
         setContent(contentUnclicked);
     }
 
+    const CardModified = styled(Card)`
+      &:hover {
+        background-color: transparent;
+      }
+    `
+    const theme = useTheme();
+    const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
+    const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
+
     return (
-        <Card elevation={4} style={{borderRadius: '1em'}}>
+        <CardModified elevation={4} style={{borderRadius: '1em', minHeight: '20em', maxHeight: '25em'}}>
             <CardActionArea onClick={handleClick}>
                 <CardMedia
                     component="img"
@@ -133,7 +144,7 @@ const OfferCard = (props: OfferCardProps) => {
                 />
                 {content}
             </CardActionArea>
-        </Card>
+        </CardModified>
     );
 }
 export default OfferCard;
