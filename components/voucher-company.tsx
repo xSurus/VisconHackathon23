@@ -11,7 +11,8 @@ type Props = {companyName : string, voucherPrice : number}
 
 const useStyles = makeStyles({
   card: {
-    maxWidth: 400,
+    Width: 400,
+    maxHeight: 400,
     margin: 10,
     borderRadius: 10,
   },
@@ -38,10 +39,9 @@ const CompanyVoucher = (props : Props) =>  {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed est finibus eros iaculis pellentesque. 
           Nulla facilisi. Quisque a quam ac nisi tristique laoreet. Aliquam eget eros vitae turpis sagittis rutrum vitae et justo. 
           Morbi et nisl euismod, dignissim urna vel, rhoncus magna. Curabitur justo neque, cursus eu lorem id, vehicula sagittis ligula. 
-          Vestibulum sollicitudin tincidunt ante, vitae  nisl fermentum nec. Aenean a libero purus. This.
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
-            {`${props.voucherPrice}.-`}
+            {`${props.voucherPrice}`}
           </Typography>
         </CardContent>
       </CardActionArea>

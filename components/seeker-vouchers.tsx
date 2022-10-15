@@ -4,11 +4,11 @@ import type { Voucher } from '../util/schemas';
 import axios from "axios";
 import { fetchVouchers } from '../services/api-requests';
 import CompanyVoucher from "./voucher-company";
+import Filter from "./filter";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
     container_content: {
-        margin: 20,
     },
     header: {
         marginBottom: 20,
@@ -30,34 +30,17 @@ const SeekerVouchers = () => {
 
     return (
         <div>
-            <Grid container justifyContent={'center'} className={classes.container_content}>
-                <Grid container className={classes.container_content} spacing={2}>
-                    <Grid item xs={5} sm={4}>
-                        <CompanyVoucher companyName = 'asdf' voucherPrice = {2}/>
-                    </Grid>
-                    <Grid item xs={4} sm={4}>
-                        <CompanyVoucher companyName = 'asdf' voucherPrice = {2}/>
-                    </Grid>
-                    <Grid item xs={4} sm={4}>
-                        <CompanyVoucher companyName = 'asdf' voucherPrice = {2}/>
-                    </Grid>
-                    <Grid item xs={5} sm={4}>
-                        <CompanyVoucher companyName = 'asdf' voucherPrice = {2}/>
-                    </Grid>
-                    <Grid item xs={4} sm={4}>
-                        <CompanyVoucher companyName = 'asdf' voucherPrice = {2}/>
-                    </Grid>
-                    <Grid item xs={4} sm={4}>
-                        <CompanyVoucher companyName = 'asdf' voucherPrice = {2}/>
-                    </Grid>
-                    
-                </Grid>
-            </Grid>
-            <pre>   
-                <code> {JSON.stringify(vouchers, null, 2)} </code>
-            </pre>
+            <Filter />
+            <Grid container className={classes.container_content}>
+                    { vouchers.map((voucher : Voucher) => {
+                        return <Grid item xs={5} sm={4}>
+                                    <CompanyVoucher companyName = {voucher.name} voucherPrice = {voucher.price} key={voucher.id}/>
+                                </Grid>
+                    })}
+                { console.log(JSON.stringify(vouchers)) }
+            </Grid> 
         </div>
     );
 };
 
-export default SeekerVouchers;
+export default SeekerVouchers; 

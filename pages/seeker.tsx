@@ -20,7 +20,11 @@ const useStyles = makeStyles({
         fontSize: 20,
         fontWeight: 600,
         textAlign: 'center',
-    }
+    },
+    body : {
+        backgroundColor: '#f7f7f7',
+        padding: 20,
+    },
 })
 const Seeker = () => {
 
@@ -29,7 +33,7 @@ const Seeker = () => {
     const classes = useStyles();
 
     return (
-        <Grid container>
+        <Grid>
             <Grid container className={classes.header}>
                 <Grid item xs={6} className={classes.headertext}>
                     <Button
@@ -46,7 +50,9 @@ const Seeker = () => {
                 </Button>
                 </Grid>
             </Grid>
+            <Grid container className={classes.body}>
             { page }
+            </Grid>
         </Grid>
     )
 }
