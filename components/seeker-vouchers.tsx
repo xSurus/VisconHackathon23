@@ -4,6 +4,7 @@ import type { Voucher } from '../util/schemas';
 import axios from "axios";
 import { fetchVouchers } from '../services/api-requests';
 import CompanyVoucher from "./voucher-company";
+import Filter from "./filter";
 
 
 const SeekerVouchers = () => {
@@ -18,7 +19,7 @@ const SeekerVouchers = () => {
     return (
         <div>
             {<Filter /> }
-            <Grid container className={classes.container_content}>
+            <Grid container>
                     {vouchers.map((voucher : Voucher) => {
                         return <Grid item xs={5} sm={4}>
                             <CompanyVoucher companyName = {voucher.name} voucherPrice = {voucher.price} key={voucher.id}/>

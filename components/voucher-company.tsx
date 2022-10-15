@@ -6,24 +6,22 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import type { Voucher } from '../util/schemas';
 import Home from '../pages';
-import { makeStyles } from '@mui/styles';
 type Props = {companyName : string, voucherPrice : number}
 
-const useStyles = makeStyles({
-  card: {
-    Width: 400,
-    maxHeight: 400,
-    margin: 10,
-    borderRadius: 10,
-  },
-})
+// const useStyles = makeStyles({
+//   card: {
+//     Width: 400,
+//     maxHeight: 400,
+//     margin: 10,
+//     borderRadius: 10,
+//   },
+// })
 
 
 const CompanyVoucher = (props : Props) =>  {
-  const classes = useStyles();
 
   return (
-    <Card className={classes.card}>
+    <Card>
       <CardActionArea href="https://google.com">
         <CardMedia
           component="img"
