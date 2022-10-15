@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../util/db";
 import { Category, isInteger, Offer, Supplier } from "../../util/schemas";
 
-type GetCategoriesQuery = { categories: Category[] };
+type GetCategoriesQuery = { categories: Category | Category[] };
 
 type GetIdQuery = { id: number };
 /** Create {stock} vouchers with {name} and {price}. Offer has categories and a supplier id */
@@ -28,8 +28,9 @@ function isGetIdQuery(query: any): query is GetIdQuery {
 function isGetCategoriesQuery(query: any): query is GetCategoriesQuery {
 	return (
 		query &&
-		Array.isArray(query.categories) &&
-		query.categories.every((c: any) => typeof c === "string")
+		(typeof query.categories === "string" ||
+			(Array.isArray(query.categories) &&
+				query.categories.every((c: any) => typeof c === "string")))
 	);
 }
 
@@ -114,7 +115,18 @@ export default async function handler(
 					console.error(e);
 				}
 			} else if (isGetCategoriesQuery(query)) {
-				let result = await db.query();
+				const categories: Category[] =
+					typeof query.categories === "string"
+						? [query.categories]
+						: query.categories;
+
+				let result = await db.query(
+					"SELECT * FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC WHERE OC.category_name = ANY( $1::text[] ) AND O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing",
+
+					[categories]
+				);
+				console.log(result);
+				``;
 			} else {
 				break;
 			}
