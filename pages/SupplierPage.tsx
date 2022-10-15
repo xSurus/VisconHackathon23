@@ -6,12 +6,13 @@ import TopBar from "../source/components/SupplierComponents/TopBar";
 const useStyles =  makeStyles({
 })
 
+
 const SupplierPage = () => {
 
     const classes = useStyles();
 
     return (
-        <TopBar index={2} />
+        <TopBar index={0} />
     )
 }
 

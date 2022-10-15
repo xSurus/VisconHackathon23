@@ -2,7 +2,8 @@ import type {NextPage} from 'next'
 import Head from 'next/head'
 import SupplierPage from "./SupplierPage";
 
-const Home: NextPage = () => {
+
+const Home: NextPage= () => {
     const hello = 5;
     return (
         <div>

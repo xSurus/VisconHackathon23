@@ -1,8 +1,9 @@
-import { ClassNames } from '@emotion/react';
+
 import {makeStyles } from '@mui/styles';
-import { Button, Grid } from '@mui/material'
+import { Button, Grid, IconButton } from '@mui/material'
 import * as React from 'react';
-import { grey } from '@mui/material/colors';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles({
     container:{
@@ -27,30 +28,39 @@ interface TopBarInterface {
 
 const TopBar = (props: TopBarInterface) => {
     const classes = useStyles();
-    const {index} = props
+    const router = useRouter();
+    let {index} = props
+    const handleClick = (e:any, id :number) =>{
+        e.preventDefault();
+        index = id;
+        router.push("/");
+    }
+
     return (
         <Grid container className={classes.container} justifyContent={'center'}>
             <Grid item >
-                <Button  className={index===0?classes.button:classes.button_inactive}>
+                <Button onClick={(e)=>{handleClick(e, 0)}} className={index===0?classes.button:classes.button_inactive}>
                     My offers
                 </Button>
                 
             </Grid>
 
             <Grid item >
-                <Button className={index===1?classes.button:classes.button_inactive}>
+                <Button onClick={(e)=>{handleClick(e, 1)}} className={index===1?classes.button:classes.button_inactive}>
                 My Vouchers
                 </Button>
             </Grid>
 
             <Grid item >
-                <Button className={index===2?classes.button:classes.button_inactive}>
+                <Button onClick={(e)=>{handleClick(e, 2)}} className={index===2?classes.button:classes.button_inactive}>
                 Profile
                 </Button>
             </Grid>
 
-            <Grid item>
-
+            <Grid item onClick={(e)=>{handleClick(e, 3)}} className={index===3?classes.button:classes.button_inactive}>
+                <IconButton aria-label='profile'>
+                    <AccountCircleIcon/>
+                </IconButton>
             </Grid>
         </Grid>
     )
