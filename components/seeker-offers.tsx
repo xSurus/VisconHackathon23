@@ -20,10 +20,14 @@ const SeekerOffers = () => {
     return (
         <Grid container style={{display: 'flex', maxHeight: '8em'}} justifyContent={'space-between'}>
             <Grid item>
-                <Typography style={{marginLeft: '3em', marginTop: '1.6em', fontSize: '1.3em', fontWeight: 'bold'}}>ALL OUR OFFERS</Typography>
-            </Grid>
-            <Grid item style={{marginRight: '3em', marginTop: '2em'}}>
-                <Filter categories={categories} setCategories={setCategories} />
+                <Grid item container justifyContent={'space-between'} alignItems={'center'} direction={'column'}>
+                    <Grid item>
+                        <Typography style={{fontSize: '1.3em', fontWeight: 'bold'}}>ALL OUR OFFERS</Typography>
+                    </Grid>
+                    <Grid item style={{}}>
+                        <Filter categories={categories} setCategories={setCategories} />
+                    </Grid>
+                </Grid>
             </Grid>
             <Grid container spacing={3} alignItems={'center'}
                   style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '6em', marginTop: '0.3em'}}>
