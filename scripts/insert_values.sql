@@ -128,7 +128,19 @@ VALUES
         'Offerta imperdibile! Un materasso supercomfort in technolatex con scappellamento a destra, e brematura!',
         1
     ),
-    ('Name2', 'Non e una truffa', 2) ON CONFLICT DO NOTHING;
+    ('Name2', 'Non e una truffa', 2),
+    ('Test3', 'cosecose', 1),
+    ('TTAGNGGNGOG', 'egawsrar', 1) ON CONFLICT DO NOTHING;
+
+INSERT INTO
+    Voucher (name, price, supplier_id, offer_id)
+SELECT
+    'test',
+    10,
+    supplier_id,
+    id
+FROM
+    Offer;
 
 INSERT INTO
     Voucher (id, name, price, supplier_id, offer_id)
@@ -188,6 +200,27 @@ VALUES
         80,
         2,
         2
+    ),
+    (
+        'ce6def9e-36cb-421b-bde4-25d503bbbfe9',
+        'lezioni di league',
+        80,
+        2,
+        3
+    ),
+    (
+        'ce6def9e-36cb-421b-bde4-25d503bbbfea',
+        'lezioni di league',
+        80,
+        2,
+        3
+    ),
+    (
+        'ce6def9e-36cb-421b-bde4-25d503bbbfeb',
+        'lezioni di league',
+        80,
+        2,
+        3
     ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
@@ -202,4 +235,24 @@ VALUES
     ('Gaming', 1),
     ('Food', 2),
     ('Cinema', 2),
-    ('Culture', 2);
+    ('Culture', 2),
+    ('Food', 3),
+    ('Gaming', 3),
+    ('Cinema', 4);
+
+INSERT INTO
+    SeekerCredential (password, seeker_id)
+SELECT
+    '$2b$15$ZRUleociv079Zve9jGIpGexivxVw1WIsX2jDIRDjqG3heCjDv2tRa',
+    id
+FROM
+    Seeker;
+
+INSERT INTO
+    SupplierCredential (password, supplier_id)
+SELECT
+    -- Password is `cock` in bcrypt with 13 salt rounds
+    '$2b$13$kP33IHjaJe6gVSsWcYoBuuEBTVT/xi9VliNPqLBErtlA8SbweydWS',
+    id
+FROM
+    Supplier;

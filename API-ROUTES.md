@@ -15,6 +15,7 @@ List of api routes:
 - `/supplier`
 - `/seeker`
 - `/offer`
+- `/order`
 
 API is Restful, meaning that HTTP Methods define the functionality.
 
@@ -35,3 +36,9 @@ TODO: Complete
 - `POST`: Create a new offer
 - `PUT or PATCH`: Edit an offer
 - `DELETE`: Delete an offer 
+
+## Order
+- `GET`: `?seeker_id` Responds with the list of orders of said seeker, `Order[]`
+- `POST`: `?seeker_id & offer_id & amount` Order a certain amount of vouchers from an offer, as a seeker. Returns `{order: Order; vouchers: Voucher[];}`
+  on success, otherwise a `string` error or `undefined`.
+- `PATCH`: `?id & status` Set the new status of this order. Responds with the updated `Order`, or undefined if not found.
