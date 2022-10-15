@@ -20,6 +20,7 @@ const LoginForm = () => {
       width: 15em;
       margin-right: 0.1em;
       height: 3em;
+
       :hover {
         background-color: black;
       }
@@ -29,6 +30,7 @@ const LoginForm = () => {
       margin-top: 2em;
       border-radius: 2em;
       background-color: #000000;
+
       :hover {
         cursor: pointer;
       }
@@ -39,6 +41,7 @@ const LoginForm = () => {
       border-radius: 2em;
       background-color: #000000;
       margin-bottom: 3.5em;
+
       :hover {
         cursor: pointer;
       }
@@ -55,17 +58,27 @@ const LoginForm = () => {
     }
 
     return (
-        <Grid container direction={'row'}>
-            <Grid item container direction={'column'}>
-                <Typography style={{lineHeight: '1.25em'}} align={'center'}>
-                    Hey!
-                </Typography>
-                <Typography paragraph align={'center'}>
-                    In order to see our offers, please LOGIN or REGISTER yourself!
-                </Typography>
+        <Grid container direction={'row'} justifyContent={'center'} alignItems={'center'} style={{height:'100vh'}}>
+            <Grid item style={{marginRight: '3em'}}>
+                <Grid item container direction={'column'}>
+                    <Grid item>
+                         <Typography style={{lineHeight: '2em', letterSpacing: '0.2em'}}>
+                            Hey!
+                        </Typography>
+                    </Grid>
+                    <Typography >
+                        In order to see our offers, please LOGIN or REGISTER yourself!
+                    </Typography>
+                    <Typography >
+                        In our webapp you will be able to add vouchers, see different
+                    </Typography>
+                    <Typography >
+                        offers provided by our partner suppliers, and purchase them!
+                    </Typography>
+                </Grid>
             </Grid>
-            <Grid item container justifyContent={'center'} alignItems={'center'} >
-                <Grid item>
+            <Grid item>
+                <Grid item container justifyContent={'center'} alignItems={'center'}>
                     <PaperContainer elevation={10}>
                         <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}
                               style={{display: 'flex'}}>
@@ -133,7 +146,8 @@ const LoginForm = () => {
                                     <PaperEmail>
                                         <Grid container justifyContent={'start'} alignItems={'center'}>
                                             <Grid item style={{marginRight: '1em'}}>
-                                                <VpnKeyIcon fontSize={'medium'} style={{marginTop: '0.2em', color: 'white'}}/>
+                                                <VpnKeyIcon fontSize={'medium'}
+                                                            style={{marginTop: '0.2em', color: 'white'}}/>
                                             </Grid>
                                             <Typography style={{color: 'white'}}>
                                                 Register using e-mail
