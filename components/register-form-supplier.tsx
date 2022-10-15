@@ -5,7 +5,9 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
 import Link from "next/link";
-
+import { Axios } from 'axios';
+import { SendSupplierRegistration } from '../services/api-requests';
+import Seeker from '../pages/seeker';
 const RegisterFormSupplier = () => {
     const LoginButton = styled(Button)`
       color: #fff;
