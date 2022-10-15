@@ -128,7 +128,9 @@ VALUES
         'Offerta imperdibile! Un materasso supercomfort in technolatex con scappellamento a destra, e brematura!',
         1
     ),
-    ('Name2', 'Non e una truffa', 2) ON CONFLICT DO NOTHING;
+    ('Name2', 'Non e una truffa', 2),
+    ('Test3', 'cosecose', 1),
+    ('TTAGNGGNGOG', 'egawsrar', 1) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Voucher (id, name, price, supplier_id, offer_id)

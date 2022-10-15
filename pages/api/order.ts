@@ -54,6 +54,40 @@ export function isGetQuery(query: any): query is GetQuery {
 	return query && isInteger(query.seeker_id);
 }
 
+export async function getAvailableVouchersCount(
+	offer_id: number
+): Promise<number> {
+	const result_vouchers = await db.query(
+		"SELECT COUNT(*)::int FROM Voucher V LEFT JOIN Voucher_Order O ON O.voucher_id = V.id WHERE ordine_id IS NULL AND offer_id = $1::integer",
+		[offer_id]
+	);
+
+	const count = result_vouchers.rows[0].count;
+
+	return count;
+}
+
+export async function getAvailableVouchers(
+	offer_id: number
+): Promise<Voucher[]> {
+	const result_vouchers = await db.query(
+		"SELECT * FROM Voucher V LEFT JOIN Voucher_Order O ON O.voucher_id = V.id WHERE ordine_id IS NULL AND offer_id = $1::integeer"[
+			offer_id
+		]
+	);
+
+	const offer = await getOfferById(offer_id);
+	if (!offer) return [];
+
+	return result_vouchers.rows.map((voucher: any) => ({
+		id: voucher.id,
+		name: voucher.name,
+		price: voucher.price,
+		offer,
+		supplier: offer.supplier,
+	}));
+}
+
 const handler: NextApiHandler<Data> = async (req, res) => {
 	const { query } = req;
 
@@ -82,11 +116,6 @@ const handler: NextApiHandler<Data> = async (req, res) => {
 		await db.query("BEGIN");
 		// Free vouchers
 		const f = async () => {
-			console.log("Checking voucher count");
-			const result_vouchers = await db.query(
-				"SELECT * FROM Voucher V LEFT JOIN Voucher_Order O ON O.voucher_id = V.id WHERE ordine_id IS NULL"
-			);
-
 			console.log("Checkint query params");
 
 			const offer = await getOfferById(query.offer_id);
@@ -97,9 +126,11 @@ const handler: NextApiHandler<Data> = async (req, res) => {
 				// not found offer id
 				return res.status(404).send("invalid-offer");
 			}
+			console.log("Checking voucher count");
+			const vouchers = await getAvailableVouchers(offer.id);
 
 			// Enough
-			if (result_vouchers.rows.length >= query.amount) {
+			if (vouchers.length >= query.amount) {
 				const order_result = await db.query(
 					"INSERT INTO Ordine (status, seeker_id) VALUES (0, $1::integer) RETURNING id, status, seeker_id",
 					[query.seeker_id]
@@ -112,19 +143,13 @@ const handler: NextApiHandler<Data> = async (req, res) => {
 				} = order_result.rows[0];
 				const vouchers: Voucher[] = [];
 				for (let i = 0; i < query.amount; i++) {
-					const voucher = result_vouchers.rows[i];
+					const voucher = vouchers[i];
 					const result = await db.query(
 						"INSERT INTO Voucher_Order (ordine_id, voucher_id) VALUES ($1::integer, $2::uuid)",
 						[order_id, voucher.id]
 					);
 
-					vouchers.push({
-						id: voucher.id,
-						name: voucher.name,
-						price: voucher.price,
-						offer,
-						supplier: offer.supplier,
-					});
+					vouchers.push(voucher);
 				}
 
 				const ans: PostData = {
