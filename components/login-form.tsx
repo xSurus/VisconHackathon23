@@ -8,7 +8,6 @@ import LoginIcon from '@mui/icons-material/Login';
 
 const useStyles = makeStyles({
     container: {
-        height: '100vh'
     },
     btn: {
         backgroundColor: '#7c7f65',
@@ -17,10 +16,6 @@ const useStyles = makeStyles({
         height: '50px',
     },
     paper: {
-        height: '70vh',
-        width: 500,
-        backgroundColor: "#cabac8",
-        borderRadius: '1.5em'
     },
     avatar: {
         backgroundColor: '#49516f',
@@ -34,12 +29,14 @@ const useStyles = makeStyles({
 
 const LoginForm = () => {
 
-    const classes = useStyles();
-
     return (
-        <Grid container justifyContent={'center'} alignItems={'center'} className={classes.container}>
+        <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
             <Grid item>
-                <Paper elevation={10} className={classes.paper}>
+                <Paper elevation={10} style={{
+                    height: '70vh',
+                    width: 500,
+                    backgroundColor: "#cabac8",
+                    borderRadius: '1.5em'}}>
                     <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}
                           style={{display: 'flex'}}>
                         <Grid item>
