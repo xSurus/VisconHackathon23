@@ -36,33 +36,18 @@ const TopBar = (props: TopBarInterface) => {
         index = id;
         router.push("/supplier");
     }
-
+    const menu_points = [{id:0, name:"My Offers"}, {id:1, name:"My Vouchers"}, {id:2, name:"Stats"}]
     return (
         <Grid container className={classes.container} justifyContent={'center'}>
-            <Grid item>
-                <Button onClick={(e) => {
-                    handleClick(e, 0); setActiveIndex(0)
-                }} className={index === 0 ? classes.button : classes.button_inactive}>
-                    My offers
+            {menu_points.map((entry) =>(
+                <Grid item>
+                    <Button onClick={(e) => {
+                    handleClick(e, entry.id); setActiveIndex(entry.id)
+                }} className={index === entry.id ? classes.button : classes.button_inactive}>
+                    {entry.name}
                 </Button>
-
-            </Grid>
-
-            <Grid item>
-                <Button onClick={(e) => {
-                    handleClick(e, 1); setActiveIndex(1)
-                }} className={index === 1 ? classes.button : classes.button_inactive}>
-                    My Vouchers
-                </Button>
-            </Grid>
-
-            <Grid item>
-                <Button onClick={(e) => {
-                    handleClick(e, 2); setActiveIndex(2)
-                }} className={index === 2 ? classes.button : classes.button_inactive}>
-                    Profile
-                </Button>
-            </Grid>
+                </Grid>
+            ))}
 
             <Grid item onClick={(e) => {
                 handleClick(e, 3); setActiveIndex(3)
