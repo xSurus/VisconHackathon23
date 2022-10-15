@@ -1,9 +1,7 @@
-import { makeStyles } from "@mui/styles";
-import { AppBar, Button, Grid } from "@mui/material";
+import {Button, Grid } from "@mui/material";
 import { useState } from "react";
 import SeekerVouchers from "../components/seeker-vouchers";
 import SeekerOrders from "../components/seeker-orders";
-import Header from "../components/header";
 
 
 const Seeker = () => {
@@ -12,20 +10,27 @@ const Seeker = () => {
     const [whichPage, setWhichPage] = useState<number>(1);
 
     return (
-        <div>
-            <h2 
-            onClick={() => {showPage(<SeekerOrders/>); setWhichPage(1)}}
-            style={{color: whichPage == 1 ? 'black' : 'rgba(0,0,0,0.5)', cursor:'pointer', display: 'inline'}}>
-                Orders
-            </h2> 
-            <h2 
-            onClick={() => {showPage(<SeekerVouchers/>); setWhichPage(2)}}
-            style={{color: whichPage == 2 ? 'black' : 'rgba(0,0,0,0.5)', cursor:'pointer', display: 'inline'}}>
-                Vouchers
-            </h2>
+        <Grid container justifyContent={'space-between'} alignItems={'center'} style={{backgroundColor: '#a1a1a1'}}>
+            <Grid item>
+                <Button
+                    onClick={() => {showPage(<SeekerOrders/>); setWhichPage(1)}}
+                    style={{color: whichPage == 1 ? 'darkred' : 'rgba(0,0,0,1)', cursor:'pointer', display: 'inline', fontSize: '1.5em'}}>
+                    Orders
+                </Button>
+            </Grid>
+            <Grid item style={{marginRight: '2.5em', marginLeft: '2.5em', color: 'rgba(105,105,105,0.5)'}}>
+                |
+            </Grid>
+           <Grid item>
+               <Button
+                   onClick={() => {showPage(<SeekerVouchers/>); setWhichPage(2)}}
+                   style={{color: whichPage == 2 ? 'darkred' : 'rgba(0,0,0,1)', cursor:'pointer', display: 'inline', fontSize: '1.5em'}}>
+                   Vouchers
+               </Button>
+           </Grid>
             { page }
-        </div>
-    ) 
+        </Grid>
+    )
 }
 
 export default Seeker;
