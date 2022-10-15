@@ -11,7 +11,7 @@ interface CompanyVoucherProps {
     companyImageUrl: string
 }
 
-const CompanyVoucher = (props: CompanyVoucherProps) => {
+const OfferCard = (props: CompanyVoucherProps) => {
 
     const {companyName, voucherPrice, companyImageUrl} = props;
 
@@ -44,4 +44,4 @@ const CompanyVoucher = (props: CompanyVoucherProps) => {
         </Card>
     );
 }
-export default CompanyVoucher;
+export default OfferCard;

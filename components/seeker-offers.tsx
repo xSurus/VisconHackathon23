@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import {Grid} from '@mui/material';
 import {FetchOffers} from '../services/api-requests';
-import CompanyVoucher from "./offer-card";
+import OfferCard from "./offer-card";
 import Filter from "./filter";
 import {Offer} from "../util/schemas";
 
@@ -24,7 +24,7 @@ const SeekerOffers = () => {
                   style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '3em', marginTop: '0.3em'}}>
                 {vouchers?.map((voucher: Offer) => {
                     return <Grid item xs={5} sm={4}>
-                        <CompanyVoucher companyName={voucher.name} voucherPrice={voucher.price_per_voucher}
+                        <OfferCard companyName={voucher.name} voucherPrice={voucher.price_per_voucher}
                                         companyImageUrl={voucher.supplier ? voucher.supplier.img : ''}
                                         key={voucher.id}/>
                     </Grid>
