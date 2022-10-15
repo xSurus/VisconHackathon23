@@ -172,7 +172,8 @@ export default async function handler(
 						"SELECT price FROM Voucher WHERE offer_id = $1::integer",
 						[o.id]
 					);
-					const price_per_voucher = res_price.rows[0].price;
+					const price_per_voucher =
+						res_price.rows.length > 0 ? res_price.rows[0].price : 0;
 
 					if (!offer) {
 						const available = await getAvailableVouchersCount(o.id);
