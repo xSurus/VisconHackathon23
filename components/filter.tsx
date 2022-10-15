@@ -16,22 +16,26 @@ import ListItemText from '@mui/material/ListItemText';
 import {Grid} from "@mui/material";
 import axios from 'axios';
 
-type DialogSelectProps = {
+interface DialogSelectProps {
     categories: FilterElement[],
     setCategories: React.Dispatch<React.SetStateAction<FilterElement[]>>,
 }
+
 export type FilterElement = {
     cat: string,
     checked: boolean
 }
 
 export default function DialogSelect(props: DialogSelectProps) {
-    
-    
+
+    const {categories, setCategories} = props;
+
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
-    axios.get("/api/category").then(x => props.setCategories(x.data.categories.map((y) => {return {cat: y, checked: true};})));
+        axios.get("/api/category").then((x) => setCategories(x.data.categories.map((y: any) => {
+            return {cat: y, checked: true};
+        })));
     }, []);
 
     const handleClickOpen = () => {
@@ -84,7 +88,7 @@ export default function DialogSelect(props: DialogSelectProps) {
                                 input={<OutlinedInput label="Tag"/>}
                                 renderValue={(selected) => selected.filter(x => x.checked).map(x => x.cat).join(', ')}
                             >
-                                {props.categories.map((category) => (
+                                {props.categories?.map((category) => (
                                     <MenuItem key={category.cat} value={category.cat}>
                                         <Checkbox checked={category.checked}/>
                                         <ListItemText primary={category.cat}/>
