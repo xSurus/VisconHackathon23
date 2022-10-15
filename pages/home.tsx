@@ -1,10 +1,9 @@
 import { Grid } from '@mui/material';
 import type {NextPage} from 'next'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import LoginForm from "../components/login-form";
+import LoginForm from '../components/login-form';
 
-const Home: NextPage = () => {
+const Landing: NextPage = () => {
     return (
         <Grid container>
             <Head>  
@@ -17,4 +16,4 @@ const Home: NextPage = () => {
     )
 }
 
-export default Home
+export default Landing
