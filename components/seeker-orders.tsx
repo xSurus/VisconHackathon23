@@ -25,7 +25,7 @@ const SeekerOrders = () => {
                 <Grid item container spacing={3}
                       style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '3em', marginTop: '0.3em'}}>
                     {orders?.map((order: Order) => {
-                        return <Grid item xs={5} sm={4}>
+                        return <Grid item xs={5} sm={4} key={order.id}>
                             <OrderCard orderNumber={order.id} orderStatus={order.status}
                                        seeker={order.seeker ? order.seeker.name : ''} key={order.id}/>
                         </Grid>
