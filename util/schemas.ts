@@ -105,7 +105,7 @@ export type Supplier = {
 	address: Address;
 	billing: Billing;
 	homepage?: string;
-}
+};
 
 export function isSupplier(o: any): o is Supplier {
 	return (
@@ -157,6 +157,7 @@ export type Offer = {
 	name: string;
 	description: string;
 	price_per_voucher: number;
+	available: number;
 	/** Can vanish in the future */
 	supplier?: Supplier;
 	/** Can be empty of course, check */
