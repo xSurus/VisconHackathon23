@@ -1,12 +1,10 @@
 import { Grid } from '@mui/material';
 import type {NextPage} from 'next'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import LoginForm from "../components/login-form";
 
 
 const Home: NextPage= () => {
-    const hello = 5;
     return (
         <Grid container>
             <Head>  
