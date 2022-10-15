@@ -1,9 +1,9 @@
 import axios from "axios";
-import type { Voucher } from '../util/schemas';
+import type { Offer } from '../util/schemas';
 
-export const fetchVouchers = async () => {
+export const FetchOffers = async () => {
     const result = await axios(
-      '/api/voucher',
+      '/api/offer',
     );
     return result;
 }

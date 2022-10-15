@@ -4,34 +4,33 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
+import styled from '@emotion/styled'
 import type { Voucher } from '../util/schemas';
 import Home from '../pages';
-type Props = {companyName : string, voucherPrice : number}
 
-// const useStyles = makeStyles({
-//   card: {
-//     Width: 400,
-//     maxHeight: 400,
-//     margin: 10,
-//     borderRadius: 10,
-//   },
-// })
+type Props = {supplier : string  | undefined, price : number}
 
 
-const CompanyVoucher = (props : Props) =>  {
-
+const OfferCard = (props : Props) =>  {
+  const CompanyOffer = styled(Card)`
+    width: 400,
+    maxHeight: 400,
+    margin: 10,
+    borderRadius: 10,
+  }
+  `
   return (
-    <Card>
+    <CompanyOffer>
       <CardActionArea href="https://google.com">
         <CardMedia
           component="img"
           width="100%"
           image="/migros.svg.png"
-          alt={props.companyName}
+          alt={props.supplier}
         />
         <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-            {`${props.companyName}`}
+            {`${props.price}`}
           </Typography>
           <Typography variant="body2" color="text.secondary">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sed est finibus eros iaculis pellentesque. 
@@ -39,11 +38,11 @@ const CompanyVoucher = (props : Props) =>  {
           Morbi et nisl euismod, dignissim urna vel, rhoncus magna. Curabitur justo neque, cursus eu lorem id, vehicula sagittis ligula. 
           </Typography>
           <Typography gutterBottom variant="h5" component="div">
-            {`${props.voucherPrice}`}
+            {`${props.price}`}
           </Typography>
         </CardContent>
       </CardActionArea>
-    </Card>
+    </CompanyOffer>
   );
 }
-export default CompanyVoucher;
+export default OfferCard;
