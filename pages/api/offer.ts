@@ -67,6 +67,58 @@ function isDeleteQuery(query: any): query is DeleteQuery {
 
 type Data = Offer[] | undefined;
 
+export async function getOfferById(id: number): Promise<Offer | undefined> {
+	await db.query("BEGIN");
+	let res_offer = await db.query(
+		"SELECT * FROM Offer AS O, Supplier AS S, Address as A, Billing as B WHERE O.id = $1::integer AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing",
+		[id]
+	);
+	console.log(res_offer);
+	let res_categories = await db.query(
+		"SELECT category_name FROM Offer_Category WHERE offer_id = $1::integer",
+		[id]
+	);
+
+	let res_price = await db.query(
+		"SELECT price FROM Voucher WHERE offer_id = $1::integer LIMIT 1",
+		[id]
+	);
+	const price_per_voucher = res_price.rows[0].price;
+	await db.query("COMMIT");
+
+	console.log(res_offer.rows[0]);
+
+	if (res_offer.rowCount === 0) return undefined;
+	const row = res_offer.rows[0];
+	const categories = res_categories.rows.map((r) => r.category_name);
+	return {
+		description: row.description,
+		name: row.name,
+		categories,
+		id: row.id,
+		price_per_voucher,
+		supplier: {
+			img: row.img,
+			name: row.name,
+			homepage: row.homepage,
+			email: row.email,
+			id: row.supplier_id,
+			address: {
+				id: row.address_id,
+				street: row.street,
+				cap: row.cap,
+				city: row.city,
+				country: row.country,
+			},
+			billing: {
+				id: row.billing,
+				billing_address: row.billing_address,
+				iban: row.iban,
+			},
+		},
+	};
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<Data>
@@ -77,62 +129,13 @@ export default async function handler(
 		case "GET":
 			if (isGetIdQuery(query)) {
 				try {
-					await db.query("BEGIN");
-					let res_offer = await db.query(
-						"SELECT * FROM Offer AS O, Supplier AS S, Address as A, Billing as B WHERE O.id = $1::integer AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing",
-						[query.id]
-					);
-					console.log(res_offer);
-					let res_categories = await db.query(
-						"SELECT category_name FROM Offer_Category WHERE offer_id = $1::integer",
-						[query.id]
-					);
-
-					let res_price = await db.query(
-						"SELECT price FROM Voucher WHERE offer_id = $1::integer LIMIT 1",
-						[query.id]
-					);
-					const price_per_voucher = res_price.rows[0].price;
-					await db.query("COMMIT");
-
-					console.log(res_offer.rows[0]);
-
-					if (res_offer.rowCount === 0)
-						return res.status(404).send(undefined);
-					const row = res_offer.rows[0];
-					const categories = res_categories.rows.map(
-						(r) => r.category_name
-					);
-					const offers: [Offer] = [
-						{
-							description: row.description,
-							name: row.name,
-							categories,
-							id: row.id,
-							price_per_voucher,
-							supplier: {
-								img: row.img,
-								name: row.name,
-								homepage: row.homepage,
-								email: row.email,
-								id: row.supplier_id,
-								address: {
-									id: row.address_id,
-									street: row.street,
-									cap: row.cap,
-									city: row.city,
-									country: row.country,
-								},
-								billing: {
-									id: row.billing,
-									billing_address: row.billing_address,
-									iban: row.iban,
-								},
-							},
-						},
-					];
-
-					return res.status(200).json(offers);
+					const offer = await getOfferById(query.id);
+					if (offer) {
+						const offers = [offer];
+						return res.status(200).json(offers);
+					} else {
+						return res.status(404).send([]);
+					}
 				} catch (e) {
 					console.error(e);
 				}
