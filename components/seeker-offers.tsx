@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Grid } from '@mui/material';
-import type { Voucher } from '../util/schemas';
 import { FetchOffers } from '../services/api-requests';
 import CompanyVoucher from "./offer-card";
 import Filter from "./filter";
+import {Offer} from "../util/schemas";
 
 
 const SeekerOffers = () => {
-    const [vouchers, setVouchers] = useState([]);
+    const [vouchers, setVouchers] = useState<Offer[]>();
 
     useEffect(() => {
         FetchOffers().then(res => {
@@ -21,9 +21,9 @@ const SeekerOffers = () => {
                 <Filter/>
             </Grid>
             <Grid item container spacing={3} style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '3em', marginTop: '0.3em'}}>
-                    {vouchers.map((voucher : Voucher) => {
+                    {vouchers?.map((voucher : Offer) => {
                         return <Grid item xs={5} sm={4}>
-                            <CompanyVoucher companyName = {voucher.name} voucherPrice = {voucher.price} key={voucher.id}/>
+                            <CompanyVoucher companyName = {voucher.name} voucherPrice = {voucher.price_per_voucher} key={voucher.id}/>
                         </Grid>
                     })}
             </Grid>
