@@ -7,19 +7,16 @@ import Image from 'next/image';
 import { Offer, Supplier } from "../../../util/schemas";
 import { PostOffer } from "../../../services/api-requests";
 import Filter from "../../../components/filter";
-import {PostQuery} from "../../../pages/api/offers";
+import {PostQuery} from "../../../pages/api/offer";
 
 
 const CreateVoucher = () =>{
-    const [offer, setValues] = React.useState<Offer>({
-        id: 99,
+    const [offer, setValues] = React.useState<PostQuery>({
+        supplier_id: 99,
 	    name: "",
         description:"",
-	    price_per_voucher: 0,
-        available:0,
-	    /** Can vanish in the future */
-	    supplier: ({} as Supplier),
-	    /** Can be empty of course, check */
+	    price: 0,
+        stock:0,
 	    categories: []
     })
 
@@ -49,22 +46,19 @@ const CreateVoucher = () =>{
     };
     const [imagePath, setImagePath] = React.useState<string>("/public/brain.png");
 
-    const handleChange = (prop: keyof Offer) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (prop: keyof PostQuery) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({...offer, [prop]:event.target.value});
         console.log(offer);
     }
 
-    const [postQuery, setPostQuery] =React.useState<PostQuery>{
-
-
-    }
+    
 
     const handleSubmit = () =>{
         if(offer.name===""){
             alert("please set a title");
         }else if(offer.description===""){
             alert("write a description");
-        }else if(offer.price_per_voucher<0){
+        }else if(offer.price<0){
             alert("enter a non-negative price");
 
         }else{
@@ -147,19 +141,19 @@ const CreateVoucher = () =>{
         <FormControl required sx={{ m: 2, width: '20ch' }} >
           <InputLabel> Amount </InputLabel>
           <OutlinedInput
-            value={offer.available}
+            value={offer.stock}
             label="Amount"
-            onChange = {handleChange('available')}
+            onChange = {handleChange('stock')}
           />
         </FormControl>
 
         <FormControl required sx={{ m: 2, width: '20ch' }} >
           <InputLabel> Price per Voucher </InputLabel>
           <OutlinedInput
-            value={offer.price_per_voucher}
+            value={offer.price}
             endAdornment={<InputAdornment position="end">CHF</InputAdornment>}
             label="Price per Voucher"
-            onChange = {handleChange('price_per_voucher')}
+            onChange = {handleChange('price')}
           />
         </FormControl>
 

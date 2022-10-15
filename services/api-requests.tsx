@@ -1,4 +1,5 @@
 import axios from "axios";
+import { PostQuery } from "../pages/api/order";
 import {Offer} from "../util/schemas";
 
 export const FetchOffers = async () => {
@@ -21,7 +22,7 @@ export const SendSupplierRegistration = (data: any) => {
     return result;
 }
 
-export const PostOffer = async (offer : Offer) => {
+export const PostOffer = async (offer : PostQuery) => {
   const result = await axios.post(
     'api/offer',
     offer
