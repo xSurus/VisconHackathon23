@@ -1,15 +1,30 @@
 import {FormControl, Grid, Input, InputLabel, Paper, Button} from '@mui/material';
 import Typography from "@mui/material/Typography";
-import GoogleIcon from '@mui/icons-material/Google';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
-import Link from "next/link";
-import { Axios } from 'axios';
-import { SendSupplierRegistration } from '../services/api-requests';
-import Seeker from '../pages/seeker';
+import {SendSupplierRegistration} from '../services/api-requests';
+import {useState} from "react";
+import {PostQuery} from "../pages/api/supplier";
+
+
 const RegisterFormSupplier = () => {
-    const LoginButton = styled(Button)`
+
+    const registerModel: PostQuery = {
+        img: '',
+        cap: 0,
+        city: '',
+        country: '',
+        iban: '',
+        email: '',
+        name: '',
+        street: '',
+        billing_address: '',
+        homepage: ''
+    }
+
+    const [model, setModel] = useState<any>(registerModel);
+
+    const CustomButton = styled(Button)`
       color: #fff;
       font-weight: bold;
       background-color: black;
@@ -22,27 +37,6 @@ const RegisterFormSupplier = () => {
         background-color: black;
       }
     `
-    const PaperGoogle = styled(Paper)`
-      padding: 0.5em 1.5em;
-      margin-top: 2em;
-      border-radius: 2em;
-      background-color: #000000;
-
-      :hover {
-        cursor: pointer;
-      }
-    `
-    const PaperEmail = styled(Paper)`
-      padding: 0.5em 1.5em;
-      margin-top: 1em;
-      border-radius: 2em;
-      background-color: #000000;
-      margin-bottom: 3.5em;
-
-      :hover {
-        cursor: pointer;
-      }
-    `
     const PaperContainer = styled(Paper)`
       height: auto;
       width: 500px;
@@ -50,9 +44,10 @@ const RegisterFormSupplier = () => {
       border-radius: 1em;
       background-color: #d0cece;
     `
-    const handleGoogleAuth = () => {
-
+    const handleClickButton = () => {
+        SendSupplierRegistration(model)
     }
+
     return (
         <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
             <Grid item>
@@ -67,7 +62,18 @@ const RegisterFormSupplier = () => {
                                 fontWeight: 'bold',
                                 padding: '0.5em',
                                 borderRadius: '0.5em'
-                            }}>LOGIN</Typography>
+                            }}>REGISTER</Typography>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="name-field">Name</InputLabel>
+                                <Input
+                                    type="name"
+                                    id="name-field"
+                                    value={model.name}
+                                    onChange={(e) => setModel({...model, ['name']: e.target.value})}
+                                />
+                            </FormControl>
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth sx={{m: 1}} variant="standard">
@@ -75,6 +81,8 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="email"
                                     id="email-field"
+                                    value={model.email}
+                                    onChange={(e) => setModel({...model, ['email']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -84,6 +92,63 @@ const RegisterFormSupplier = () => {
                                 <Input
                                     type="password"
                                     id="password-field"
+                                    value={model.password}
+                                    onChange={(e) => setModel({...model, ['password']: e.target.value})}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="street-field">Street</InputLabel>
+                                <Input
+                                    type="street"
+                                    id="street-field"
+                                    value={model.street}
+                                    onChange={(e) => setModel({...model, ['street']: e.target.value})}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="cap-field">ZIP</InputLabel>
+                                <Input
+                                    type="cap"
+                                    id="cap-field"
+                                    value={model.cap}
+                                    onChange={(e) => setModel({...model, ['cap']: e.target.value})}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="city-field">City</InputLabel>
+                                <Input
+                                    type="city"
+                                    id="city-field"
+                                    value={model.city}
+                                    onChange={(e) => setModel({...model, ['city']: e.target.value})}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="country-field">Country</InputLabel>
+                                <Input
+                                    type="country"
+                                    id="country-field"
+                                    value={model.country}
+                                    onChange={(e) => setModel({...model, ['country']: e.target.value})}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="iban-field">IBAN</InputLabel>
+                                <Input
+                                    type="iban"
+                                    id="iban-field"
+                                    value={model.iban}
+                                    onChange={(e) => setModel({...model, ['iban']: e.target.value})}
                                 />
                             </FormControl>
                         </Grid>
@@ -91,47 +156,28 @@ const RegisterFormSupplier = () => {
                             <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
                                 <Grid container justifyContent={'center'} alignItems={'center'}>
                                     <Grid item>
-                                        <LoginButton>
-                                            Access
-                                            <LoginIcon style={{marginLeft: '0.5em'}}/>
-                                        </LoginButton>
+
                                     </Grid>
                                 </Grid>
                             </Paper>
                         </Grid>
-                        <Grid item style={{
-                            borderBottom: '1px solid black',
-                            borderBottomColor: 'rgba(100,100,100,0.5)',
-                            display: 'flex',
-                            width: '80%',
-                            marginTop: '2.5em'
-                        }}>
-                            <div/>
-                        </Grid>
                         <Grid item>
-                            <PaperGoogle onClick={handleGoogleAuth}>
-                                <Grid container justifyContent={'start'} alignItems={'center'}>
-                                    <Grid item style={{marginRight: '1em', marginTop: '0.2em'}}>
-                                        <GoogleIcon style={{color: 'white'}}/>
+                            <Paper style={{
+                                borderRadius: 0,
+                                width: '13em',
+                                marginTop: '1.3em',
+                                marginLeft: '1em',
+                                marginBottom: '2em'
+                            }}>
+                                <Grid container justifyContent={'center'} alignItems={'center'}>
+                                    <Grid item>
+                                        <CustomButton onClick={handleClickButton}>
+                                            Register
+                                            <LoginIcon style={{marginLeft: '0.5em'}}/>
+                                        </CustomButton>
                                     </Grid>
-                                    <Typography style={{color: 'white'}}>
-                                        Continue with Google
-                                    </Typography>
                                 </Grid>
-                            </PaperGoogle>
-                            <Link href={'/registration'}>
-                                <PaperEmail>
-                                    <Grid container justifyContent={'start'} alignItems={'center'}>
-                                        <Grid item style={{marginRight: '1em'}}>
-                                            <VpnKeyIcon fontSize={'medium'}
-                                                        style={{marginTop: '0.2em', color: 'white'}}/>
-                                        </Grid>
-                                        <Typography style={{color: 'white'}}>
-                                            Register using e-mail
-                                        </Typography>
-                                    </Grid>
-                                </PaperEmail>
-                            </Link>
+                            </Paper>
                         </Grid>
                     </Grid>
                 </PaperContainer>

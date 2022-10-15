@@ -129,7 +129,7 @@ const OfferCard = (props: OfferCardProps) => {
 
 
     return (
-        <CardModified elevation={4} style={{borderRadius: '1em', minHeight: '20em', maxHeight: '25em'}}>
+        <CardModified elevation={4} style={{borderRadius: '1em', minHeight: '15em', maxHeight: '25em'}}>
             <CardActionArea onClick={handleClick}>
                 <CardMedia
                     component="img"

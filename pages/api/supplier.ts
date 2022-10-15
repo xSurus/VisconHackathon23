@@ -6,7 +6,7 @@ import { Axios } from "axios";
 import { checkPrimeSync } from "crypto";
 
 type GetQuery = Id | {};
-type PostQuery = Omit<Omit<Omit<Supplier, "id">, "billing">, "address"> &
+export type PostQuery = Omit<Omit<Omit<Supplier, "id">, "billing">, "address"> &
 	Omit<Address, "id"> &
 	Omit<Billing, "id">;
 type DeleteQuery = Id;

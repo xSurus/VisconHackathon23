@@ -5,6 +5,12 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
 import Link from "next/link";
+import { SendLogin, SendLoginSup } from '../services/api-requests';
+import { Seeker, Supplier } from '../util/schemas';
+import { useState, useEffect, useRef } from "react";
+import Router from "next/router";
+
+
 
 const LoginForm = () => {
 
@@ -56,111 +62,146 @@ const LoginForm = () => {
     const handleGoogleAuth = () => {
 
     }
-
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value);
+    }
+    const handleChangePw = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+    }
+    const onSubmitHandler = () => {
+        SendLogin().then((res) => {
+            setSeeker(res.data);
+        })
+        console.log(seeker);
+        const have_email = seeker?.filter(x => x.email === email).length > 0;
+        if (have_email) 
+        SendLoginSup().then((res) => {
+            setSupplier(res.data);
+        })
+        const have_email_sup = supplier?.filter(x => x.email === email).length > 0;
+        if (have_email_sup) {Router.push('/seeker')}
+        else {alert('Account not found')};
+    }
     return (
-        <Grid container direction={'row'} justifyContent={'center'} alignItems={'center'} style={{height:'100vh'}}>
-            <Grid item style={{marginRight: '3em'}} lg={3}>
-                <Grid item container direction={'column'}>
-                    <Grid item>
-                         <Typography style={{lineHeight: '2em', letterSpacing: '0.2em'}}>
-                            Hey!
+        <div style={{marginTop: '4em'}}>
+            <Grid container direction={matchesMD ? 'column' : 'row'} justifyContent={'center'} alignItems={'center'}>
+                <Grid item xs={!matchesMD ? 4 : 12}>
+                    <Grid item container direction={'column'} sx={{
+                        paddingLeft: '2em',
+                        paddingRight: '2em'
+                    }}>
+                        <Grid item>
+                            <Typography textAlign={matchesMD ? 'center' : 'inherit'} style={{
+                                lineHeight: '2em',
+                                letterSpacing: '0.1em',
+                                fontFamily: 'Roboto',
+                                fontWeight: 'bold',
+                                fontSize: matchesSM ? '1em' : matchesMD ? '2em' : '3em'
+                            }} variant={'h3'}>
+                                Hey!
+                            </Typography>
+                        </Grid>
+                        <Typography textAlign={matchesMD ? 'center' : 'inherit'} variant={'overline'}
+                                    style={{marginBottom: '1em'}}>
+                            In order to see our offers, please LOGIN or REGISTER yourself!
+                        </Typography>
+                        <Typography textAlign={matchesMD ? 'center' : 'inherit'} variant={'overline'}
+                                    style={{marginBottom: matchesMD ? '2em' : 0}}>
+                            In our webapp you will be able to add vouchers, see different offers provided by our partner
+                            suppliers, and purchase them!
                         </Typography>
                     </Grid>
-                    <Typography >
-                        In order to see our offers, please LOGIN or REGISTER yourself!
-                    </Typography>
-                    <Typography >
-                        In our webapp you will be able to add vouchers, see different
-                    </Typography>
-                    <Typography >
-                        offers provided by our partner suppliers, and purchase them!
-                    </Typography>
                 </Grid>
-            </Grid>
-            <Grid item lg={6}>
-                <Grid item container justifyContent={'center'} alignItems={'center'}>
-                    <PaperContainer elevation={10}>
-                        <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}
-                              style={{display: 'flex'}}>
-                            <Grid item>
-                                <Typography style={{
-                                    marginTop: '1.5em',
-                                    marginBottom: '0.5em',
-                                    fontSize: '1.5em',
-                                    fontWeight: 'bold',
-                                    padding: '0.5em',
-                                    borderRadius: '0.5em'
-                                }}>LOGIN</Typography>
-                            </Grid>
-                            <Grid item>
-                                <FormControl fullWidth sx={{m: 1}} variant="standard">
-                                    <InputLabel htmlFor="email-field">Email</InputLabel>
-                                    <Input
-                                        type="email"
-                                        id="email-field"
-                                    />
-                                </FormControl>
-                            </Grid>
-                            <Grid item>
-                                <FormControl fullWidth sx={{m: 1}} variant="standard">
-                                    <InputLabel htmlFor="password-field">Password</InputLabel>
-                                    <Input
-                                        type="password"
-                                        id="password-field"
-                                    />
-                                </FormControl>
-                            </Grid>
-                            <Grid item>
-                                <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
-                                    <Grid container justifyContent={'center'} alignItems={'center'}>
-                                        <Grid item>
-                                            <LoginButton>
-                                                Access
-                                                <LoginIcon style={{marginLeft: '0.5em'}}/>
-                                            </LoginButton>
+                <Grid item xs={!matchesMD ? 5 : 12} sx={{width: matchesSM ? '70%' : '100%', marginTop: !matchesMD ? '2em' : 0}}>
+                    <Grid item container justifyContent={'center'} alignItems={'center'}>
+                        <PaperContainer elevation={10} sx={{width: matchesMD ? '5em' : '13em'}}>
+                            <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}>
+                                <Grid>
+                                    <Typography style={{
+                                        marginTop: !matchesMD ? '1.5em' : 0,
+                                        marginBottom: !matchesMD ? '0.5em' : 0,
+                                        fontSize: '1.5em',
+                                        fontWeight: 'bold',
+                                        padding: '0.5em',
+                                        borderRadius: '0.5em'
+                                    }}>LOGIN</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <FormControl sx={{m: 1}} variant="standard">
+                                        <InputLabel htmlFor="email-field">Email</InputLabel>
+                                        <Input
+                                            type="email"
+                                            id="email-field"
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item>
+                                    <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                        <InputLabel htmlFor="password-field">Password</InputLabel>
+                                        <Input
+                                            type="password"
+                                            id="password-field"
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item>
+                                    <Paper
+                                        style={{
+                                            borderRadius: 0,
+                                            width: matchesSM ? '5em' : matchesMD ? '10em' : '13em',
+                                            marginTop: '1.3em',
+                                            marginLeft: '1em'
+                                        }}>
+                                        <Grid container justifyContent={'center'} alignItems={'center'}>
+                                            <Grid item>
+                                                <LoginButton>
+                                                    Access
+                                                    <LoginIcon style={{marginLeft: '0.5em'}}/>
+                                                </LoginButton>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                            <Grid item style={{
-                                borderBottom: '1px solid black',
-                                borderBottomColor: 'rgba(100,100,100,0.5)',
-                                display: 'flex',
-                                width: '80%',
-                                marginTop: '2.5em'
-                            }}>
-                                <div/>
-                            </Grid>
-                            <Grid item>
-                                <PaperGoogle onClick={handleGoogleAuth}>
-                                    <Grid container justifyContent={'start'} alignItems={'center'}>
-                                        <Grid item style={{marginRight: '1em', marginTop: '0.2em'}}>
-                                            <GoogleIcon style={{color: 'white'}}/>
-                                        </Grid>
-                                        <Typography style={{color: 'white'}}>
-                                            Continue with Google
-                                        </Typography>
-                                    </Grid>
-                                </PaperGoogle>
-                                <Link href={'/registration'}>
-                                    <PaperEmail>
+                                    </Paper>
+                                </Grid>
+                                <Grid item style={{
+                                    borderBottom: '1px solid black',
+                                    borderBottomColor: 'rgba(100,100,100,0.5)',
+                                    display: 'flex',
+                                    width: '80%',
+                                    marginTop: '2.5em'
+                                }}>
+                                    <div/>
+                                </Grid>
+                                <Grid item>
+                                    <PaperGoogle onClick={handleGoogleAuth}>
                                         <Grid container justifyContent={'start'} alignItems={'center'}>
-                                            <Grid item style={{marginRight: '1em'}}>
-                                                <VpnKeyIcon fontSize={'medium'}
-                                                            style={{marginTop: '0.2em', color: 'white'}}/>
+                                            <Grid item style={{marginRight: '1em', marginTop: '0.2em'}}>
+                                                <GoogleIcon style={{color: 'white'}}/>
                                             </Grid>
                                             <Typography style={{color: 'white'}}>
-                                                Register using e-mail
+                                                Continue with Google
                                             </Typography>
                                         </Grid>
-                                    </PaperEmail>
-                                </Link>
+                                    </PaperGoogle>
+                                    <Link href={'/registration'}>
+                                        <PaperEmail>
+                                            <Grid container justifyContent={'start'} alignItems={'center'}>
+                                                <Grid item style={{marginRight: '1em'}}>
+                                                    <VpnKeyIcon fontSize={'medium'}
+                                                                style={{marginTop: '0.2em', color: 'white'}}/>
+                                                </Grid>
+                                                <Typography style={{color: 'white'}}>
+                                                    Register using e-mail
+                                                </Typography>
+                                            </Grid>
+                                        </PaperEmail>
+                                    </Link>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </PaperContainer>
+                        </PaperContainer>
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
+        </div>
     );
 };
 export default LoginForm;
