@@ -14,15 +14,17 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import {Grid} from "@mui/material";
+import { FetchCategories } from '../services/api-requests';
+import axios from 'axios';
 
-const allCategories = [
-    'Pog',
-    'PogPog'
-];
 
 export default function DialogSelect() {
     const [open, setOpen] = React.useState(false);
     const [categories, setCategories] = React.useState<string[]>([]);
+
+    React.useEffect(() => {
+    axios.get("/api/category").then(x => setCategories(x.data.categories));
+    }, []);
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -44,11 +46,6 @@ export default function DialogSelect() {
         }
     };
 
-    const allCategories = [
-        'Pog',
-        'PogPog'
-    ];
-
     return (
         <Grid>
             <Grid item>
@@ -69,7 +66,7 @@ export default function DialogSelect() {
                                 input={<OutlinedInput label="Tag"/>}
                                 renderValue={(selected) => selected.join(', ')}
                             >
-                                {allCategories.map((category) => (
+                                {categories.map((category) => (
                                     <MenuItem key={category} value={category}>
                                         <Checkbox checked={categories.indexOf(category) > -1}/>
                                         <ListItemText primary={category}/>
