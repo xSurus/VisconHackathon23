@@ -33,16 +33,16 @@ export default function DialogSelect(props: DialogSelectProps) {
     const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
-        axios.get("/api/category").then((x) => setCategories(x.data.categories.map((y: any) => {
+        axios.get("/api/category").then((x) => x.data.categories.map((y: any) => {
             return {cat: y, checked: true};
-        })));
+        })).then(setCategories);
     }, []);
 
     const handleClickOpen = () => {
         setOpen(true)
     }
 
-    const handleChange = (event: SelectChangeEvent<typeof props.categories>) => {
+    const handleChange = (event: SelectChangeEvent<typeof categories>) => {
         const {
             target: {value},
         } = event;
@@ -58,7 +58,7 @@ export default function DialogSelect(props: DialogSelectProps) {
         })
         //onsole.log(changed);
         //console.log(value);
-        props.setCategories(updated);
+        setCategories(updated);
     };
 
     const handleClose = (event: React.SyntheticEvent<unknown>, reason?: string) => {
@@ -77,18 +77,18 @@ export default function DialogSelect(props: DialogSelectProps) {
                 <DialogTitle>Filter by (multichoice)</DialogTitle>
                 <DialogContent>
                     <Box component="form" sx={{display: 'flex', flexWrap: 'wrap'}}>
-                        <FormControl sx={{m: 1, minWidth: 120}}>
+                        <FormControl sx={{m: 1, minWidth: 200}}>
                             <InputLabel htmlFor="demo-dialog-native">Categories</InputLabel>
                             <Select
                                 labelId="categories"
                                 id="categories"
                                 multiple
-                                value={props.categories}
+                                value={categories}
                                 onChange={handleChange}
                                 input={<OutlinedInput label="Tag"/>}
                                 renderValue={(selected) => selected.filter(x => x.checked).map(x => x.cat).join(', ')}
                             >
-                                {props.categories?.map((category) => (
+                                {categories?.map((category) => (
                                     <MenuItem key={category.cat} value={category.cat}>
                                         <Checkbox checked={category.checked}/>
                                         <ListItemText primary={category.cat}/>

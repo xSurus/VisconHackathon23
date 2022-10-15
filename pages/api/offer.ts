@@ -9,6 +9,7 @@ import {
 	Offer,
 	Supplier,
 } from "../../util/schemas";
+import { getAvailableVouchers, getAvailableVouchersCount } from "./order";
 
 type GetCategoriesQuery = { categories: Category | Category[] };
 
@@ -83,6 +84,7 @@ export async function getOfferById(id: number): Promise<Offer | undefined> {
 		"SELECT price FROM Voucher WHERE offer_id = $1::integer LIMIT 1",
 		[id]
 	);
+
 	const price_per_voucher = res_price.rows[0].price;
 	await db.query("COMMIT");
 
@@ -91,11 +93,13 @@ export async function getOfferById(id: number): Promise<Offer | undefined> {
 	if (res_offer.rowCount === 0) return undefined;
 	const row = res_offer.rows[0];
 	const categories = res_categories.rows.map((r) => r.category_name);
-	return {
+
+	const offer = {
 		description: row.description,
 		name: row.name,
 		categories,
 		id: row.id,
+		available: 0,
 		price_per_voucher,
 		supplier: {
 			img: row.img,
@@ -117,6 +121,10 @@ export async function getOfferById(id: number): Promise<Offer | undefined> {
 			},
 		},
 	};
+
+	const available = await getAvailableVouchersCount(offer.id);
+
+	return { ...offer, available };
 }
 
 export default async function handler(
@@ -164,10 +172,14 @@ export default async function handler(
 						"SELECT price FROM Voucher WHERE offer_id = $1::integer",
 						[o.id]
 					);
-					const price_per_voucher = res_price.rows[0].price;
+					const price_per_voucher =
+						res_price.rows.length > 0 ? res_price.rows[0].price : 0;
 
 					if (!offer) {
+						const available = await getAvailableVouchersCount(o.id);
+
 						offer = {
+							available,
 							description: o.description,
 							name: o.name,
 							categories: [o.category_name],
@@ -221,7 +233,11 @@ export default async function handler(
 						const price_per_voucher = res_price.rows[0].price;
 
 						if (!offer) {
+							const available = await getAvailableVouchersCount(
+								o.id
+							);
 							offer = {
+								available,
 								description: o.description,
 								name: o.name,
 								categories: [o.category_name],
