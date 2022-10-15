@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Grid } from '@mui/material';
 import type { Voucher } from '../util/schemas';
-import { fetchVouchers } from '../services/api-requests';
+import { FetchOffers } from '../services/api-requests';
 import CompanyVoucher from "./offer-card";
 import Filter from "./filter";
 
@@ -10,7 +10,7 @@ const SeekerOffers = () => {
     const [vouchers, setVouchers] = useState([]);
 
     useEffect(() => {
-        fetchVouchers().then(res => {
+        FetchOffers().then(res => {
           setVouchers(res.data)
         })
     },[])
