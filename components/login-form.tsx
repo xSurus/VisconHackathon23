@@ -5,6 +5,12 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
 import Link from "next/link";
+import { SendLogin, SendLoginSup } from '../services/api-requests';
+import { Seeker, Supplier } from '../util/schemas';
+import { useState, useEffect, useRef } from "react";
+import Router from "next/router";
+
+
 
 const LoginForm = () => {
 
@@ -56,7 +62,26 @@ const LoginForm = () => {
     const handleGoogleAuth = () => {
 
     }
-
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value);
+    }
+    const handleChangePw = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+    }
+    const onSubmitHandler = () => {
+        SendLogin().then((res) => {
+            setSeeker(res.data);
+        })
+        console.log(seeker);
+        const have_email = seeker?.filter(x => x.email === email).length > 0;
+        if (have_email) 
+        SendLoginSup().then((res) => {
+            setSupplier(res.data);
+        })
+        const have_email_sup = supplier?.filter(x => x.email === email).length > 0;
+        if (have_email_sup) {Router.push('/seeker')}
+        else {alert('Account not found')};
+    }
     return (
         <div style={{marginTop: '4em'}}>
             <Grid container direction={matchesMD ? 'column' : 'row'} justifyContent={'center'} alignItems={'center'}>
