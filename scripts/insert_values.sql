@@ -133,6 +133,16 @@ VALUES
     ('TTAGNGGNGOG', 'egawsrar', 1) ON CONFLICT DO NOTHING;
 
 INSERT INTO
+    Voucher (name, price, supplier_id, offer_id)
+SELECT
+    'test',
+    10,
+    supplier_id,
+    id
+FROM
+    Offer;
+
+INSERT INTO
     Voucher (id, name, price, supplier_id, offer_id)
 VALUES
     (
@@ -190,6 +200,27 @@ VALUES
         80,
         2,
         2
+    ),
+    (
+        'ce6def9e-36cb-421b-bde4-25d503bbbfe9',
+        'lezioni di league',
+        80,
+        2,
+        3
+    ),
+    (
+        'ce6def9e-36cb-421b-bde4-25d503bbbfea',
+        'lezioni di league',
+        80,
+        2,
+        3
+    ),
+    (
+        'ce6def9e-36cb-421b-bde4-25d503bbbfeb',
+        'lezioni di league',
+        80,
+        2,
+        3
     ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
@@ -204,4 +235,7 @@ VALUES
     ('Gaming', 1),
     ('Food', 2),
     ('Cinema', 2),
-    ('Culture', 2);
+    ('Culture', 2),
+    ('Food', 3),
+    ('Gaming', 3),
+    ('Cinema', 4);

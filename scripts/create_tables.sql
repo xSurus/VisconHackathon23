@@ -69,3 +69,17 @@ CREATE TABLE IF NOT EXISTS Offer_Category (
     category_name text REFERENCES Category(name) NOT NULL,
     PRIMARY KEY (offer_id, category_name)
 );
+
+CREATE TABLE IF NOT EXISTS SeekerCredentials (
+    seeker_id SERIAL REFERENCES Seeker(id) NOT NULL,
+    token CHAR(64) NOT NULL,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL -- bcrypt hash of the password
+);
+
+CREATE TABLE IF NOT EXISTS SupplierCredentials (
+    supplier_id SERIAL REFERENCES Supplier(id) NOT NULL,
+    email TEXT NOT NULL,
+    token CHAR(64) NOT NULL,
+    password TEXT NOT NULL -- bcrypt hash of the password    
+);
