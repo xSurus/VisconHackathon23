@@ -29,7 +29,15 @@ VALUES
         8001,
         'Zurich',
         'Switzerland'
-    );
+    ),
+    (
+        2,
+        'Ramistrasse 80', 
+        8001, 
+        'Zurich', 
+        'Switzerland'
+    )
+ON CONFLICT DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS Billing (
     id SERIAL PRIMARY KEY,
@@ -70,6 +78,14 @@ VALUES
         'oceano.balls',
         1,
         1
+    ),
+    (
+        2,
+        'Migros',
+        'contact@migros.ch',
+        'migros.ch',
+        2,
+        2
     );
 
 CREATE TABLE IF NOT EXISTS Seeker (
@@ -83,7 +99,8 @@ CREATE TABLE IF NOT EXISTS Seeker (
 INSERT INTO
     Seeker (id, name, email, address_id, homepage)
 VALUES
-    (1, 'VIS', 'vis@ethz.ch', 1, 'vis.ethz.ch');
+    (1, 'VIS', 'vis@ethz.ch', 1, 'vis.ethz.ch'),
+    (2, 'AMIV', 'amiv@ethz.ch', 2, 'amiv.ethz.ch');
 
 CREATE TABLE IF NOT EXISTS Ordine (
     id SERIAL PRIMARY KEY,
@@ -97,7 +114,8 @@ CREATE TABLE IF NOT EXISTS Ordine (
 INSERT INTO
     Ordine (id, status, seeker_id)
 VALUES
-    (1, 0, 1);
+    (1, 0, 1),
+    (2, 0, 2);
 
 CREATE TABLE IF NOT EXISTS Voucher (
     id SERIAL PRIMARY KEY,
@@ -118,6 +136,14 @@ VALUES
         40,
         1,
         1
+    ), 
+    (
+        2,
+        'massaggio con ciabatte',
+        uuid_generate_v4(),
+        10,
+        2,
+        2
     );
 
 CREATE TABLE IF NOT EXISTS Voucher_Order (
@@ -139,7 +165,8 @@ CREATE TABLE IF NOT EXISTS Offer (
 INSERT INTO
     Offer (id, supplier_id)
 VALUES
-    (1, 1);
+    (1, 1),
+    (2, 2);
 
 -- Many Category <> One Offer map table.
 CREATE TABLE IF NOT EXISTS Offer_Category (
