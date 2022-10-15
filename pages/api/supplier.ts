@@ -1,13 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../util/db";
-import type { Supplier, Id, Address } from "../../util/schemas";
+import type { Supplier, Id, Address, Billing } from "../../util/schemas";
 import { isSupplier, addId, isEmptyObj, isId } from "../../util/schemas";
 import { Axios } from "axios";
 
 type GetQuery = Id | {};
-type PostQuery = Omit<Supplier, "id">;
+type PostQuery = Omit<Omit<Omit<Supplier, "id">, "billing">, "address"> &
+	Omit<Address, "id"> &
+	Omit<Billing, "id">;
 type DeleteQuery = Id;
 type PatchQuery = Supplier;
+
+type Post2Query = keyof PostQuery;
 
 function isGetQuery(query: any): query is GetQuery {
 	return (
@@ -15,7 +19,7 @@ function isGetQuery(query: any): query is GetQuery {
 	);
 }
 
-let isPostQuery = (x: any) => isSupplier(addId(x));
+let isPostQuery = (x: any): x is PostQuery => true; // FIXME: COMPLETE!
 
 let isPatchQuery = isSupplier;
 
@@ -23,11 +27,43 @@ let isDeleteQuery = isId;
 
 type Data = Supplier[] | undefined;
 
+export async function getSupplierById(
+	id: number
+): Promise<Supplier | undefined> {
+	const result = await db.query(
+		"SELECT S.id as sid, S.name as sname, S.img as simg, S.email as semail, S.homepage as shomepage, A.id as aid, A.street as astreet, A.cap as acap, A.city as acity, A.country as acountry, B.id as bid, B.billing_address as baddr, B.iban as biban FROM Address AS A, Supplier AS S, Billing as B WHERE S.id = $1::integer AND S.address_id=A.id AND S.billing = B.id",
+		// @ts-ignore
+		[query.id]
+	);
+	if (result.rows.length === 0) return undefined;
+
+	const x = result.rows[0];
+	return {
+		id: x.sid,
+		name: x.sname,
+		img: x.sigm,
+		email: x.semail,
+		homepage: x.shomepage,
+		address: {
+			id: x.aid,
+			street: x.astreet,
+			cap: x.acap,
+			city: x.acity,
+			country: x.acountry,
+		},
+		billing: {
+			id: x.bid,
+			billing_address: x.baddr,
+			iban: x.biban,
+		},
+	};
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<Data>
 ) {
-	const { query } = req;
+	const { query, body } = req;
 
 	switch (req.method) {
 		case "GET":
@@ -80,7 +116,7 @@ export default async function handler(
 		//     return res.status(200).send(undefined);
 
 		case "POST":
-			//if (!isPostQuery(query)) break;
+			//if (!isPostQuery(body)) break; //TODO: CHECK
 			try {
 				await db.query("BEGIN");
 				let addr_id = (
