@@ -8,10 +8,15 @@ export const FetchOffers = async () => {
     return result;
 }
 
-export const SendSupplierRegistration = async (data: any) => {
-    const result = await axios.post(
-      '/api/supplier',
-      data
-    );
+export const SendSupplierRegistration = (data: any) => {
+  const params = new URLSearchParams();
+  for (const key in data) {
+    params.append(key, data[key]);
+  }
+    console.log(data);
+    const result = axios.post('/api/supplier', params).then((response) => {
+        console.log(response);
+    });
+    console.log('lol');
     return result;
 }

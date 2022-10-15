@@ -164,13 +164,13 @@ const RegisterFormSupplier = () => {
                                 <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em', marginBottom: '2em'}}>
                                     <Grid container justifyContent={'center'} alignItems={'center'}>
                                         <Grid item>
-                                            <CustomButton onClick={() => {SendSupplierRegistration({
-                                                                                                    name: 'giovanni',
-                                                                                                    img: 'string',
-                                                                                                    email: 'string',
-                                                                                                    street: 'string', cap: 20121, city: 'string', country: 'string',
-                                                                                                    billing_address: 'Address', iban: 'string',
-                                                                                                    homepage: 'string',})}}>
+                                            <CustomButton onClick={() => {console.log('hi'); SendSupplierRegistration({
+                                                                                                    name: 'giofffvanni',
+                                                                                                    img: 'strsdfgng',
+                                                                                                    email: 'stdfging',
+                                                                                                    street: 'sasdfgring', cap: 20121, city: 'strfasding', country: 'striasdfg',
+                                                                                                    billing_address: 'Address', iban: 'strasdfing',
+                                                                                                    homepage: 'strasdfing',})}}>
                                                 Register
                                                 <LoginIcon style={{marginLeft: '0.5em'}}/>
                                             </CustomButton>

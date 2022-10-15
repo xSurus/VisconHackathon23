@@ -3,6 +3,7 @@ import db from "../../util/db";
 import type { Supplier, Id, Address } from "../../util/schemas";
 import { isSupplier, addId, isEmptyObj, isId } from "../../util/schemas";
 import { Axios } from "axios";
+import { checkPrimeSync } from "crypto";
 
 type GetQuery = Id | {};
 type PostQuery = Omit<Supplier, "id">;
@@ -82,6 +83,7 @@ export default async function handler(
 		case "POST":
 			//if (!isPostQuery(query)) break;
 			try {
+				
 				await db.query("BEGIN");
 				let addr_id = (
 					await db.query(
