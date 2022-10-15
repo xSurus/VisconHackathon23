@@ -7,7 +7,7 @@ type DeleteQuery = { id: number };
 type PutQuery = { id: number };
 
 function isGetQuery(query: any): query is GetQuery {
-	return !query || (typeof query.id === "string" && !isNaN(query.id));
+	return !Object.keys(query).length || (query && typeof query.id === "string" && !isNaN(query.id));
 }
 
 function isDeleteQuery(query: any): query is DeleteQuery {
@@ -27,7 +27,7 @@ export default async function handler(
 			if (!isGetQuery(query)) break;
 			try {
 				let result: Voucher[] = (
-					!query
+					!Object.keys(query).length
 						? await db.query("SELECT * FROM Voucher")
 						: await db.query(
 								"SELECT * FROM Voucher WHERE id = $1::integer",

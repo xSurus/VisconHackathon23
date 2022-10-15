@@ -42,7 +42,7 @@ function isPostQuery(query: any): PostQuery {
 		isInteger(query.price) &&
 		typeof query.stock === "string" &&
 		isInteger(query.stock) &&
-		typeof name === "string" &&
+		typeof query.name === "string" &&
 		Array.isArray(query.categories) &&
 		query.categories.every((c: any) => typeof c === "string")
 	);
