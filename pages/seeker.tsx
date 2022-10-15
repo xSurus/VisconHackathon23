@@ -1,8 +1,8 @@
 import {Button, Grid, Icon, IconButton} from "@mui/material";
 import {useState} from "react";
-import SeekerVouchers from "../components/seeker-vouchers";
+import SeekerOffers from "../components/seeker-offers";
 import SeekerOrders from "../components/seeker-orders";
-import CompanyVoucher from "../components/voucher-company";
+import CompanyVoucher from "../components/offer-card";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LoginForm from "../components/login-form";
 import styled from "@emotion/styled";
@@ -44,7 +44,7 @@ const Seeker = () => {
                 <Grid item>
                     <Button
                         onClick={() => {
-                            showPage(<SeekerVouchers/>);
+                            showPage(<SeekerOffers/>);
                             setWhichPage(2)
                         }}
                         style={{

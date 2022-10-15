@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Grid } from '@mui/material';
 import type { Voucher } from '../util/schemas';
 import { fetchVouchers } from '../services/api-requests';
-import CompanyVoucher from "./voucher-company";
+import CompanyVoucher from "./offer-card";
 import Filter from "./filter";
 
 
-const SeekerVouchers = () => {
+const SeekerOffers = () => {
     const [vouchers, setVouchers] = useState([]);
 
     useEffect(() => {
@@ -31,4 +31,4 @@ const SeekerVouchers = () => {
     );
 };
 
-export default SeekerVouchers; 
+export default SeekerOffers;
