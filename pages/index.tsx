@@ -4,7 +4,7 @@ import Head from 'next/head'
 import Link from 'next/link';
 import LoginForm from '../components/login-form';
 import RegisterFormSupplier from '../components/register-form-supplier';
-import SupplierPage from "./SupplierPage";
+import Supplier from "./supplier";
 
 const Home: NextPage = () => {
     return (

@@ -11,7 +11,7 @@ const useStyles =  makeStyles({
     }
 })
 
-const SupplierPage = () => {
+const Supplier = () => {
 
     const classes = useStyles();
 
@@ -28,4 +28,4 @@ const SupplierPage = () => {
     )
 }
 
-export default SupplierPage;
+export default Supplier;
