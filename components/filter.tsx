@@ -13,6 +13,7 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
+import {Grid} from "@mui/material";
 
 const allCategories = [
     'Pog',
@@ -49,10 +50,12 @@ export default function DialogSelect() {
     ];
 
     return (
-        <div>
-            <Button onClick={handleClickOpen}><FilterAltIcon/> Filter</Button>
+        <Grid container justifyContent={'center'} alignItems={'center'}>
+            <Grid item>
+                <Button style={{color: 'black', backgroundColor: 'rgba(0,0,0,0.15)', fontSize: '1em'}} onClick={handleClickOpen}><FilterAltIcon/> Filter</Button>
+            </Grid>
             <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-                <DialogTitle>Set Filters</DialogTitle>
+                <DialogTitle>Filter by (multichoice)</DialogTitle>
                 <DialogContent>
                     <Box component="form" sx={{display: 'flex', flexWrap: 'wrap'}}>
                         <FormControl sx={{m: 1, minWidth: 120}}>
@@ -80,6 +83,6 @@ export default function DialogSelect() {
                     <Button onClick={handleClose}>Ok</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </Grid>
     );
 }
