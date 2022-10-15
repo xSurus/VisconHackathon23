@@ -1,5 +1,11 @@
 import { NextApiHandler } from "next";
-import { isInteger, Offer, Order, Voucher } from "../../util/schemas";
+import {
+	isInteger,
+	Offer,
+	Order,
+	OrderStatus,
+	Voucher,
+} from "../../util/schemas";
 import db from "../../util/db";
 import { getSeekerById } from "./seeker";
 import { Result } from "@mui/system/cssVars/useCurrentColorScheme";
@@ -15,8 +21,9 @@ export type PostData =
 /** Delete given offer */
 export type DeleteData = undefined;
 export type GetData = Order[];
+export type PatchData = Order | undefined;
 
-export type Data = GetData | PostData | DeleteData;
+export type Data = GetData | PostData | DeleteData | PatchData;
 
 /** Get all orders of this */
 export type GetQuery = {
@@ -37,6 +44,11 @@ export type DeleteQuery = {
 	order_id: number;
 };
 
+export type PatchQuery = {
+	status: OrderStatus;
+	id: Order["id"];
+};
+
 export function isDeleteQuery(query: any): query is DeleteQuery {
 	return query && isInteger(query.order_id);
 }
@@ -52,6 +64,16 @@ export function isPostQuery(query: any): query is PostQuery {
 
 export function isGetQuery(query: any): query is GetQuery {
 	return query && isInteger(query.seeker_id);
+}
+
+export function isPatchQuery(q: any): q is PatchQuery {
+	return (
+		q &&
+		isInteger(q.id) &&
+		isInteger(q.status) &&
+		q.status >= 0 &&
+		q.status <= 3
+	);
 }
 
 export async function getAvailableVouchersCount(
@@ -71,9 +93,8 @@ export async function getAvailableVouchers(
 	offer_id: number
 ): Promise<Voucher[]> {
 	const result_vouchers = await db.query(
-		"SELECT * FROM Voucher V LEFT JOIN Voucher_Order O ON O.voucher_id = V.id WHERE ordine_id IS NULL AND offer_id = $1::integeer"[
-			offer_id
-		]
+		"SELECT * FROM Voucher V LEFT JOIN Voucher_Order O ON O.voucher_id = V.id WHERE ordine_id IS NULL AND offer_id = $1::integer",
+		[offer_id]
 	);
 
 	const offer = await getOfferById(offer_id);
@@ -141,7 +162,7 @@ const handler: NextApiHandler<Data> = async (req, res) => {
 					status,
 					seeker_id,
 				} = order_result.rows[0];
-				const vouchers: Voucher[] = [];
+
 				for (let i = 0; i < query.amount; i++) {
 					const voucher = vouchers[i];
 					const result = await db.query(
@@ -170,6 +191,25 @@ const handler: NextApiHandler<Data> = async (req, res) => {
 
 		await db.query("COMMIT");
 	} else if (req.method === "DELETE" && isDeleteQuery(query)) {
+	} else if (req.method === "PATCH" && isPatchQuery(query)) {
+		console.log(`PATCH Request on Order ${query.id}`);
+
+		const r = await db.query(
+			"UPDATE Ordine SET status = $1::integer WHERE id = $2::integer RETURNING *",
+			[query.status, query.id]
+		);
+
+		if (r.rowCount > 0) {
+			const { seeker_id, id, status } = r.rows[0];
+
+			const seeker = await getSeekerById(seeker_id);
+
+			if (!seeker) return res.status(500).send("seeker-id-not-stored");
+
+			res.status(200).json({ seeker, id, status });
+		} else {
+			return res.status(404).send(undefined);
+		}
 	} else {
 		res.status(400).send(undefined);
 	}
