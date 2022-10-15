@@ -23,16 +23,6 @@ const allCategories = [
 export default function DialogSelect() {
     const [open, setOpen] = React.useState(false);
     const [categories, setCategories] = React.useState<string[]>([]);
-    //
-    // const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-    //     const {
-    //         target: {value},
-    //     } = event;
-    //     setCategories(
-    //         // On autofill we get a stringified value.
-    //         typeof value === 'string' ? value.split(',') : value,
-    //     );
-    // };
 
     const handleClickOpen = () => {
         setOpen(true)
