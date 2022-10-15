@@ -7,3 +7,11 @@ export const FetchOffers = async () => {
     );
     return result;
 }
+
+export const SendSupplierRegistration = async (data: any) => {
+    const result = await axios.post(
+      '/api/supplier',
+      data
+    );
+    return result;
+}
