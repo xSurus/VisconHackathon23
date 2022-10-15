@@ -16,7 +16,7 @@ const SeekerOffers = () => {
     }, [])
 
     return (
-        <Grid container style={{display: 'flex'}} justifyContent={'end'}>
+        <Grid container style={{display: 'flex', maxHeight: '8em'}} justifyContent={'end'}>
             <Grid item style={{marginRight: '3em', marginTop: '2em'}}>
                 <Filter/>
             </Grid>

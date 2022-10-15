@@ -23,6 +23,7 @@ const OfferCard = (props: CompanyVoucherProps) => {
                     width="100%"
                     image={companyImageUrl}
                     alt={companyName}
+                    sx={{maxHeight: '8em'}}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div" style={{}}>
