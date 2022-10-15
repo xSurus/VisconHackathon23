@@ -22,6 +22,7 @@ type PostQuery = {
 	supplier_id: number;
 	/** categories of the offer */
 	categories: Category[];
+	description: string;
 	/** Value of each voucher */
 	price: number;
 	/** Amount of vouchers in the offer */
@@ -71,7 +72,6 @@ export default async function handler(
 	res: NextApiResponse<Data>
 ) {
 	const query = req.query;
-	const body = req.body;
 
 	switch (req.method) {
 		case "GET":
@@ -105,6 +105,7 @@ export default async function handler(
 					);
 					const offers: [Offer] = [
 						{
+							description: row.description,
 							name: row.name,
 							categories,
 							id: row.id,
@@ -145,7 +146,7 @@ export default async function handler(
 				// then join with every Offer_Category to retrieve every category of each offer
 				let result = await db.query(
 					`SELECT * FROM
-					(SELECT O.id, O.name,  O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+					(SELECT O.id, O.name, O.description, O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
 						A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
 					WHERE OC.category_name = ANY( $1::text[] ) AND O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R
 					INNER JOIN Offer_Category as OCC ON OCC.offer_id = R.id`,
@@ -164,6 +165,7 @@ export default async function handler(
 
 					if (!offer) {
 						offer = {
+							description: o.description,
 							name: o.name,
 							categories: [o.category_name],
 							id: o.id,
@@ -200,7 +202,7 @@ export default async function handler(
 				try {
 					let result = await db.query(
 						`SELECT * FROM
-						(SELECT O.id, O.supplier_id, O.name, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+						(SELECT O.id, O.description, O.supplier_id, O.name, OC.category_name, S.name as supplier_name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
 							A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
 						WHERE O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R`
 					);
@@ -217,13 +219,14 @@ export default async function handler(
 
 						if (!offer) {
 							offer = {
+								description: o.description,
 								name: o.name,
 								categories: [o.category_name],
 								id: o.id,
 								price_per_voucher,
 								supplier: {
 									img: o.img,
-									name: o.name,
+									name: o.supplier_name,
 									homepage: o.homepage,
 									email: o.email,
 									id: o.supplier_id,
@@ -260,8 +263,8 @@ export default async function handler(
 			try {
 				console.log("BALL");
 				let result = await db.query(
-					`INSERT INTO Offer (supplier_id) VALUES ($1::integer) RETURNING id AS offer_id`,
-					[query.supplier_id]
+					`INSERT INTO Offer (supplier_id, name, description) VALUES ($1::integer, $2::text, $3::text) RETURNING id AS offer_id`,
+					[query.supplier_id, query.name, query.description]
 				);
 				const { offer_id } = result.rows[0];
 				console.log("COCK");
