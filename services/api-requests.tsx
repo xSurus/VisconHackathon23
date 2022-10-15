@@ -14,3 +14,11 @@ export const FetchOrders = async () => {
   );
   return result;
 }
+
+export const PostOffer = async (offer : Offer) => {
+  const result = await axios.post(
+    'api/offer',
+    offer
+  );
+  return result;
+}

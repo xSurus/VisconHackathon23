@@ -4,7 +4,7 @@ import {Button, Grid} from "@mui/material";
 const Supplier = () => {
 
 
-    const [activeIndex, setActiveIndex] = useState<number>(1);
+    const [activeIndex, setActiveIndex] = React.useState<number>(1);
 
     return (
         <Grid container>
