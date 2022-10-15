@@ -1,5 +1,72 @@
 CREATE TABLE IF NOT EXISTS Category (name TEXT PRIMARY KEY);
 
+CREATE TABLE IF NOT EXISTS Address (
+    id SERIAL PRIMARY KEY,
+    street TEXT NOT NULL,
+    cap INTEGER NOT NULL,
+    city TEXT NOT NULL,
+    country TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Billing (
+    id SERIAL PRIMARY KEY,
+    billing_address TEXT NOT NULL,
+    iban TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Supplier (
+    id SERIAL PRIMARY KEY,
+    name text UNIQUE NOT NULL,
+    email text UNIQUE NOT NULL,
+    homepage text,
+    address_id SERIAL REFERENCES Address(id) NOT NULL,
+    billing SERIAL REFERENCES Billing(id) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Seeker (
+    id SERIAL PRIMARY KEY,
+    name text UNIQUE NOT NULL,
+    email text NOT NULL,
+    address_id SERIAL REFERENCES Address(id) NOT NULL,
+    homepage text
+);
+
+CREATE TABLE IF NOT EXISTS Ordine (
+    id SERIAL PRIMARY KEY,
+    -- pending=0, confirmed=1, declined=2, paid=3
+    status INTEGER NOT NULL,
+    seeker_id SERIAL REFERENCES Seeker(id) ON DELETE
+    SET
+        NULL
+);
+
+CREATE TABLE IF NOT EXISTS Offer (
+    id SERIAL PRIMARY KEY,
+    supplier_id SERIAL REFERENCES Supplier(id)
+);
+
+CREATE TABLE IF NOT EXISTS Voucher (
+    id SERIAL PRIMARY KEY,
+    name text NOT NULL,
+    uuid uuid NOT NULL,
+    price money NOT NULL,
+    supplier_id SERIAL REFERENCES Supplier(id),
+    offer_id SERIAL REFERENCES Offer(id)
+);
+
+CREATE TABLE IF NOT EXISTS Voucher_Order (
+    ordine_id SERIAL REFERENCES Ordine(id) NOT NULL,
+    voucher_id SERIAL REFERENCES Voucher(id) NOT NULL,
+    PRIMARY KEY(ordine_id, voucher_id)
+);
+
+-- Many Category <> One Offer map table.
+CREATE TABLE IF NOT EXISTS Offer_Category (
+    offer_id SERIAL REFERENCES Offer(id) NOT NULL,
+    category_name text REFERENCES Category(name) NOT NULL,
+    PRIMARY KEY (offer_id, category_name)
+);
+
 INSERT INTO
     Category (name)
 VALUES
@@ -11,14 +78,6 @@ VALUES
     ('Cinema'),
     ('Culture'),
     ('Cock') ON CONFLICT DO NOTHING;
-
-CREATE TABLE IF NOT EXISTS Address (
-    id SERIAL PRIMARY KEY,
-    street TEXT NOT NULL,
-    cap INTEGER NOT NULL,
-    city TEXT NOT NULL,
-    country TEXT NOT NULL
-);
 
 INSERT INTO
     Address (id, street, cap, city, country)
@@ -32,18 +91,11 @@ VALUES
     ),
     (
         2,
-        'Ramistrasse 80', 
-        8001, 
-        'Zurich', 
+        'Ramistrasse 80',
+        8001,
+        'Zurich',
         'Switzerland'
-    )
-ON CONFLICT DO NOTHING;
-
-CREATE TABLE IF NOT EXISTS Billing (
-    id SERIAL PRIMARY KEY,
-    billing_address TEXT NOT NULL,
-    iban TEXT NOT NULL
-);
+    ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Billing (id, billing_address, iban)
@@ -57,16 +109,7 @@ VALUES
         2,
         'billing della madonna bestia',
         '98173659872469245'
-    );
-
-CREATE TABLE IF NOT EXISTS Supplier (
-    id SERIAL PRIMARY KEY,
-    name text UNIQUE NOT NULL,
-    email text UNIQUE NOT NULL,
-    homepage text,
-    address_id SERIAL REFERENCES Address(id) NOT NULL,
-    billing SERIAL REFERENCES Billing(id) NOT NULL
-);
+    ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Supplier (id, name, email, homepage, address_id, billing)
@@ -86,45 +129,25 @@ VALUES
         'migros.ch',
         2,
         2
-    );
-
-CREATE TABLE IF NOT EXISTS Seeker (
-    id SERIAL PRIMARY KEY,
-    name text UNIQUE NOT NULL,
-    email text NOT NULL,
-    address_id SERIAL REFERENCES Address(id) NOT NULL,
-    homepage text
-);
+    ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Seeker (id, name, email, address_id, homepage)
 VALUES
     (1, 'VIS', 'vis@ethz.ch', 1, 'vis.ethz.ch'),
-    (2, 'AMIV', 'amiv@ethz.ch', 2, 'amiv.ethz.ch');
-
-CREATE TABLE IF NOT EXISTS Ordine (
-    id SERIAL PRIMARY KEY,
-    -- pending=0, confirmed=1, declined=2, paid=3
-    status INTEGER NOT NULL,
-    seeker_id SERIAL REFERENCES Seeker(id) ON DELETE
-    SET
-        NULL
-);
+    (2, 'AMIV', 'amiv@ethz.ch', 2, 'amiv.ethz.ch') ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Ordine (id, status, seeker_id)
 VALUES
     (1, 0, 1),
-    (2, 0, 2);
+    (2, 0, 2) ON CONFLICT DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS Voucher (
-    id SERIAL PRIMARY KEY,
-    name text NOT NULL,
-    uuid uuid NOT NULL,
-    price money NOT NULL,
-    supplier_id SERIAL REFERENCES Supplier(id),
-    offer_id SERIAL REFERENCES Offer(id)
-);
+INSERT INTO
+    Offer (id, supplier_id)
+VALUES
+    (1, 1),
+    (2, 2) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Voucher (id, name, uuid, price, supplier_id, offer_id)
@@ -136,7 +159,7 @@ VALUES
         40,
         1,
         1
-    ), 
+    ),
     (
         2,
         'massaggio con ciabatte',
@@ -144,33 +167,9 @@ VALUES
         10,
         2,
         2
-    );
-
-CREATE TABLE IF NOT EXISTS Voucher_Order (
-    ordine_id SERIAL REFERENCES Ordine(id) NOT NULL,
-    voucher_id SERIAL REFERENCES Voucher(id) NOT NULL,
-    PRIMARY KEY(ordine_id, voucher_id)
-);
+    ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Voucher_Order (ordine_id, voucher_id)
 VALUES
-    (1, 1);
-
-CREATE TABLE IF NOT EXISTS Offer (
-    id SERIAL PRIMARY KEY,
-    supplier_id SERIAL REFERENCES Supplier(id)
-);
-
-INSERT INTO
-    Offer (id, supplier_id)
-VALUES
-    (1, 1),
-    (2, 2);
-
--- Many Category <> One Offer map table.
-CREATE TABLE IF NOT EXISTS Offer_Category (
-    offer_id SERIAL REFERENCES Offer(id) NOT NULL,
-    category_name text REFERENCES Category(name) NOT NULL,
-    PRIMARY KEY (offer_id, category_name)
-);
+    (1, 1) ON CONFLICT DO NOTHING;
