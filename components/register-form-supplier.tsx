@@ -6,7 +6,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import styled from '@emotion/styled'
 import Link from "next/link";
 
-const RegisterFormSeeker = () => {
+const RegisterFormSupplier = () => {
   const LoginButton = styled(Button)`
   color: #fff;
   font-weight: bold;
@@ -45,9 +45,9 @@ const RegisterFormSeeker = () => {
     border-radius: 1em;
     background-color: #d0cece;
   `
-const RegisterFormSupplier = () => {
+  const handleGoogleAuth = () => {
 
-
+  }
   return (
       <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
               <Grid item>

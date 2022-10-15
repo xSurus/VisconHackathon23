@@ -5,13 +5,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import {CardActionArea} from '@mui/material';
 
-interface CompanyVoucherProps {
+interface OfferCardProps {
     companyName: string,
     voucherPrice: number,
     companyImageUrl: string
 }
 
-const CompanyVoucher = (props: CompanyVoucherProps) => {
+const OfferCard = (props: OfferCardProps) => {
 
     const {companyName, voucherPrice, companyImageUrl} = props;
 
@@ -44,4 +44,4 @@ const CompanyVoucher = (props: CompanyVoucherProps) => {
         </Card>
     );
 }
-export default CompanyVoucher;
+export default OfferCard;
