@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS Ordine (
 
 CREATE TABLE IF NOT EXISTS Offer (
     id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
     supplier_id SERIAL REFERENCES Supplier(id)
 );
 
@@ -205,10 +207,15 @@ VALUES
     (2, 0, 2) ON CONFLICT DO NOTHING;
 
 INSERT INTO
-    Offer (id, supplier_id)
+    Offer (id, name, description, supplier_id)
 VALUES
-    (1, 1),
-    (2, 2) ON CONFLICT DO NOTHING;
+    (
+        1,
+        'Name1',
+        'Offerta imperdibile! Un materasso supercomfort in technolatex con scappellamento a destra, e brematura!',
+        1
+    ),
+    (2, 'Name2', 'Non e una truffa', 2) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Voucher (id, name, price, supplier_id, offer_id)
