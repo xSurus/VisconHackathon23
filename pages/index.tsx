@@ -2,9 +2,8 @@ import { Grid } from '@mui/material';
 import type {NextPage} from 'next'
 import Head from 'next/head'
 import LoginForm from "../components/login-form";
-
-
-const Home: NextPage= () => {
+import CompanyVoucher from '../components/offer-card';
+const Home: NextPage = () => {
     return (
         <Grid container>
             <Head>  

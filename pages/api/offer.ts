@@ -1,45 +1,297 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import db from '../../util/db'
+import { Result } from "@mui/system/cssVars/useCurrentColorScheme";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Query } from "pg";
+import db from "../../util/db";
+import {
+	Category,
+	isEmptyObj,
+	isInteger,
+	Offer,
+	Supplier,
+} from "../../util/schemas";
 
+type GetCategoriesQuery = { categories: Category | Category[] };
 
-type GetQuery = { id: number }
-type DeleteQuery = { id: number }
-type PatchQuery = { id: number, street: string, cap: number, city: string, country: string }
+type GetIdQuery = { id: number };
 
-function isGetQuery(query: any): query is GetQuery {
-    return query && typeof query.id === 'number'
+type GetAllQuery = {};
+
+/** Create {stock} vouchers with {name} and {price}. Offer has categories and a supplier id */
+type PostQuery = {
+	/** supplier id of whoever posts the offer */
+	supplier_id: number;
+	/** categories of the offer */
+	categories: Category[];
+	/** Value of each voucher */
+	price: number;
+	/** Amount of vouchers in the offer */
+	stock: number;
+	/** Name of the voucher */
+	name: string;
+};
+
+type DeleteQuery = { id: number };
+
+function isGetIdQuery(query: any): query is GetIdQuery {
+	return query && typeof query.id === "string" && isInteger(query.id);
+}
+
+function isGetCategoriesQuery(query: any): query is GetCategoriesQuery {
+	return (
+		query &&
+		(typeof query.categories === "string" ||
+			(Array.isArray(query.categories) &&
+				query.categories.every((c: any) => typeof c === "string")))
+	);
+}
+
+function isPostQuery(query: any): query is PostQuery {
+	return (
+		query &&
+		typeof query.supplier_id === "string" &&
+		isInteger(query.supplier_id) &&
+		typeof query.price === "string" &&
+		isInteger(query.price) &&
+		typeof query.stock === "string" &&
+		isInteger(query.stock) &&
+		typeof query.name === "string" &&
+		Array.isArray(query.categories) &&
+		query.categories.every((c: any) => typeof c === "string")
+	);
 }
 
 function isDeleteQuery(query: any): query is DeleteQuery {
-    return query && typeof query.id === 'number'
+	return query && typeof query.id === "string" && isInteger(query.id);
 }
 
-function isPatchQuery(query: any): query is PatchQuery {
-    return query && typeof query.id === 'number' && query.street === 'string' && query.cap === 'number' && query.city === 'string' && query.country === 'string'
-}
-
-type Data = {
-    id: number,
-    street: string,
-    cap: number,
-    city: string,
-    country: string,
-} | undefined;
+type Data = Offer[] | undefined;
 
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<Data>
+	req: NextApiRequest,
+	res: NextApiResponse<Data>
 ) {
-    const { query } = req;
+	const query = req.query;
+	const body = req.body;
 
-    switch (req.method) {
-        case 'GET':
-            if (!isGetQuery(query)) break;
-            try {
-                let result = await db.query("SELECT * FROM Address WHERE id = $1::integer", [query.id]);
-                if (result.rowCount === 0) return res.status(400).send(undefined);
-                let row: Data = result.rows[0];
-                return res.status(200).json(row);
-            } catch (e) { }
-    }
+	switch (req.method) {
+		case "GET":
+			if (isGetIdQuery(query)) {
+				try {
+					await db.query("BEGIN");
+					let res_offer = await db.query(
+						"SELECT * FROM Offer AS O, Supplier AS S, Address as A, Billing as B WHERE O.id = $1::integer AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing",
+						[query.id]
+					);
+					console.log(res_offer);
+					let res_categories = await db.query(
+						"SELECT category_name FROM Offer_Category WHERE offer_id = $1::integer",
+						[query.id]
+					);
+
+					let res_price = await db.query(
+						"SELECT price FROM Voucher WHERE offer_id = $1::integer LIMIT 1",
+						[query.id]
+					);
+					const price_per_voucher = res_price.rows[0].price;
+					await db.query("COMMIT");
+
+					console.log(res_offer.rows[0]);
+
+					if (res_offer.rowCount === 0)
+						return res.status(404).send(undefined);
+					const row = res_offer.rows[0];
+					const categories = res_categories.rows.map(
+						(r) => r.category_name
+					);
+					const offers: [Offer] = [
+						{
+							name: row.name,
+							categories,
+							id: row.id,
+							price_per_voucher,
+							supplier: {
+								img: row.img,
+								name: row.name,
+								homepage: row.homepage,
+								email: row.email,
+								id: row.supplier_id,
+								address: {
+									id: row.address_id,
+									street: row.street,
+									cap: row.cap,
+									city: row.city,
+									country: row.country,
+								},
+								billing: {
+									id: row.billing,
+									billing_address: row.billing_address,
+									iban: row.iban,
+								},
+							},
+						},
+					];
+
+					return res.status(200).json(offers);
+				} catch (e) {
+					console.error(e);
+				}
+			} else if (isGetCategoriesQuery(query)) {
+				const categories: Category[] =
+					typeof query.categories === "string"
+						? [query.categories]
+						: query.categories;
+
+				// First get the orders and subtables that have a category in the given set
+				// then join with every Offer_Category to retrieve every category of each offer
+				let result = await db.query(
+					`SELECT * FROM
+					(SELECT O.id, O.name,  O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+						A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
+					WHERE OC.category_name = ANY( $1::text[] ) AND O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R
+					INNER JOIN Offer_Category as OCC ON OCC.offer_id = R.id`,
+
+					[categories]
+				);
+				const ac = new Map<number, Offer>();
+
+				for (const o of result.rows) {
+					let offer = ac.get(o.id);
+					const res_price = await db.query(
+						"SELECT price FROM Voucher WHERE offer_id = $1::integer",
+						[o.id]
+					);
+					const price_per_voucher = res_price.rows[0].price;
+
+					if (!offer) {
+						offer = {
+							name: o.name,
+							categories: [o.category_name],
+							id: o.id,
+							price_per_voucher,
+							supplier: {
+								img: o.img,
+								name: o.name,
+								homepage: o.homepage,
+								email: o.email,
+								id: o.supplier_id,
+								address: {
+									id: o.address_id,
+									street: o.street,
+									cap: o.cap,
+									city: o.city,
+									country: o.country,
+								},
+								billing: {
+									id: o.billing,
+									billing_address: o.billing_address,
+									iban: o.iban,
+								},
+							},
+						};
+
+						ac.set(offer.id, offer);
+					} else {
+						offer.categories.push(o.category_name);
+					}
+				}
+
+				return res.status(200).json(Array.from(ac.values()));
+			} else {
+				try {
+					let result = await db.query(
+						`SELECT * FROM
+						(SELECT O.id, O.supplier_id, O.name, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+							A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
+						WHERE O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R`
+					);
+
+					const ac = new Map<number, Offer>();
+
+					for (const o of result.rows) {
+						let offer = ac.get(o.id);
+						const res_price = await db.query(
+							"SELECT price FROM Voucher WHERE offer_id = $1::integer",
+							[o.id]
+						);
+						const price_per_voucher = res_price.rows[0].price;
+
+						if (!offer) {
+							offer = {
+								name: o.name,
+								categories: [o.category_name],
+								id: o.id,
+								price_per_voucher,
+								supplier: {
+									img: o.img,
+									name: o.name,
+									homepage: o.homepage,
+									email: o.email,
+									id: o.supplier_id,
+									address: {
+										id: o.address_id,
+										street: o.street,
+										cap: o.cap,
+										city: o.city,
+										country: o.country,
+									},
+									billing: {
+										id: o.billing,
+										billing_address: o.billing_address,
+										iban: o.iban,
+									},
+								},
+							};
+
+							ac.set(offer.id, offer);
+						} else {
+							offer.categories.push(o.category_name);
+						}
+					}
+
+					return res.status(200).json(Array.from(ac.values()));
+				} catch (e) {
+					console.error(e);
+					return res.status(500).send(undefined);
+				}
+			}
+
+		case "POST":
+			if (!isPostQuery(query)) break;
+			try {
+				console.log("BALL");
+				let result = await db.query(
+					`INSERT INTO Offer (supplier_id) VALUES ($1::integer) RETURNING id AS offer_id`,
+					[query.supplier_id]
+				);
+				const { offer_id } = result.rows[0];
+				console.log("COCK");
+				for (let i = 0; i < query.stock; i++) {
+					const res = await db.query(
+						"INSERT INTO Voucher (name, price, supplier_id, offer_id) VALUES ($1::text, $2::integer, $3::integer, $4::integer)",
+						[query.name, query.price, query.supplier_id, offer_id]
+					);
+
+					if (res.rowCount) console.log(`Inserted Voucher`);
+				}
+				for (const c of query.categories) {
+					const res = await db.query(
+						"INSERT INTO Offer_Category (offer_id, category_name) VALUES ($1::integer, $2::text)",
+						[offer_id, c]
+					);
+					if (res.rowCount) {
+						console.log("inserted category");
+					}
+				}
+			} catch (e) {}
+			return res.status(201).send(undefined);
+		case "DELETE":
+			if (!isDeleteQuery(query)) break;
+			try {
+				let _result = await db.query("");
+			} catch (e) {
+				// TODO: PRint
+			}
+			return res.status(200).send(undefined);
+	}
+	res.status(400).send(undefined);
 }
