@@ -1,11 +1,9 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
-import {CardActionArea} from '@mui/material';
-import {useState} from "react";
+import {CardActionArea, Grid} from '@mui/material';
 
 interface OrderCardProps {
     orderNumber: number,
@@ -13,55 +11,55 @@ interface OrderCardProps {
     seeker: string
 }
 
-type StatusMessage = {
-    label:string,
-    color:("default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" | undefined)
-}
-
 const OrderCard = (props: OrderCardProps) => {
 
     const {orderNumber, orderStatus, seeker} = props;
 
-    const orderStatusMessage: StatusMessage = {
-        color: undefined,
-        label:''
+    const getLabel = (orderStatus: number) => {
+        switch (orderStatus) {
+            case 0: return 'Pending';
+            case 1: return 'Confirmed';
+            case 2: return 'Declined';
+            case 3: return 'Paid';
+            default: return '';
+        }
     }
 
-    switch (orderStatus) {
-        case 0: {
-            orderStatusMessage.color = 'warning'
-            orderStatusMessage.label = 'Pending'
-        }
-        case 1 : {
-            orderStatusMessage.color = 'success'
-            orderStatusMessage.label = 'Confirmed'
-        }
-        case 2: {
-            orderStatusMessage.color = 'error'
-            orderStatusMessage.label = 'Declined'
-        }
-        case 3: {
-            orderStatusMessage.color =  'success'
-            orderStatusMessage.label = 'Paid'
+    const getColor = (orderStatus: number) => {
+        switch (orderStatus) {
+            case 0: return 'warning';
+            case 1: return 'success';
+            case 2: return 'error';
+            case 3: return 'success';
+            default: return undefined;
         }
     }
+
     return (
-        <Card elevation={3}>
-            <CardActionArea>
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div" style={{}}>
-                        Order Number: {`${orderNumber}`}
-                    </Typography>
-                    <Typography gutterBottom variant="h5" component="div">
-                        Ordered by {`${seeker}`}
-                    </Typography>
-                    <Chip 
-                        label= { orderStatusMessage.label } 
-                        color= { orderStatusMessage.color }
-                    />
-                </CardContent>
-            </CardActionArea>
-        </Card>
+            <Card elevation={3}>
+                <CardActionArea>
+                    <CardContent>
+                        <Grid container justifyContent={'space-between'}>
+                            <Grid item style={{marginLeft: '5   em'}}>
+                                <Typography gutterBottom variant="h5" component="div" style={{}}>
+                                    Order Number: {`${orderNumber}`}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography gutterBottom variant="h5" component="div">
+                                    Ordered by {`${seeker}`}
+                                </Typography>
+                            </Grid>
+                            <Grid item style={{marginRight: '5em'}}>
+                                <Chip
+                                    label={getLabel(orderStatus)}
+                                    color={getColor(orderStatus)}
+                                />
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
     );
 }
 export default OrderCard;
