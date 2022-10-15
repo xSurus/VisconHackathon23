@@ -70,7 +70,7 @@ const Seeker = () => {
                             display: 'inline',
                             fontSize: '1.5em'
                         }}>
-                        Vouchers
+                        Offers
                     </Button>
                 </Grid>
                 <SeparatorBar>
