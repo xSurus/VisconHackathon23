@@ -95,6 +95,20 @@ VALUES
         8001,
         'Zurich',
         'Switzerland'
+    ),
+    (
+        3,
+        'CAB Addr',
+        8001,
+        'Zurich',
+        'Switzerland'
+    ),
+    (
+        4,
+        'Street stuff',
+        598459,
+        'NYC',
+        'murrica'
     ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
@@ -109,6 +123,11 @@ VALUES
         2,
         'billing della madonna bestia',
         '98173659872469245'
+    ),
+    (
+        3,
+        'billing cab',
+        'IBANPLACEHOLDER'
     ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
@@ -129,13 +148,22 @@ VALUES
         'migros.ch',
         2,
         2
+    ),
+    (
+        3,
+        'Steam',
+        'contact@steam.com',
+        'steam.com',
+        4,
+        3
     ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Seeker (id, name, email, address_id, homepage)
 VALUES
-    (1, 'VIS', 'vis@ethz.ch', 1, 'vis.ethz.ch'),
-    (2, 'AMIV', 'amiv@ethz.ch', 2, 'amiv.ethz.ch') ON CONFLICT DO NOTHING;
+    (1, 'VIS', 'vis@ethz.ch', 3, 'vis.ethz.ch'),
+    (2, 'AMIV', 'amiv@ethz.ch', 2, 'amiv.ethz.ch'),
+    (3, 'VMP', 'vmp@ethz.ch', 1, 'vmp.ethz.ch') ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Ordine (id, status, seeker_id)

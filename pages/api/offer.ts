@@ -121,12 +121,36 @@ export default async function handler(
 						: query.categories;
 
 				let result = await db.query(
-					"SELECT * FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC WHERE OC.category_name = ANY( $1::text[] ) AND O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing",
+					`SELECT * FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
+					WHERE OC.category_name = ANY( $1::text[] ) AND O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing`,
 
 					[categories]
 				);
 				console.log(result);
-				``;
+				result.rows.reduce((o) => {
+					const offer = {
+						categories,
+						id: o.id,
+						supplier: {
+							name: o.name,
+							homepage: o.homepage,
+							email: o.email,
+							id: o.supplier_id,
+							address: {
+								id: o.address_id,
+								street: o.street,
+								cap: o.cap,
+								city: o.city,
+								country: o.country,
+							},
+							billing: {
+								id: o.billing,
+								billing_address: o.billing_address,
+								iban: o.iban,
+							},
+						},
+					};
+				}, []);
 			} else {
 				break;
 			}
