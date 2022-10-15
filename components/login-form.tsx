@@ -1,33 +1,23 @@
 import {FormControl, Grid, Input, InputLabel, Paper, Button} from '@mui/material';
-import {makeStyles} from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import GoogleIcon from '@mui/icons-material/Google';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LoginIcon from '@mui/icons-material/Login';
-
-
-const useStyles = makeStyles({
-    container: {
-    },
-    btn: {
-        backgroundColor: '#7c7f65',
-        color: 'darkgray',
-        width: '90%',
-        height: '50px',
-    },
-    paper: {
-    },
-    avatar: {
-        backgroundColor: '#49516f',
-    },
-    formcontrol: {
-        width: '90%',
-        height: '50px',
-    }
-})
-
+import styled from '@emotion/styled'
 
 const LoginForm = () => {
+
+    const LoginButton = styled(Button)`
+      color: #fff;
+      font-weight: bold;
+      background-color: black;
+      border-radius: 0;
+      width: 15em;
+      margin-right: 0.1em;
+      :hover {
+        background-color: black;
+      }
+    `
 
     return (
         <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
@@ -36,7 +26,8 @@ const LoginForm = () => {
                     height: '70vh',
                     width: 500,
                     backgroundColor: "#cabac8",
-                    borderRadius: '1.5em'}}>
+                    borderRadius: '1.5em'
+                }}>
                     <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}
                           style={{display: 'flex'}}>
                         <Grid item>
@@ -69,12 +60,13 @@ const LoginForm = () => {
                         </Grid>
                         <Grid item>
                             <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
-                                <Grid container justifyContent={'center'} alignItems={'center'} style={{backgroundColor: 'white'}}>
+                                <Grid container justifyContent={'center'} alignItems={'center'}
+                                      style={{backgroundColor: 'white'}}>
                                     <Grid item>
-                                        <Button style={{color: '#fff', fontWeight:'bold', backgroundColor: 'red', borderRadius: 0, width: '15em', marginRight: '0.1em'}}>
+                                        <LoginButton>
                                             Access
                                             <LoginIcon style={{marginLeft: '0.5em'}}/>
-                                        </Button>
+                                        </LoginButton>
                                     </Grid>
                                     <Grid item>
 

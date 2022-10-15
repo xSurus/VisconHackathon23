@@ -1,35 +1,9 @@
-import { Grid, Paper } from '@mui/material';
-import {makeStyles} from "@mui/styles";
-import { Formik, Field, Form, FormikHelpers } from 'formik';
 import { TextField, Button, Card } from '@mui/material';
-
-interface Values {
-    username: string;
-    password: string;
-}
 
 const RegisterFormSeeker = () => {
 
   return (
-    <Formik
-    initialValues={{
-        username: '',
-        password: '',
-    }}
-
-    onSubmit={(
-        values: Values,
-        { setSubmitting }: FormikHelpers<Values>
-    ) => {
-        setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-        }, 500);
-    }}
-
-    >
     <Card variant="outlined">
-        <Form>
             <TextField id="username" label="Username"     variant="outlined" />
             <TextField id="email"    label="E-mail"       variant="outlined" />
             <TextField id="phone"    label="Phone Number" variant="outlined" />
@@ -45,9 +19,7 @@ const RegisterFormSeeker = () => {
             <TextField id="password" label="Password" variant="outlined" type="password" />
             <TextField id="password_repeated" label="Repeat Password" variant="outlined" type="password"/>
             <Button type="submit">Register</Button>
-        </Form>
     </Card>
-    </Formik>
   );
 };
 
