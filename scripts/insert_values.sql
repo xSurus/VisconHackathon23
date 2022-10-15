@@ -239,3 +239,20 @@ VALUES
     ('Food', 3),
     ('Gaming', 3),
     ('Cinema', 4);
+
+INSERT INTO
+    SeekerCredential (password, seeker_id)
+SELECT
+    '$2b$15$ZRUleociv079Zve9jGIpGexivxVw1WIsX2jDIRDjqG3heCjDv2tRa',
+    id
+FROM
+    Seeker;
+
+INSERT INTO
+    SupplierCredential (password, supplier_id)
+SELECT
+    -- Password is `cock` in bcrypt with 13 salt rounds
+    '$2b$13$kP33IHjaJe6gVSsWcYoBuuEBTVT/xi9VliNPqLBErtlA8SbweydWS',
+    id
+FROM
+    Supplier;

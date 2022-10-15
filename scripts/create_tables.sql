@@ -70,16 +70,22 @@ CREATE TABLE IF NOT EXISTS Offer_Category (
     PRIMARY KEY (offer_id, category_name)
 );
 
-CREATE TABLE IF NOT EXISTS SeekerCredentials (
-    seeker_id SERIAL REFERENCES Seeker(id) NOT NULL,
-    token CHAR(64) NOT NULL,
-    email TEXT NOT NULL,
+CREATE TABLE IF NOT EXISTS SeekerCredential (
+    seeker_id SERIAL PRIMARY KEY REFERENCES Seeker(id) NOT NULL,
+    token CHAR(64) UNIQUE NOT NULL DEFAULT concat(md5(random() :: text), md5(random() :: text)),
+    email TEXT UNIQUE NOT NULL DEFAULT concat(
+        substr(md5(random() :: text), 0, 6),
+        '@thundercock.dev'
+    ),
     password TEXT NOT NULL -- bcrypt hash of the password
 );
 
-CREATE TABLE IF NOT EXISTS SupplierCredentials (
-    supplier_id SERIAL REFERENCES Supplier(id) NOT NULL,
-    email TEXT NOT NULL,
-    token CHAR(64) NOT NULL,
+CREATE TABLE IF NOT EXISTS SupplierCredential (
+    supplier_id SERIAL PRIMARY KEY REFERENCES Supplier(id) NOT NULL,
+    email TEXT UNIQUE NOT NULL DEFAULT concat(
+        substr(md5(random() :: text), 0, 6),
+        '@thundercock.dev'
+    ),
+    token CHAR(64) UNIQUE NOT NULL DEFAULT concat(md5(random() :: text), md5(random() :: text)),
     password TEXT NOT NULL -- bcrypt hash of the password    
 );

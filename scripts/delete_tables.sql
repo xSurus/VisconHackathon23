@@ -1,4 +1,8 @@
 -- Nuke everything
+DROP TABLE IF EXISTS SupplierCredential;
+
+DROP TABLE IF EXISTS SeekerCredential;
+
 DROP TABLE IF EXISTS Offer CASCADE;
 
 DROP TABLE IF EXISTS Voucher_Order CASCADE;
