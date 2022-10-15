@@ -8,8 +8,6 @@ import Button from '@mui/material/Button';
 import {CardActionArea, Grid} from '@mui/material';
 import {useState} from "react";
 import styled from "@emotion/styled";
-import { useTheme } from "@mui/material";
-import {useMediaQuery} from "@mui/material";
 
 interface OfferCardProps {
     companyName: string,
@@ -128,9 +126,7 @@ const OfferCard = (props: OfferCardProps) => {
         background-color: transparent;
       }
     `
-    const theme = useTheme();
-    const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
-    const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
+
 
     return (
         <CardModified elevation={4} style={{borderRadius: '1em', minHeight: '20em', maxHeight: '25em'}}>
