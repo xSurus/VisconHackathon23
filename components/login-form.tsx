@@ -1,106 +1,138 @@
-import { Grid, Paper, Avatar, Typography, Link, Button, TextField} from '@mui/material';
-import { makeStyles } from "@mui/styles";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Formik, Field, Form, FormikHelpers, useFormik} from 'formik';
-import * as Yup from 'yup';
+import {FormControl, Grid, Input, InputLabel, Paper, Button} from '@mui/material';
+import {makeStyles} from "@mui/styles";
+import Typography from "@mui/material/Typography";
+import GoogleIcon from '@mui/icons-material/Google';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import LoginIcon from '@mui/icons-material/Login';
 
 
 const useStyles = makeStyles({
-  center: {
-    spacing: 0,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: '10px',
-  },
-  btn: {
-    backgroundColor:'#7c7f65',
-    color: 'darkgray',
-    width: '90%',
-    height: '50px',
-  },
-  paper: {
-    height:'70vh',
-    width:500,
-    backgroundColor: "#cabac8",
-  },
-  avatar: {
-    backgroundColor:'#49516f',
-  },
-  formcontrol: {
-    width: '90%',
-    height: '50px',
-  }
+    container: {
+    },
+    btn: {
+        backgroundColor: '#7c7f65',
+        color: 'darkgray',
+        width: '90%',
+        height: '50px',
+    },
+    paper: {
+    },
+    avatar: {
+        backgroundColor: '#49516f',
+    },
+    formcontrol: {
+        width: '90%',
+        height: '50px',
+    }
 })
-interface Values {
-  username: string;
-  password: string;
-}
 
-const lowercaseRegEx = /(?=.*[a-z])/
-const uppercaseRegEx = /(?=.*[A-Z])/
-const numericRegEx = /(?=.*[0-9])/
-const lengthRegEx = /(?=.{6,})/
-
-let validationSchema = Yup.object().shape({
-  userName: Yup.string().required("Required"),
-  email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string()
-    .matches(
-      lowercaseRegEx,
-      "Must contain one lowercase alphabetical character!"
-    )
-    .matches(
-      uppercaseRegEx,
-      "Must contain one uppercase alphabetical character!"
-    )
-    .matches(numericRegEx, "Must contain one numeric character!")
-    .matches(lengthRegEx, "Must contain 6 characters!")
-    .required("Required!"),
-})
 
 const LoginForm = () => {
-  
-  const formik = useFormik({
-    initialValues: {
-      email: 'foobar@example.com',
-      password: 'foobar',
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
 
-  const classes = useStyles();
+    return (
+        <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
+            <Grid item>
+                <Paper elevation={10} style={{
+                    height: '70vh',
+                    width: 500,
+                    backgroundColor: "#cabac8",
+                    borderRadius: '1.5em'}}>
+                    <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}
+                          style={{display: 'flex'}}>
+                        <Grid item>
+                            <Typography style={{
+                                marginTop: '1.5em',
+                                fontSize: '1.5em',
+                                fontWeight: 'bold',
+                                backgroundColor: 'rgba(100,100,100,0.2)',
+                                padding: '0.5em',
+                                borderRadius: '0.5em'
+                            }}>LOGIN</Typography>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="email-field">Email</InputLabel>
+                                <Input
+                                    type="email"
+                                    id="email-field"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="password-field">Password</InputLabel>
+                                <Input
+                                    type="password"
+                                    id="password-field"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
+                                <Grid container justifyContent={'center'} alignItems={'center'} style={{backgroundColor: 'white'}}>
+                                    <Grid item>
+                                        <Button style={{color: '#fff', fontWeight:'bold', backgroundColor: 'red', borderRadius: 0, width: '15em', marginRight: '0.1em'}}>
+                                            Access
+                                            <LoginIcon style={{marginLeft: '0.5em'}}/>
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
 
-  return (
-    <Grid className={classes.center}>
-      <Paper elevation={10} className={classes.paper}>
-        <h2>Login</h2>
-        <Formik
-          initialValues={{
-            username: '',
-            password: '',
-          }}
-
-          onSubmit={(
-            values: Values,
-            { setSubmitting }: FormikHelpers<Values>
-          ) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 500);
-          }}
-        >
-          <Form>
-            <TextField className={classes.formcontrol} id="username" name="username" placeholder="Username"/>
-            <TextField className={classes.formcontrol} id="password" name="password" placeholder="Password"/>
-            <Button type="submit" className={classes.btn}>Login</Button>
-            <Link href="/Registration"><Button className={classes.btn}>Registration</Button></Link>
-          </Form>
-        </Formik>
-      </Paper>
-    </Grid>
-  );
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                        <Grid item style={{
+                            borderBottom: '1px solid black',
+                            borderBottomColor: 'rgba(100,100,100,0.5)',
+                            display: 'flex',
+                            width: '80%',
+                            marginTop: '2.5em'
+                        }}>
+                            <div/>
+                        </Grid>
+                        <Grid item>
+                            <Paper style={{
+                                paddingTop: '0.5em',
+                                paddingBottom: '0.5em',
+                                paddingLeft: '1.5em',
+                                paddingRight: '1.5em',
+                                marginTop: '2em',
+                                borderRadius: '2em',
+                                backgroundColor: '#007dff'
+                            }}>
+                                <Grid container justifyContent={'start'} alignItems={'center'}>
+                                    <Grid item style={{marginRight: '1em', marginTop: '0.2em'}}>
+                                        <GoogleIcon style={{color: 'white'}}/>
+                                    </Grid>
+                                    <Typography style={{color: 'white'}}>
+                                        Continue with Google
+                                    </Typography>
+                                </Grid>
+                            </Paper>
+                            <Paper style={{
+                                paddingTop: '0.5em',
+                                paddingBottom: '0.5em',
+                                paddingLeft: '1.5em',
+                                paddingRight: '1.5em',
+                                marginTop: '1em',
+                                borderRadius: '2em',
+                                backgroundColor: 'red'
+                            }}>
+                                <Grid container justifyContent={'start'} alignItems={'center'}>
+                                    <Grid item style={{marginRight: '1em'}}>
+                                        <VpnKeyIcon fontSize={'medium'} style={{marginTop: '0.2em', color: 'white'}}/>
+                                    </Grid>
+                                    <Typography style={{color: 'white'}}>
+                                        Register using e-mail
+                                    </Typography>
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </Paper>
+            </Grid>
+        </Grid>
+    );
 };
 export default LoginForm;
