@@ -10,7 +10,7 @@ const SeekerOffers = () => {
     const [offers, setOffers] = useState<Offer[]>();
 
     useEffect(() => {
-        FetchOffers().then(res => {
+        FetchOffers().then((res:any) => {
           setOffers(res.data)
         })
     },[])
@@ -24,7 +24,7 @@ const SeekerOffers = () => {
             </Grid>
             <Grid item container spacing={3} style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '3em', marginTop: '0.3em'}}>
                     {offers?.map((offer : Offer) => {
-                        return <Grid item xs={5} sm={4}>
+                        return <Grid key={offer.id} item xs={5} sm={4}>
                         <OfferCard companyName={offer.name} voucherPrice={offer.price_per_voucher}
                                         companyImageUrl={offer.supplier ? offer.supplier.img : ''}
                                         key={offer.id}/>

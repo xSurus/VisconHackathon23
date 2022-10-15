@@ -1,8 +1,9 @@
 import axios from "axios";
 import {Offer} from "../util/schemas";
+import type {Seeker} from '../util/schemas';
 
 export const FetchOffers = async () => {
-    const result = await axios(
+    const result = await axios.get(
       '/api/offer',
     );
     return result;
@@ -11,6 +12,12 @@ export const FetchOffers = async () => {
 export const SendLogin = () => {
   const result = axios(
     '/api/offer',
+  );
+  return result;
+}
+export const FetchOrders = async (seeker_id : number) => {
+  const result = await axios.get(
+    '/api/order', { params: {seeker_id} }
   );
   return result;
 }
