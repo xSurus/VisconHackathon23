@@ -9,7 +9,7 @@ import { Axios } from 'axios';
 import { SendSupplierRegistration } from '../services/api-requests';
 import Seeker from '../pages/seeker';
 const RegisterFormSupplier = () => {
-    const LoginButton = styled(Button)`
+    const CustomButton = styled(Button)`
       color: #fff;
       font-weight: bold;
       background-color: black;
@@ -17,30 +17,20 @@ const RegisterFormSupplier = () => {
       width: 15em;
       margin-right: 0.1em;
       height: 3em;
-
       :hover {
         background-color: black;
       }
     `
-    const PaperGoogle = styled(Paper)`
-      padding: 0.5em 1.5em;
-      margin-top: 2em;
-      border-radius: 2em;
-      background-color: #000000;
-
+    const UploadButton = styled(Button)`
+      color: #fff;
+      font-weight: bold;
+      background-color: gray;
+      border-radius: 0;
+      width: 15em;
+      margin-right: 0.1em;
+      height: 3em;
       :hover {
-        cursor: pointer;
-      }
-    `
-    const PaperEmail = styled(Paper)`
-      padding: 0.5em 1.5em;
-      margin-top: 1em;
-      border-radius: 2em;
-      background-color: #000000;
-      margin-bottom: 3.5em;
-
-      :hover {
-        cursor: pointer;
+        background-color: black;
       }
     `
     const PaperContainer = styled(Paper)`
@@ -67,7 +57,16 @@ const RegisterFormSupplier = () => {
                                 fontWeight: 'bold',
                                 padding: '0.5em',
                                 borderRadius: '0.5em'
-                            }}>LOGIN</Typography>
+                            }}>REGISTER</Typography>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="name-field">Name</InputLabel>
+                                <Input
+                                    type="name"
+                                    id="name-field"
+                                />
+                            </FormControl>
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth sx={{m: 1}} variant="standard">
@@ -88,50 +87,96 @@ const RegisterFormSupplier = () => {
                             </FormControl>
                         </Grid>
                         <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="street-field">Street</InputLabel>
+                                <Input
+                                    type="street"
+                                    id="street-field"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="cap-field">ZIP</InputLabel>
+                                <Input
+                                    type="cap"
+                                    id="cap-field"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="city-field">City</InputLabel>
+                                <Input
+                                    type="city"
+                                    id="city-field"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="country-field">Country</InputLabel>
+                                <Input
+                                    type="country"
+                                    id="country-field"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth sx={{m: 1}} variant="standard">
+                                <InputLabel htmlFor="iban-field">IBAN</InputLabel>
+                                <Input
+                                    type="iban"
+                                    id="iban-field"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
                             <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
                                 <Grid container justifyContent={'center'} alignItems={'center'}>
                                     <Grid item>
-                                        <LoginButton>
-                                            Access
-                                            <LoginIcon style={{marginLeft: '0.5em'}}/>
-                                        </LoginButton>
+                                        <input
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                            id="raised-button-file"
+                                            multiple
+                                            type="file"
+                                            color='red'
+                                        />
+                                        <label htmlFor="raised-button-file">
+                                            <Button component="span" style={{
+                                                color: 'white',
+                                                backgroundColor: 'black',
+                                                fontWeight: 'bold',
+                                                borderRadius: 0,
+                                                width: '15em',
+                                                height: '3em',
+                                                marginRight: '0.1em',
+                                            }}>
+                                                Upload Logo
+                                            </Button>
+                                        </label>
                                     </Grid>
                                 </Grid>
                             </Paper>
                         </Grid>
-                        <Grid item style={{
-                            borderBottom: '1px solid black',
-                            borderBottomColor: 'rgba(100,100,100,0.5)',
-                            display: 'flex',
-                            width: '80%',
-                            marginTop: '2.5em'
-                        }}>
-                            <div/>
-                        </Grid>
                         <Grid item>
-                            <PaperGoogle onClick={handleGoogleAuth}>
-                                <Grid container justifyContent={'start'} alignItems={'center'}>
-                                    <Grid item style={{marginRight: '1em', marginTop: '0.2em'}}>
-                                        <GoogleIcon style={{color: 'white'}}/>
+                            <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em', marginBottom: '2em'}}>
+                                <Grid container justifyContent={'center'} alignItems={'center'}>
+                                    <Grid item>
+                                        <CustomButton onClick={() => {console.log('hi'); SendSupplierRegistration({
+                                            name: 'giofffvanni',
+                                            img: 'strsdfgng',
+                                            email: 'stdfging',
+                                            street: 'sasdfgring', cap: 20121, city: 'strfasding', country: 'striasdfg',
+                                            billing_address: 'Address', iban: 'strasdfing',
+                                            homepage: 'strasdfing',})}}>
+                                            Register
+                                            <LoginIcon style={{marginLeft: '0.5em'}}/>
+                                        </CustomButton>
                                     </Grid>
-                                    <Typography style={{color: 'white'}}>
-                                        Continue with Google
-                                    </Typography>
                                 </Grid>
-                            </PaperGoogle>
-                            <Link href={'/registration'}>
-                                <PaperEmail>
-                                    <Grid container justifyContent={'start'} alignItems={'center'}>
-                                        <Grid item style={{marginRight: '1em'}}>
-                                            <VpnKeyIcon fontSize={'medium'}
-                                                        style={{marginTop: '0.2em', color: 'white'}}/>
-                                        </Grid>
-                                        <Typography style={{color: 'white'}}>
-                                            Register using e-mail
-                                        </Typography>
-                                    </Grid>
-                                </PaperEmail>
-                            </Link>
+                            </Paper>
                         </Grid>
                     </Grid>
                 </PaperContainer>
