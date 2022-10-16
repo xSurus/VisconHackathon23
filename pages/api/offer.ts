@@ -15,14 +15,18 @@ type GetCategoriesQuery = { categories: Category | Category[] };
 
 export type GetIdQuery = { id: number };
 
-type GetAllQuery = {};
+type GetSupplierIdQuery = { supplier_id: number };
+
+export function isGetSupplierIdQuery(q: any): q is GetSupplierIdQuery {
+	return q && isInteger(q.supplier_id);
+}
 
 /** Create {stock} vouchers with {name} and {price}. Offer has categories and a supplier id */
 export type PostQuery = {
 	/** supplier id of whoever posts the offer */
 	supplier_id: number;
 	/** categories of the offer */
-	categories: Category | Category[];
+	categories?: Category | Category[];
 	description: string;
 	/** Value of each voucher */
 	price: number;
@@ -57,7 +61,10 @@ function isPostQuery(query: any): query is PostQuery {
 		typeof query.stock === "string" &&
 		isInteger(query.stock) &&
 		typeof query.name === "string" &&
-		(!Array.isArray(query.categories) ||
+		typeof query.description === "string" &&
+		(typeof query.categories === "string" ||
+			typeof query.categories === "undefined" ||
+			!Array.isArray(query.categories) ||
 			query.categories.every((c: any) => typeof c === "string"))
 	);
 }
@@ -67,6 +74,24 @@ function isDeleteQuery(query: any): query is DeleteQuery {
 }
 
 type Data = Offer[] | undefined;
+
+export async function getOffersBySupplierId(
+	supplier_id: number
+): Promise<Offer[]> {
+	await db.query("BEGIN");
+	// Get IDS
+	const res_offers = await db.query(
+		"SELECT id FROM Offer WHERE supplier_id = $1::integer",
+		[supplier_id]
+	);
+	const offers = [];
+	for (const r of res_offers.rows) {
+		const off = await getOfferById(r.id);
+		off && offers.push(off);
+	}
+	await db.query("COMMIT");
+	return offers;
+}
 
 export async function getOfferById(id: number): Promise<Offer | undefined> {
 	await db.query("BEGIN");
@@ -134,7 +159,10 @@ export default async function handler(
 	const query = req.query;
 	switch (req.method) {
 		case "GET":
-			if (isGetIdQuery(query)) {
+			if (isGetSupplierIdQuery(query)) {
+				const offers = await getOffersBySupplierId(query.supplier_id);
+				return res.status(200).json(offers);
+			} else if (isGetIdQuery(query)) {
 				try {
 					const offer = await getOfferById(query.id);
 					if (offer) {
@@ -297,7 +325,15 @@ export default async function handler(
 
 					if (res.rowCount) console.log(`Inserted Voucher`);
 				}
-				for (const c of query.categories) {
+
+				const categories =
+					typeof query.categories === "undefined"
+						? []
+						: typeof query.categories === "string"
+						? [query.categories]
+						: query.categories;
+
+				for (const c of categories) {
 					const res = await db.query(
 						"INSERT INTO Offer_Category (offer_id, category_name) VALUES ($1::integer, $2::text)",
 						[offer_id, c]
@@ -308,6 +344,7 @@ export default async function handler(
 				}
 			} catch (e) {
 				console.error(e);
+				return res.status(500).send(undefined);
 			}
 			return res.status(201).send(undefined);
 		case "DELETE":

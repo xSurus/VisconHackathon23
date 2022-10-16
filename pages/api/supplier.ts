@@ -1,14 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../util/db";
-import type { Supplier, Id, Address, Billing } from "../../util/schemas";
+import { Supplier, Id, Address, Billing, isInteger } from "../../util/schemas";
 import { isSupplier, addId, isEmptyObj, isId } from "../../util/schemas";
 import { Axios } from "axios";
-import { checkPrimeSync } from "crypto";
+import bcrypt from "bcrypt";
 
 type GetQuery = Id | {};
+
+/** `login_email` and `email` can be different! Beware!
+ *
+ * Also add a password check or something in case the user typos
+ */
 export type PostQuery = Omit<Omit<Omit<Supplier, "id">, "billing">, "address"> &
 	Omit<Address, "id"> &
-	Omit<Billing, "id">;
+	Omit<Billing, "id"> & {
+		login_email: string;
+		password: string;
+	};
+
+type PostQueryFields = keyof PostQuery;
+
 type DeleteQuery = Id;
 type PatchQuery = Supplier;
 
@@ -20,7 +31,26 @@ function isGetQuery(query: any): query is GetQuery {
 	);
 }
 
-let isPostQuery = (x: any): x is PostQuery => true; // FIXME: COMPLETE!
+let isPostQuery = (x: any): x is PostQuery => {
+	const strings = [
+		"name",
+		"email",
+		"street",
+		"city",
+		"country",
+		"billing_address",
+		"iban",
+		"password",
+		"login_email",
+	];
+	return (
+		x &&
+		strings.every((f) => typeof x[f] === "string") &&
+		(!x.img || typeof x.img === "string") &&
+		(x.homepage || typeof x.homepage === "string") &&
+		isInteger(x.cap)
+	);
+};
 
 let isPatchQuery = isSupplier;
 
@@ -42,7 +72,7 @@ export async function getSupplierById(
 	return {
 		id: x.sid,
 		name: x.sname,
-		img: x.sigm,
+		img: x.simg,
 		email: x.semail,
 		homepage: x.shomepage,
 		address: {
@@ -117,9 +147,8 @@ export default async function handler(
 		//     return res.status(200).send(undefined);
 
 		case "POST":
-			//if (!isPostQuery(body)) break; //TODO: CHECK
+			if (!isPostQuery(query)) break; // FIXME: PASSING SENTITIVE INFO IN THE QUERY IS REALLY BAD! USE BODY INSTEAD
 			try {
-				
 				await db.query("BEGIN");
 				let addr_id = (
 					await db.query(
@@ -137,7 +166,7 @@ export default async function handler(
 				console.log(addr_id);
 				console.log(bill_id);
 				let result = await db.query(
-					"INSERT INTO Supplier (name, img, email, address_id, homepage, billing) VALUES ($1::text, $2::text, $3::text, $4::integer, $5::text, $6::integer)",
+					"INSERT INTO Supplier (name, img, email, address_id, homepage, billing) VALUES ($1::text, $2::text, $3::text, $4::integer, $5::text, $6::integer) RETURNING id",
 					[
 						query.name,
 						query.img,
@@ -147,9 +176,35 @@ export default async function handler(
 						bill_id,
 					]
 				);
-				await db.query("COMMIT");
+
+				if (result.rows.length > 0 && result.rows[0].id) {
+					const hash_password = bcrypt.hash(query.password, 13);
+					// Create credentials
+					let r = await db.query(
+						"INSERT INTO SupplierCredential (supplier_id, email, password) VALUES ($1::integer, $2::text, $3::text) RETURNING token",
+						[result.rows[0].id, query.login_email, hash_password]
+					);
+
+					if (r.rows.length === 0) {
+						console.error(
+							"Cannot create credentials for new user. Abort."
+						);
+						db.query("ABORT");
+						return res.status(500).send(undefined);
+					}
+
+					await db.query("COMMIT");
+					console.log("Created supplier USER!");
+
+					res.status(201).send(undefined);
+				} else {
+					console.error(
+						"Cannot create supplier entry! Abort transaction"
+					);
+					await db.query("ABORT");
+				}
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 			return res.status(200).send(undefined);
 
@@ -165,5 +220,7 @@ export default async function handler(
 			}
 			return res.status(200).send(undefined);
 	}
+
+	console.log("malformed supplier req");
 	res.status(400).send(undefined);
 }

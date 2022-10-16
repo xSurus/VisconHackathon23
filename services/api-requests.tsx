@@ -44,13 +44,21 @@ export const FetchOrders = async (seeker_id : number) => {
 
 export const SendSupplierRegistration = (data: PostQuery) => {
   const params = {params: data}
-    const result = axios.post('/api/supplier', null, params).then((response) => {
-        console.log(response);
-    });
-    console.log('lol');
-    return result;
+  const result = axios.post('/api/supplier', null, params).then((response) => {
+      console.log(response);
+  });
+  console.log('lol');
+  return result;
 }
 
+export const SendSeekerRegistration = (data: PostQuery) => {
+  const params = {params: data}
+  const result = axios.post('/api/seeker', null, params).then((response) => {
+      console.log(response);
+  });
+  console.log('lol');
+  return result;
+}
 
 
 export const editOrder = async (id : number, status : number) => {
