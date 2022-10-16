@@ -35,11 +35,18 @@ export const SendLoginSup = () => {
   return result;
 }
 
-export const FetchOrders = async (seeker_id : number) => {
+export const FetchOrdersSeeker = async (seeker_id : number) => {
     const result = await axios.get(
       '/api/order', {params: {seeker_id}}
     );
     return result;
+}
+
+export const FetchOrdersSupplier = async (supplier_id : number) => {
+  const result = await axios.get(
+    '/api/order', {params: {supplier_id}}
+  );
+  return result;
 }
 
 export const SendSupplierRegistration = (data: PostQuery) => {

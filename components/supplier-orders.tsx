@@ -3,7 +3,7 @@ import { TextField, Button, Card, Grid } from "@mui/material";
 import Filter from "./filter";
 import OrderCard from "./order-card-supplier";
 import type { Order } from "../util/schemas";
-import { FetchOrders } from "../services/api-requests";
+import { FetchOrdersSupplier } from "../services/api-requests";
 import type { Seeker } from "../util/schemas";
 import { OrderStatus } from "../util/schemas";
 import Typography from "@mui/material/Typography";
@@ -32,7 +32,7 @@ const SupplierOrders = () => {
 	]);
 
 	useEffect(() => {
-		FetchOrders(1).then((res) => {
+		FetchOrdersSupplier(1).then((res) => {
 			setOrders(res.data);
 		});
 	}, []);
