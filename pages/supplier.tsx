@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Button, Grid, IconButton} from "@mui/material";
-import CreateVoucher from '../source/components/SupplierComponents/createVoucher';
+import CreateVoucher from '../components/createVoucher';
 import styled from '@emotion/styled';
 import SeekerOrders from '../components/seeker-orders';
 import SeekerOffers from '../components/seeker-offers';
@@ -8,6 +8,7 @@ import LoginForm from '../components/login-form';
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { style } from '@mui/system';
+import SupplierOffers from '../components/supplier-my-offers';
 
 const Supplier = () => {
 
@@ -61,10 +62,10 @@ const Supplier = () => {
                 <SeparatorBar>
                     |
                 </SeparatorBar>
-                <Grid item>
+                <Grid>
                     <Button
                         onClick={() => {
-                            showPage(<CreateVoucher/>);
+                            showPage(<SupplierOffers/>);
                             setWhichPage(2)
                         }}
                         style={{
@@ -73,7 +74,25 @@ const Supplier = () => {
                             display: 'inline',
                             fontSize: '1.5em'
                         }}>
-                        Voucher
+                        My Vouchers
+                    </Button>
+                </Grid>
+                <SeparatorBar>
+                    |
+                </SeparatorBar>
+                <Grid item>
+                    <Button
+                        onClick={() => {
+                            showPage(<CreateVoucher/>);
+                            setWhichPage(3)
+                        }}
+                        style={{
+                            color: whichPage === 3 ? 'darkred' : 'rgba(0,0,0,1)',
+                            cursor: 'pointer',
+                            display: 'inline',
+                            fontSize: '1.5em'
+                        }}>
+                        New Voucher
                     </Button>
                 </Grid>
                 <SeparatorBar>
@@ -83,14 +102,14 @@ const Supplier = () => {
                     <IconButton
                         onClick={() => {
                             showPage(<LoginForm/>);
-                            setWhichPage(3)
+                            setWhichPage(4)
                         }}
-                        style={{color: whichPage === 3 ? 'darkred' : 'rgba(0,0,0,1)', fontSize: '1.5em'}}>
+                        style={{color: whichPage === 4 ? 'darkred' : 'rgba(0,0,0,1)', fontSize: '1.5em'}}>
                         <AccountBoxIcon/>
                     </IconButton>
                 </Grid>
             </Grid>
-            <Grid container style={{marginTop: whichPage === 3 ? '-3em' : 0}}>
+            <Grid container style={{marginTop: whichPage === 4 ? '-3em' : 0}}>
                 {page}
             </Grid>
         </Grid>

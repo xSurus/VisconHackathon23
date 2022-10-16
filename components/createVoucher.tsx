@@ -4,10 +4,10 @@ import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import * as React from 'react';
 import Image from 'next/image';
-import { Offer, Supplier } from "../../../util/schemas";
-import { PostOffer } from "../../../services/api-requests";
-import Filter from "../../../components/filter";
-import {PostQuery} from "../../../pages/api/offer";
+import { Offer, Supplier } from "../util/schemas";
+import { PostOffer } from "../services/api-requests";
+import Filter from "./filter";
+import {PostQuery} from "../pages/api/offer";
 
 
 const CreateVoucher = () =>{
