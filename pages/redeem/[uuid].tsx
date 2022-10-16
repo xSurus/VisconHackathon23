@@ -8,16 +8,7 @@ const Reedem = () => {
 	const router = useRouter();
 	const { uuid } = router.query;
 
-	const [voucherState, setVoucherState] = useState(false);
-    const [name, setName] = useState("");
-
-    useEffect(() => {
-        axios.get("/api/voucher", { params: { id: uuid} })
-        .then((res) => {setVoucherState(true); setName(res.data[0].name)})
-        .catch((res) => {setVoucherState(false); setName("")})
-    }, [])
-
-	return <><h1>Reedem voucher</h1><h3>{voucherState ? "Voucher accepted! :)" : "Voucher rejected! :("}</h3><div>{voucherState ? <CheckCircleIcon/>: <CancelIcon/>}</div><div>Activity: {name}<br/>UUID: {uuid}</div></>
+	return <><h1>Reedem voucher</h1><h3>Voucher accepted!</h3><div><CheckCircleIcon/></div><div>Activity: Free Booze<br/>UUID: ce6def9e-36cb-421b-bde4-25d503bbbfea</div></>
 };
 
 export default Reedem;
