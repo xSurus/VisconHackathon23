@@ -18,16 +18,16 @@ import Router from "next/router";
 import { SendSeekerRegistration } from "../services/api-requests";
 
 const CustomButton = styled(Button)`
-      color: #fff;
-      font-weight: bold;
-      background-color: black;
-      border-radius: -1;
-      width: 18em;
-      height: 5em;
-      :hover {
-        background-color: black;
-      }
-    `;
+	color: #fff;
+	font-weight: bold;
+	background-color: black;
+	border-radius: -1;
+	width: 18em;
+	height: 5em;
+	:hover {
+		background-color: black;
+	}
+`;
 const UploadButton = styled(Button)`
     color: #fff;
     font-weight: bold;
@@ -58,9 +58,11 @@ const RegisterFormSeeker = () => {
 		street: "",
 		cap: 0,
 		homepage: "",
+		login_email: "",
+		password: "",
 	};
 
-	const [model, setModel] = useState<any>(registerModel);
+	const [model, setModel] = useState<PostQuery>(registerModel);
 	const handleClickButton = () => {
 		SendSeekerRegistration(model);
 		Router.push("/seeker");
@@ -134,6 +136,7 @@ const RegisterFormSeeker = () => {
 										setModel({
 											...model,
 											["email"]: e.target.value,
+											["login_email"]: e.target.value,
 										})
 									}
 								/>
@@ -197,7 +200,10 @@ const RegisterFormSeeker = () => {
 									onChange={(e) =>
 										setModel({
 											...model,
-											["cap"]: e.target.value,
+											["cap"]: parseInt(
+												e.target.value,
+												10
+											),
 										})
 									}
 								/>
@@ -248,13 +254,15 @@ const RegisterFormSeeker = () => {
 							</FormControl>
 						</Grid>
 						<Grid item>
-                        <Paper style={{
-                                borderRadius: 0,
-                                width: '13em',
-                                marginTop: '1.3em',
-                                marginLeft: '1em',
-                                marginBottom: '2em'
-                            }}>
+							<Paper
+								style={{
+									borderRadius: 0,
+									width: "13em",
+									marginTop: "1.3em",
+									marginLeft: "1em",
+									marginBottom: "2em",
+								}}
+							>
 								<Grid
 									container
 									justifyContent={"center"}

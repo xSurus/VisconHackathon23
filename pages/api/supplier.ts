@@ -178,7 +178,7 @@ export default async function handler(
 				);
 
 				if (result.rows.length > 0 && result.rows[0].id) {
-					const hash_password = bcrypt.hash(query.password, 13);
+					const hash_password = await bcrypt.hash(query.password, 13);
 					// Create credentials
 					let r = await db.query(
 						"INSERT INTO SupplierCredential (supplier_id, email, password) VALUES ($1::integer, $2::text, $3::text) RETURNING token",

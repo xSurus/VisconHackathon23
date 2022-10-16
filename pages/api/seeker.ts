@@ -3,6 +3,7 @@ import db from "../../util/db";
 import type { Seeker, Id, Address } from "../../util/schemas";
 import { isSeeker, addId, isEmptyObj, isId } from "../../util/schemas";
 import { Axios } from "axios";
+import bcrypt from "bcrypt";
 
 type GetQuery = Id | {};
 export type PostQuery = Omit<Omit<Omit<Seeker, "id">, "billing">, "address"> &
@@ -16,7 +17,7 @@ function isGetQuery(query: any): query is GetQuery {
 	);
 }
 
-let isPostQuery = (x: any) => ;
+let isPostQuery = (x: any): x is PostQuery => true; // TODO:
 
 let isPatchQuery = isSeeker;
 
@@ -96,7 +97,7 @@ export default async function handler(
 		//     return res.status(200).send(undefined);
 
 		case "POST":
-			//if (!isPostQuery(query)) break;
+			if (!isPostQuery(query)) break;
 			try {
 				await db.query("BEGIN");
 				let addr_id = (
@@ -116,11 +117,33 @@ export default async function handler(
 						query.homepage,
 					]
 				);
-				await db.query("COMMIT");
+
+				if (result.rows.length > 0 && result.rows[0].id) {
+					const hash_password = await bcrypt.hash(query.password, 13);
+					// Create credentials
+					let r = await db.query(
+						"INSERT INTO SupplierCredential (supplier_id, email, password) VALUES ($1::integer, $2::text, $3::text) RETURNING token",
+						[result.rows[0].id, query.login_email, hash_password]
+					);
+
+					if (r.rows.length === 0) {
+						console.error(
+							"Cannot create credentials for new user. Abort."
+						);
+						db.query("ABORT");
+						return res.status(500).send(undefined);
+					}
+
+					await db.query("COMMIT");
+					console.log("Created supplier USER!");
+
+					return res.status(201).send(undefined);
+				}
 			} catch (e) {
 				console.log(e);
+				res.status(500).send(undefined);
 			}
-			return res.status(200).send(undefined);
+			db.query("ABORT");
 
 		case "DELETE":
 			if (!isDeleteQuery(query)) break;
