@@ -15,7 +15,11 @@ type GetCategoriesQuery = { categories: Category | Category[] };
 
 type GetIdQuery = { id: number };
 
-type GetAllQuery = {};
+type GetSupplierIdQuery = { supplier_id: number };
+
+export function isGetSupplierIdQuery(q: any): q is GetSupplierIdQuery {
+	return q && isInteger(q.supplier_id);
+}
 
 /** Create {stock} vouchers with {name} and {price}. Offer has categories and a supplier id */
 export type PostQuery = {
@@ -70,6 +74,24 @@ function isDeleteQuery(query: any): query is DeleteQuery {
 }
 
 type Data = Offer[] | undefined;
+
+export async function getOffersBySupplierId(
+	supplier_id: number
+): Promise<Offer[]> {
+	await db.query("BEGIN");
+	// Get IDS
+	const res_offers = await db.query(
+		"SELECT id FROM Offer WHERE supplier_id = $1::integer",
+		[supplier_id]
+	);
+	const offers = [];
+	for (const r of res_offers.rows) {
+		const off = await getOfferById(r.id);
+		off && offers.push(off);
+	}
+	await db.query("COMMIT");
+	return offers;
+}
 
 export async function getOfferById(id: number): Promise<Offer | undefined> {
 	await db.query("BEGIN");
@@ -138,7 +160,10 @@ export default async function handler(
 
 	switch (req.method) {
 		case "GET":
-			if (isGetIdQuery(query)) {
+			if (isGetSupplierIdQuery(query)) {
+				const offers = await getOffersBySupplierId(query.supplier_id);
+				return res.status(200).json(offers);
+			} else if (isGetIdQuery(query)) {
 				try {
 					const offer = await getOfferById(query.id);
 					if (offer) {
