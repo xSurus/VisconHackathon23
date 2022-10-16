@@ -31,19 +31,23 @@ export const FetchOrders = async (seeker_id : number) => {
   return result;
 }
 
-export const SendSupplierRegistration = (data: any) => {
-  const params = new URLSearchParams();
-  for (const key in data) {
-    params.append(key, data[key]);
-  }
-    console.log(data);
-    const result = axios.post('/api/supplier', params).then((response) => {
-        console.log(response);
-    });
-    console.log('lol');
-    return result;
+export const SendSupplierRegistration = (data: PostQuery) => {
+  const params = {params: data}
+  const result = axios.post('/api/supplier', null, params).then((response) => {
+      console.log(response);
+  });
+  console.log('lol');
+  return result;
 }
 
+export const SendSeekerRegistration = (data: PostQuery) => {
+  const params = {params: data}
+  const result = axios.post('/api/seeker', null, params).then((response) => {
+      console.log(response);
+  });
+  console.log('lol');
+  return result;
+}
 
 export const editOrder = async (id : number, status : number) => {
   const res = await axios.patch(

@@ -5,7 +5,8 @@ import { isSeeker, addId, isEmptyObj, isId } from "../../util/schemas";
 import { Axios } from "axios";
 
 type GetQuery = Id | {};
-type PostQuery = Omit<Seeker, "id">;
+export type PostQuery = Omit<Omit<Omit<Seeker, "id">, "billing">, "address"> &
+	Omit<Address, "id">;
 type DeleteQuery = Id;
 type PatchQuery = Seeker;
 
