@@ -63,7 +63,7 @@ const RegisterFormSeeker = () => {
 	const [model, setModel] = useState<any>(registerModel);
 	const handleClickButton = () => {
 		SendSeekerRegistration(model);
-		Router.push("/supplier");
+		Router.push("/seeker");
 	};
 	return (
 		<Grid

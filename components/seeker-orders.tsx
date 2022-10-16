@@ -3,7 +3,7 @@ import { TextField, Button, Card, Grid } from "@mui/material";
 import Filter from "./filter";
 import OrderCard from "./order-card-seeker";
 import type { Order } from "../util/schemas";
-import { FetchOrdersSeeker } from "../services/api-requests";
+import { FetchOrders, FetchOrdersSeeker } from "../services/api-requests";
 import type { Seeker } from "../util/schemas";
 import { OrderStatus } from "../util/schemas";
 import Typography from "@mui/material/Typography";
@@ -31,12 +31,11 @@ const SeekerOrders = () => {
 		},
 	]);
 
-    useEffect(() => {
-		FetchOrdersSeeker(1).then((res) => {
+	useEffect(() => {
+		FetchOrders(2).then((res) => {
 			setOrders(res.data);
 		});
 	}, []);
-
 
 	return (
 		<Grid
@@ -71,19 +70,30 @@ const SeekerOrders = () => {
 					marginTop: "0.3em",
 				}}
 			>
-				{orders.filter(x => categories.filter(x => x.checked).map(x => x.cat).filter(value => value === OrderStatus[x.status]).length > 0
-                    ).map((order: Order) => {
-					return (
-						<Grid item xs={12} key={order.id}>
-							<OrderCard
-								orderNumber={order.id}
-								orderStatus={order.status}
-								seeker={order.seeker ? order.seeker.name : ""}
-								key={order.id}
-							/>
-						</Grid>
-					);
-				})}
+				{orders
+					.filter(
+						(x) =>
+							categories
+								.filter((x) => x.checked)
+								.map((x) => x.cat)
+								.filter(
+									(value) => value === OrderStatus[x.status]
+								).length > 0
+					)
+					.map((order: Order) => {
+						return (
+							<Grid item xs={12} key={order.id}>
+								<OrderCard
+									orderNumber={order.id}
+									orderStatus={order.status}
+									seeker={
+										order.seeker ? order.seeker.name : ""
+									}
+									key={order.id}
+								/>
+							</Grid>
+						);
+					})}
 			</Grid>
 		</Grid>
 	);

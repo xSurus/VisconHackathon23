@@ -29,6 +29,22 @@ export const sendLogin = async (
 	const result = await axios.post("/api/login", body);
 	return result;
 };
+export const PostOrder = (seekeridG: number, id: number, num: number) => {
+	const res = axios
+		.post("/api/order", null, {
+			params: { offer_id: id, amount: num, seeker_id: seekeridG },
+		})
+		.then((res) => {
+			console.log(res);
+			console.log(res.data);
+		});
+	return res;
+};
+
+export const SendLoginSup = () => {
+	const result = axios("/api/supplier");
+	return result;
+};
 
 
 */
@@ -71,7 +87,6 @@ export const SendSupplierRegistration = (data: PostQuery) => {
 		.then((response) => {
 			console.log(response);
 		});
-	console.log("lol");
 	return result;
 };
 
@@ -80,7 +95,6 @@ export const SendSeekerRegistration = (data: PostQuery) => {
 	const result = axios.post("/api/seeker", null, params).then((response) => {
 		console.log(response);
 	});
-	console.log("lol");
 	return result;
 };
 
