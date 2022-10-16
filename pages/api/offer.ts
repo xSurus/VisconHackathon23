@@ -295,7 +295,13 @@ export default async function handler(
 
 					if (res.rowCount) console.log(`Inserted Voucher`);
 				}
-				for (const c of query.categories) {
+
+				const categories =
+					typeof query.categories === "string"
+						? [query.categories]
+						: query.categories;
+
+				for (const c of categories) {
 					const res = await db.query(
 						"INSERT INTO Offer_Category (offer_id, category_name) VALUES ($1::integer, $2::text)",
 						[offer_id, c]
