@@ -42,7 +42,7 @@ export async function getSupplierById(
 	return {
 		id: x.sid,
 		name: x.sname,
-		img: x.sigm,
+		img: x.simg,
 		email: x.semail,
 		homepage: x.shomepage,
 		address: {
@@ -119,7 +119,6 @@ export default async function handler(
 		case "POST":
 			//if (!isPostQuery(body)) break; //TODO: CHECK
 			try {
-				
 				await db.query("BEGIN");
 				let addr_id = (
 					await db.query(

@@ -27,7 +27,7 @@ function rowToSeeker(x: any): Seeker {
 	return {
 		id: x.sid,
 		name: x.sname,
-		img: x.sigm,
+		img: x.simg,
 		email: x.semail,
 		homepage: x.shomepage,
 		address: {
