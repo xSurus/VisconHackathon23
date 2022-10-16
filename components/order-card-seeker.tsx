@@ -7,11 +7,13 @@ import Chip from '@mui/material/Chip';
 import {CardActionArea, Grid} from '@mui/material';
 import { editOrder } from '../services/api-requests';
 import { OrderStatus} from '../util/schemas';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 interface OrderCardProps {
     orderNumber: number,
     orderStatus: number,
     seeker: string,
+    seeker_id: number,
 }
 
 const OrderCard = (props: OrderCardProps) => {
@@ -50,6 +52,9 @@ const OrderCard = (props: OrderCardProps) => {
                                     label={getLabel(orderStatus)}
                                     color={getColor(orderStatus)}
                                 />
+                                <Link href="/api/pdf">
+                                <Button onClick={() => {}}><PictureAsPdfIcon></PictureAsPdfIcon></Button>
+                                </Link>
                             </Grid>
                         </Grid>
                     </CardContent>

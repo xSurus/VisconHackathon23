@@ -9,7 +9,7 @@ import { OrderStatus } from "../util/schemas";
 import Typography from "@mui/material/Typography";
 import type { FilterElement } from "./filter";
 
-const SeekerOrders = () => {
+const SeekerOrders = ({seeker_id}: {seeker_id: number}) => {
 	const [orders, setOrders] = useState<Order[]>([]);
 
 	const [categories, setCategories] = useState<FilterElement[]>([
@@ -80,6 +80,7 @@ const SeekerOrders = () => {
 								orderStatus={order.status}
 								seeker={order.seeker ? order.seeker.name : ""}
 								key={order.id}
+								seeker_id={seeker_id}
 							/>
 						</Grid>
 					);
