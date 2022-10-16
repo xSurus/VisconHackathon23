@@ -1,6 +1,6 @@
 import axios from "axios";
 import { PostBody as LoginPostBody } from "../pages/api/login";
-import { GetIdQuery, PostQuery as OfferPostQuery } from "../pages/api/offer";
+import { GetIdQuery, PostQuery as OfferPostQuery, PostQuery } from "../pages/api/offer";
 import { PostQuery as SupplierPostQuery } from "../pages/api/supplier";
 import { PostQuery as SeekerPostQuery } from "../pages/api/seeker";
 import { Offer } from "../util/schemas";
