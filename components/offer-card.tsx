@@ -17,7 +17,8 @@ interface OfferCardProps {
     offerid: number,
     companyImageUrl: string,
     offerDescription: string,
-    availableVouchers: number
+    availableVouchers: number,
+    orderId: number
 }
 const BuyVoucherButton = styled(Button)`
 color: #545050;

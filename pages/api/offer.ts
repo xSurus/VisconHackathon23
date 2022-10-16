@@ -355,7 +355,7 @@ export default async function handler(
 				break;
 			} 
 			try {
-				//let _result = await db.query("DELETE FROM Offer WHERE id=$1::integer", [query.id]);
+				let _result = await db.query("UPDATE Offer SET active=false WHERE id=$1::integer", [query.id]);
 			} catch (e) {
 				// TODO: PRint
 				console.error("can not delete Offer because there are transactions in progress");

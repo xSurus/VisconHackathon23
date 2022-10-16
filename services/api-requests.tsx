@@ -29,6 +29,7 @@ export const sendLogin = async (
 	const result = await axios.post("/api/login", body);
 	return result;
 };
+*/
 export const PostOrder = (seekeridG: number, id: number, num: number) => {
 	const res = axios
 		.post("/api/order", null, {
@@ -47,7 +48,7 @@ export const SendLoginSup = () => {
 };
 
 
-*/
+
 export const FetchOffersBySupplierId = async (query : GetSupplierIdQuery ) =>{
   const params= {params : query}
   const result = await axios.get(
