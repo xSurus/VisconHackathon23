@@ -21,7 +21,7 @@ const SeparatorBar = styled(Grid)`
 type Data = { userType: string; token: string; id: number };
 
 const Seeker = ({ data }: { data: Data }) => {
-	const [page, showPage] = useState(<SeekerOrders />);
+	const [page, showPage] = useState(<SeekerOrders seeker_id={data.id} />);
 	const [whichPage, setWhichPage] = useState<number>(1);
 
 	const HeaderM = styled(Grid)`
@@ -53,7 +53,7 @@ const Seeker = ({ data }: { data: Data }) => {
 				<Grid>
 					<Button
 						onClick={() => {
-							showPage(<SeekerOrders />);
+							showPage(<SeekerOrders seeker_id={data.id}/>);
 							setWhichPage(1);
 						}}
 						style={{
