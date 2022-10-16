@@ -2,6 +2,7 @@ import axios from "axios";
 import { PostQuery } from "../pages/api/offer";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
+import { resourceLimits } from "worker_threads";
 
 export const FetchOffers = async () => {
     const result = await axios.get(
@@ -50,6 +51,13 @@ export const SendSupplierRegistration = (data: any) => {
     return result;
 }
 
+
+export const editOrder = async (id : number, status : number) => {
+  const res = await axios.patch(
+    '/api/order', null, { params: {id, status} }
+  );
+  return res;
+}
 export const PostOffer = async (offer : PostQuery) => {
   const result = await axios.post(
     'api/offer',
