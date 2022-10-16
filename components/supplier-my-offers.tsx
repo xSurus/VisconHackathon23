@@ -12,9 +12,8 @@ const SupplierOffers = () => {
     const [categories, setCategories] = useState<FilterElement[]>([]);
 
     //placeholder, later replaced through login data
-    const seeker_id = 1;
     useEffect(() => {
-        FetchMyOffers(seeker_id).then(res => {
+        FetchMyOffers(1).then(res => {
             setVouchers(res.data)
         })
     }, [])

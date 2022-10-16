@@ -11,14 +11,15 @@ import {PostQuery} from "../pages/api/offer";
 
 
 const CreateVoucher = () =>{
-    const [offer, setValues] = React.useState<PostQuery>({
-        supplier_id: 99,
-	    name: "",
-        description:"",
+    const offerModel:PostQuery = {
+        supplier_id:0,
+	    name: '',
+        description:'',
 	    price: 0,
         stock:0,
 	    categories: []
-    })
+    }
+    const [offer, setValues] = React.useState<any>(offerModel)
 
     const [open, setOpen] = React.useState(false);
     const allCategories = [

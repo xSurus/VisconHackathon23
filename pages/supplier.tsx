@@ -2,8 +2,7 @@ import * as React from 'react';
 import {Button, Grid, IconButton} from "@mui/material";
 import CreateVoucher from '../components/createVoucher';
 import styled from '@emotion/styled';
-import SeekerOrders from '../components/seeker-orders';
-import SeekerOffers from '../components/seeker-offers';
+import SupplierOrders from '../components/supplier-orders';
 import LoginForm from '../components/login-form';
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -13,7 +12,7 @@ import SupplierOffers from '../components/supplier-my-offers';
 const Supplier = () => {
 
 
-    const [page, showPage] = React.useState(<SeekerOrders/>);
+    const [page, showPage] = React.useState(<SupplierOrders/>);
     const [whichPage, setWhichPage] = React.useState<number>(1);
 
     const SeparatorBar = styled(Grid)`
@@ -47,7 +46,7 @@ const Supplier = () => {
                 <Grid>
                     <Button
                         onClick={() => {
-                            showPage(<SeekerOrders/>);
+                            showPage(<SupplierOrders/>);
                             setWhichPage(1)
                         }}
                         style={{

@@ -58,10 +58,17 @@ export const editOrder = async (id : number, status : number) => {
   );
   return res;
 }
-export const PostOffer = async (offer : PostQuery) => {
+export const PostOffer = async (offer : any) => {
+  const params = new URLSearchParams();
+  for(const key in offer){
+    params.append(key, offer[key]);
+  }
+  console.log(offer);
   const result = await axios.post(
     'api/offer',
-    offer
-  );
+    params
+  ).then((response) => {
+    console.log(response);
+});
   return result;
 };
