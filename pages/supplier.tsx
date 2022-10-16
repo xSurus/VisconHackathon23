@@ -9,7 +9,7 @@ import SupplierOffers from "../components/supplier-my-offers";
 
 type Data = { token: string; id: number; userType: string };
 
-const Supplier = ({ data }: { data: Data }) => {
+const Supplier = ( data: Data ) => {
 	const [activeIndex, setActiveIndex] = React.useState<number>(1);
 
     const [page, showPage] = React.useState(<SupplierOrders/>);

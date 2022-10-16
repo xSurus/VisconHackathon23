@@ -20,7 +20,7 @@ const SeparatorBar = styled(Grid)`
 
 type Data = { userType: string; token: string; id: number };
 
-const Seeker = ({ data }: { data: Data }) => {
+const Seeker = (data: Data) => {
 	const [page, showPage] = useState(<SeekerOrders seeker_id={data.id} />);
 	const [whichPage, setWhichPage] = useState<number>(1);
 
