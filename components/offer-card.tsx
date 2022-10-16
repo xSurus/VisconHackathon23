@@ -6,32 +6,40 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {CardActionArea, Grid} from '@mui/material';
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import styled from "@emotion/styled";
 
 interface OfferCardProps {
     companyName: string,
     voucherPrice: number,
     companyImageUrl: string,
-    offerDescription: string
+    offerDescription: string,
+    availableVouchers: number
 }
+const BuyVoucherButton = styled(Button)`
+color: #545050;
+
+&:hover {
+  background-color: inherit;
+  color: #ff0000;
+}
+`
 
 const OfferCard = (props: OfferCardProps) => {
 
-    const {companyName, voucherPrice, companyImageUrl, offerDescription} = props;
+    const {companyName, voucherPrice, companyImageUrl, offerDescription, availableVouchers} = props;
     const [active, setActive] = useState(false);
 
-    const BuyVoucherButton = styled(Button)`
-      color: #545050;
+    const [vouchersToOrder, setVouchersToOrder] = useState('');
 
-      &:hover {
-        background-color: inherit;
-        color: #ff0000;
-      }
-    `
+    const handleTextFieldChange = (e) => {
+        console.log(e)
+        setVouchersToOrder(e.target.value);
+    }
 
-    const contentUnclicked = () => {
-        return (
+   
+
+    const contentUnclicked = 
             <CardContent>
                 <Grid item container direction={'column'}>
                     <Grid item>
@@ -52,6 +60,8 @@ const OfferCard = (props: OfferCardProps) => {
                     <Grid item style={{marginTop: '1em'}}>
                         <Typography gutterBottom variant="h6" component="div">
                             {voucherPrice} CHF / Voucher
+                            <br></br>
+                            <p>{availableVouchers} Vouchers remaining!</p>
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -65,13 +75,8 @@ const OfferCard = (props: OfferCardProps) => {
                     </Grid>
                 </Grid>
             </CardContent>
-        )
-    }
 
-    const [content, setContent] = useState(contentUnclicked);
-
-    const contentClicked = () => {
-        return (
+    const contentClicked = 
             <CardContent>
                 <Grid container direction={'column'} justifyContent={'center'} alignItems={'center'} spacing={2}>
                     <Grid item>
@@ -85,11 +90,12 @@ const OfferCard = (props: OfferCardProps) => {
                             id="outlined-basic"
                             label="Amount of vouchers"
                             variant="outlined"
+                            value={vouchersToOrder}
+                            onChange={handleTextFieldChange}
                             onMouseDown={event => event.stopPropagation()}
                             onClick={event => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                console.log("Button clicked");
                             }}
                         />
                     </Grid>
@@ -100,7 +106,7 @@ const OfferCard = (props: OfferCardProps) => {
                             onClick={event => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                console.log("Button clicked");
+                                console.log({vouchersToOrder});
                             }}
                         >
                             Place Order!
@@ -108,29 +114,24 @@ const OfferCard = (props: OfferCardProps) => {
                     </Grid>
                 </Grid>
             </CardContent>
-        )
-    };
+
+
 
     const handleClick = () => {
         if (!active) {
             setActive(true);
-            setContent(contentClicked);
             return;
         }
         setActive(false);
-        setContent(contentUnclicked);
     }
 
-    const CardModified = styled(Card)`
-      &:hover {
-        background-color: transparent;
-      }
-    `
+   
 
 
     return (
-        <CardModified elevation={4} style={{borderRadius: '1em', minHeight: '15em', maxHeight: '25em'}}>
+        <Card elevation={4} style={{borderRadius: '1em', minHeight: '15em', maxHeight: '25em'}}>
             <CardActionArea onClick={handleClick}>
+                <>
                 <CardMedia
                     component="img"
                     width="100%"
@@ -138,9 +139,9 @@ const OfferCard = (props: OfferCardProps) => {
                     alt={companyName}
                     sx={{maxHeight: '10em', objectFit: "contain"}}
                 />
-                {content}
+                {active ? contentClicked : contentUnclicked}</>
             </CardActionArea>
-        </CardModified>
+        </Card>
     );
 }
 export default OfferCard;
