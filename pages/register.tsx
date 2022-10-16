@@ -30,7 +30,7 @@ const Registration = () => {
 						noWrap
 						sx={{ flexGrow: 1 }}
 					>
-						OUR NAME
+						Voucher bros
 					</Typography>
 					<nav>
 						<Link

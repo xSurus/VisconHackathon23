@@ -28,7 +28,7 @@ const Supplier = (data: Data) => {
             >
             <Toolbar sx={{ flexWrap: 'wrap' }}>
             <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-                OUR NAME
+                Voucher bros
             </Typography>
             <nav>
                 <Link
@@ -89,7 +89,7 @@ const Supplier = (data: Data) => {
             </Toolbar>
             </AppBar>
             <Grid item>
-                <CreateVoucher/>
+                {page}
             </Grid>
         </Grid>
     )

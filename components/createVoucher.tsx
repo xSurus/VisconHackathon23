@@ -13,7 +13,7 @@ import axios from "axios";
 
 const CreateVoucher = () =>{
     const offerModel:PostQuery = {
-        supplier_id:1,
+        supplier_id: 1,
 	    name: '',
         description:'',
 	    price: 0,
@@ -169,7 +169,7 @@ const CreateVoucher = () =>{
         </Button>
 
         <Button onClick={handleSubmit} sx={{m:3}} variant="contained">
-            Sumbmit
+            Submit
         </Button>
 
         </div>

@@ -50,7 +50,7 @@ const Seeker = (data: Data) => {
             >
             <Toolbar sx={{ flexWrap: 'wrap' }}>
             <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-                OUR NAME
+                Voucher bros
             </Typography>
             <nav>
                 <Link
