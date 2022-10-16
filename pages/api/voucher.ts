@@ -32,7 +32,7 @@ export default async function handler(
 					!Object.keys(query).length
 						? await db.query("SELECT * FROM Voucher")
 						: await db.query(
-								"SELECT * FROM Voucher WHERE id = $1::integer",
+								"SELECT * FROM Voucher WHERE id = $1::uuid",
 								[query.id]
 						  )
 				).rows;
