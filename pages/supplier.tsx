@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<Data> = async (context) => {
 	}
 };
 
-const Supplier = ({ data }: { data: Data }) => {
+const Supplier = (data: Data) => {
 	const [page, showPage] = useState(<SupplierOrders />);
 	const [whichPage, setWhichPage] = useState<number>(1);
 
