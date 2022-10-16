@@ -17,8 +17,6 @@ const SeparatorBar = styled(Grid)`
 	margin-right: 1em;
 	margin-left: 1em;
 `;
-
-type Data = { userType: string; token: string; id: number };
 const HeaderM = styled(Grid)`
 	background-color: #white;
 	height: 3em;
@@ -36,6 +34,10 @@ const AccountIcon = styled(IconButton)`
 	margin-top: 0.5em;
 	margin-right: 0.5em;
 `;
+
+
+type Data = { userType: string; token: string; id: number };
+
 const Seeker = (data: Data) => {
 	const [page, showPage] = useState(<SeekerOrders />);
 	const [whichPage, setWhichPage] = useState<number>(1);
