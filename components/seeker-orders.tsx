@@ -32,7 +32,7 @@ const SeekerOrders = () => {
 	]);
 
     useEffect(() => {
-		FetchOrders(1).then((res) => {
+		FetchOrders(2).then((res) => {
 			setOrders(res.data);
 		});
 	}, []);
