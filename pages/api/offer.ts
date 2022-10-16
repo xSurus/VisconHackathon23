@@ -22,7 +22,7 @@ export type PostQuery = {
 	/** supplier id of whoever posts the offer */
 	supplier_id: number;
 	/** categories of the offer */
-	categories: Category[];
+	categories: Category | Category[];
 	description: string;
 	/** Value of each voucher */
 	price: number;
@@ -57,8 +57,8 @@ function isPostQuery(query: any): query is PostQuery {
 		typeof query.stock === "string" &&
 		isInteger(query.stock) &&
 		typeof query.name === "string" &&
-		Array.isArray(query.categories) &&
-		query.categories.every((c: any) => typeof c === "string")
+		(!Array.isArray(query.categories) ||
+			query.categories.every((c: any) => typeof c === "string"))
 	);
 }
 

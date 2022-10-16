@@ -26,9 +26,12 @@ export type PatchData = Order | undefined;
 export type Data = GetData | PostData | DeleteData | PatchData;
 
 /** Get all orders of this */
-export type GetQuery = {
-	seeker_id: number;
-};
+export type GetQuery =
+	| {
+			seeker_id: number;
+	  }
+	| { supplier_id: number }
+	| { offer_id: number };
 
 /** Create order for request */
 export type PostQuery = {
@@ -63,7 +66,12 @@ export function isPostQuery(query: any): query is PostQuery {
 }
 
 export function isGetQuery(query: any): query is GetQuery {
-	return query && isInteger(query.seeker_id);
+	return (
+		query &&
+		(isInteger(query.supplier_id) ||
+			isInteger(query.offer_id) ||
+			isInteger(query.seeker_id))
+	);
 }
 
 export function isPatchQuery(q: any): q is PatchQuery {
@@ -109,27 +117,59 @@ export async function getAvailableVouchers(
 	}));
 }
 
+const rowsToOrders = async (rows: any[]): Promise<Order[]> => {
+	const orders: Order[] = [];
+	for (const order of rows) {
+		const seeker = await getSeekerById(order.seeker_id);
+
+		const offer = await getOfferById(order.offer_id);
+
+		if (!offer) {
+			return []; // Should not be possible, but :)))
+		}
+
+		orders.push({
+			id: order.id,
+			status: order.status,
+			seeker,
+			offer,
+		});
+	}
+
+	return orders;
+};
+
 const handler: NextApiHandler<Data> = async (req, res) => {
 	const { query } = req;
 
 	if (req.method === "GET" && isGetQuery(query)) {
-		const result = await db.query(
-			"SELECT * FROM Ordine WHERE seeker_id = $1::integer",
-			[query.seeker_id]
-		);
+		if (query.seeker_id) {
+			const result = await db.query(
+				"SELECT * FROM Ordine WHERE seeker_id = $1::integer",
+				[query.seeker_id]
+			);
 
-		const orders: Order[] = [];
-		for (const order of result.rows) {
-			const seeker = await getSeekerById(order.seeker_id);
+			const orders = await rowsToOrders(result.rows);
+			return res.status(200).json(orders);
+		} else if (query.offer_id) {
+			const result = await db.query(
+				"SELECT * FROM Ordine WHERE offer_id = $1::integer",
+				[query.offer_id]
+			);
 
-			orders.push({
-				id: order.id,
-				status: order.status,
-				seeker: seeker ? seeker : undefined,
-			});
+			const orders = await rowsToOrders(result.rows);
+
+			return res.status(200).json(orders);
+		} else if (query.supplier_id) {
+			const result = await db.query(
+				"SELECT ordi.* FROM Ordine AS ordi, Offer AS offe WHERE ordi.offer_id = offe.id AND offe.supplier_id = $1::integer",
+				[query.supplier_id]
+			);
+
+			const orders = await rowsToOrders(result.rows);
+
+			return res.status(200).json(orders);
 		}
-
-		return res.status(200).json(orders);
 	} else if (req.method == "POST" && isPostQuery(query)) {
 		// Check if ENOUGH vouchers are available (not already part of an order).
 		// If that's the case, send a 404 to indicate that not enough voucher were found.
@@ -178,13 +218,14 @@ const handler: NextApiHandler<Data> = async (req, res) => {
 						id: order_id,
 						status,
 						seeker,
+						offer,
 					},
 					vouchers,
 				};
 
-				res.status(200).json(ans);
+				return res.status(200).json(ans);
 			} else {
-				res.status(404).send("not-enough-vouchers");
+				return res.status(404).send("not-enough-vouchers");
 			}
 		};
 		f();
@@ -200,19 +241,23 @@ const handler: NextApiHandler<Data> = async (req, res) => {
 		);
 
 		if (r.rowCount > 0) {
-			const { seeker_id, id, status } = r.rows[0];
+			const { offer_id, seeker_id, id, status } = r.rows[0];
 
 			const seeker = await getSeekerById(seeker_id);
+			const offer = await getOfferById(offer_id);
 
-			if (!seeker) return res.status(500).send("seeker-id-not-stored");
+			if (!seeker || !offer)
+				return res.status(500).send("seeker-or-offer-id-not-stored");
 
-			res.status(200).json({ seeker, id, status });
+			return res.status(200).json({ seeker, id, status, offer });
 		} else {
 			return res.status(404).send(undefined);
 		}
 	} else {
-		res.status(400).send(undefined);
+		return res.status(400).send(undefined);
 	}
+
+	res.status(400).send(undefined);
 };
 
 export default handler;

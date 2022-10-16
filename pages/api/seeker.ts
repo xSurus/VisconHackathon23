@@ -48,7 +48,7 @@ export async function getSeekers(): Promise<Seeker[]> {
 	return seekers;
 }
 
-export async function getSeekerById(id: number): Promise<Seeker | null> {
+export async function getSeekerById(id: number): Promise<Seeker | undefined> {
 	const res = await db.query(
 		"SELECT S.id as sid, S.name as sname, S.img as simg, S.email as semail, S.homepage as shomepage, A.id as aid, A.street as astreet, A.cap as acap, A.city as acity, A.country as acountry FROM Address AS A, Seeker AS S WHERE S.id = $1::integer AND S.address_id=A.id",
 		// @ts-ignore
@@ -60,7 +60,7 @@ export async function getSeekerById(id: number): Promise<Seeker | null> {
 		const seeker = rowToSeeker(x);
 
 		return seeker;
-	} else return null;
+	} else return undefined;
 }
 
 export default async function handler(
