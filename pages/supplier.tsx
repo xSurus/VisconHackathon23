@@ -35,13 +35,13 @@ const Supplier = (data: Data) => {
                 variant="button"
                 color="text.primary"
                 href="#"
-                /*style={{
+                style={{
                     opacity: whichPage === 1 ? 1 : 0.4,
                 }}
                 onClick={() => {
-                    showPage(<SeekerOrders/>);
+                    showPage(<SupplierOrders/>);
                     setWhichPage(1)
-                }} */
+                }}
                 sx={{ my: 1, mx: 1.5 }}
                 >
                 Orders
@@ -50,25 +50,40 @@ const Supplier = (data: Data) => {
                 variant="button"
                 color="text.primary"
                 href="#"
-                /*style={{
+                style={{
                     opacity: whichPage === 2 ? 1 : 0.4,
                 }}
                 onClick={() => {
-                    showPage(<SeekerOffers/>);
+                    showPage(<SupplierOffers/>);
                     setWhichPage(2)
-                }}*/
+                }}
                 sx={{ my: 1, mx: 1.5 }}
                 >
                 Offers
                 </Link>
+                <Link
+                variant="button"
+                color="text.primary"
+                href="#"
+                style={{
+                    opacity: whichPage === 3 ? 1 : 0.4,
+                }}
+                onClick={() => {
+                    showPage(<CreateVoucher/>);
+                    setWhichPage(3)
+                }}
+                sx={{ my: 1, mx: 1.5 }}
+                >
+                Create Voucher
+                </Link>
             </nav>
-            <Button /*onClick={() => {
+            <Button onClick={() => {
                             showPage(<LoginForm/>);
-                            setWhichPage(3)
-                        }} */variant="outlined" href="#" sx={{ my: 1, mx: 1.5 }} 
-                        /*style={{
-                            opacity: whichPage === 3 ? 1 : 0.4,
-                        }}*/>
+                            setWhichPage(4)
+                        }} variant="outlined" href="#" sx={{ my: 1, mx: 1.5 }} 
+                        style={{
+                            opacity: whichPage === 4 ? 1 : 0.4,
+                        }}>
                 Login/Profile
             </Button>
             </Toolbar>

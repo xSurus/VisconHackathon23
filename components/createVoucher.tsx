@@ -5,7 +5,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import * as React from 'react';
 import Image from 'next/image';
 import { Offer, Supplier } from "../util/schemas";
-import {  PostOffer } from "../services/api-requests";
+import { PostOffer } from "../services/api-requests";
 import Filter from "./filter";
 import {PostQuery} from "../pages/api/offer";
 import axios from "axios";

@@ -21,7 +21,7 @@ const CustomButton = styled(Button)`
 const PaperContainer = styled(Paper)`
       height: auto;
       width: 499px;
-      margin-top: 0em;
+      margin-top: 3em;
       border-radius: 1em;
       background-color: #d1cece;
     `
@@ -34,15 +34,16 @@ const RegisterFormSupplier = () => {
         city: '',
         country: '',
         iban: '',
-        email: '',
+        login_email: '',
         name: '',
         street: '',
         billing_address: '',
-        homepage: ''
+        homepage: '',
+        email: '',
+        password: '',
     }
 
     const [model, setModel] = useState<any>(registerModel);
-
         const handleClickButton = () => {
         SendSupplierRegistration(model);
         Router.push('/supplier');

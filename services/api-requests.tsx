@@ -72,7 +72,7 @@ export const editOrder = async (id: number, status: number) => {
 	});
 	return res;
 };
-/* export const PostOffer = async (offer : PostQuery) => {
+export const PostOffer = async (offer : PostQuery) => {
   const params = {paramsSerializer: {serialize: (params :any)=>{ return qs.stringify(params, {arrayFormat: 'repeat'})}} , params: offer}
   console.log(offer);
   const result = await axios.post('api/offer', null, params ).then((response:any) => {
@@ -80,4 +80,3 @@ export const editOrder = async (id: number, status: number) => {
 });
   return result;
 };
- */
