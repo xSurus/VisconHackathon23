@@ -4,7 +4,7 @@ import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
 import { resourceLimits } from "worker_threads";
 import { PostData } from "../pages/api/order";
-import qs from "qs";
+/* import qs from "qs"; */
 
 export const FetchOffers = async () => {
     const result = await axios.get(
@@ -36,11 +36,10 @@ export const SendLoginSup = () => {
 }
 
 export const FetchOrders = async (seeker_id : number) => {
-  const params = {params: seeker_id}
-  const result =  axios.get(
-    '/api/order', params
-  );
-  return result;
+    const result = await axios.get(
+      '/api/order', {params: {seeker_id}}
+    );
+    return result;
 }
 
 export const SendSupplierRegistration = (data: PostQuery) => {
@@ -60,7 +59,7 @@ export const editOrder = async (id : number, status : number) => {
   );
   return res;
 }
-export const PostOffer = async (offer : PostQuery) => {
+/* export const PostOffer = async (offer : PostQuery) => {
   const params = {paramsSerializer: {serialize: (params :any)=>{ return qs.stringify(params, {arrayFormat: 'repeat'})}} , params: offer}
   console.log(offer);
   const result = await axios.post('api/offer', null, params ).then((response:any) => {
@@ -68,3 +67,4 @@ export const PostOffer = async (offer : PostQuery) => {
 });
   return result;
 };
+ */
