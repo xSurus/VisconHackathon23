@@ -158,6 +158,7 @@ export type Offer = {
 	name: string;
 	description: string;
 	price_per_voucher: number;
+	active: boolean;
 	available: number;
 	/** Can vanish in the future */
 	supplier?: Supplier;

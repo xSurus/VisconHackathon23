@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS Seeker (
 
 CREATE TABLE IF NOT EXISTS Offer (
     id SERIAL PRIMARY KEY,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     supplier_id INTEGER REFERENCES Supplier(id)

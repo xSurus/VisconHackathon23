@@ -121,6 +121,7 @@ export async function getOfferById(id: number): Promise<Offer | undefined> {
 	const categories = res_categories.rows.map((r) => r.category_name);
 
 	const offer = {
+		active: row.active,
 		description: row.description,
 		name: row.name,
 		categories,
@@ -186,7 +187,7 @@ export default async function handler(
 				// then join with every Offer_Category to retrieve every category of each offer
 				let result = await db.query(
 					`SELECT * FROM
-					(SELECT O.id, O.name, O.description, O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+					(SELECT O.id, O.name, O.description, O.active, O.supplier_id, OC.category_name, S.name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
 						A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
 					WHERE OC.category_name = ANY( $1::text[] ) AND O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R
 					INNER JOIN Offer_Category as OCC ON OCC.offer_id = R.id`,
@@ -209,6 +210,7 @@ export default async function handler(
 
 						offer = {
 							available,
+							active: o.active,
 							description: o.description,
 							name: o.name,
 							categories: [o.category_name],
@@ -246,7 +248,7 @@ export default async function handler(
 				try {
 					let result = await db.query(
 						`SELECT * FROM
-						(SELECT O.id, O.description, O.supplier_id, O.name, OC.category_name, S.name as supplier_name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
+						(SELECT O.id, O.description, O.supplier_id, O.name, O.active, OC.category_name, S.name as supplier_name, S.email, S.homepage, S.img, S.address_id, A.city, A.cap,
 							A.country, A.street, S.billing, B.billing_address, B.iban  FROM Offer AS O, Supplier AS S, Address as A, Billing as B, Offer_Category AS OC
 						WHERE O.id = OC.offer_id AND S.id = O.supplier_id AND S.address_id = A.id AND B.id = S.billing) as R`
 					);
@@ -267,6 +269,7 @@ export default async function handler(
 							);
 							offer = {
 								available,
+								active: o.active,
 								description: o.description,
 								name: o.name,
 								categories: [o.category_name],
@@ -307,10 +310,10 @@ export default async function handler(
 			}
 
 		case "POST":
-			if (!isPostQuery(query)){
-				console.log("not a post", query)
+			if (!isPostQuery(query)) {
+				console.log("not a post", query);
 				break;
-			} 
+			}
 			try {
 				console.log("BALL");
 				let result = await db.query(
