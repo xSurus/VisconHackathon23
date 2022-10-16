@@ -140,6 +140,7 @@ export type Order = {
 	id: number;
 	status: OrderStatus;
 	seeker?: Seeker;
+	offer: Offer;
 };
 
 export function isOrder(o: any): o is Order {

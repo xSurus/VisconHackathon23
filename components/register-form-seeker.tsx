@@ -39,9 +39,6 @@ const RegisterFormSeeker = () => {
     border-radius: 1em;
     background-color: #d0cece;
   `
-    const handleGoogleAuth = () => {
-
-    }
     return (
         <Grid container justifyContent={'center'} alignItems={'center'} style={{height: '100vh'}}>
                 <Grid item>
@@ -120,35 +117,6 @@ const RegisterFormSeeker = () => {
                                         id="country-field"
                                     />
                                 </FormControl>
-                            </Grid>
-                            <Grid item>
-                                <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
-                                    <Grid container justifyContent={'center'} alignItems={'center'}>
-                                        <Grid item>
-                                            <input
-                                                accept="image/*"
-                                                style={{ display: 'none' }}
-                                                id="raised-button-file"
-                                                multiple
-                                                type="file"
-                                                color='red'
-                                                />
-                                                <label htmlFor="raised-button-file">
-                                                <Button component="span" style={{
-                                                    color: 'white',
-                                                    backgroundColor: 'black',
-                                                    fontWeight: 'bold',
-                                                    borderRadius: 0,
-                                                    width: '15em',
-                                                    height: '3em',
-                                                    marginRight: '0.1em',
-                                                  }}>
-                                                    Upload Logo
-                                                </Button>
-                                            </label> 
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
                             </Grid>
                             <Grid item>
                                 <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em', marginBottom: '2em'}}>

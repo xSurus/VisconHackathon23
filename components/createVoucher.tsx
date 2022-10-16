@@ -4,27 +4,32 @@ import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import * as React from 'react';
 import Image from 'next/image';
-import { Offer, Supplier } from "../../../util/schemas";
-import { PostOffer } from "../../../services/api-requests";
-import Filter from "../../../components/filter";
-import {PostQuery} from "../../../pages/api/offer";
+import { Offer, Supplier } from "../util/schemas";
+import {  PostOffer } from "../services/api-requests";
+import Filter from "./filter";
+import {PostQuery} from "../pages/api/offer";
+import axios from "axios";
 
 
 const CreateVoucher = () =>{
-    const [offer, setValues] = React.useState<PostQuery>({
-        supplier_id: 99,
-	    name: "",
-        description:"",
+    const offerModel:PostQuery = {
+        supplier_id:1,
+	    name: '',
+        description:'',
 	    price: 0,
         stock:0,
 	    categories: []
-    })
+    }
+    const [offer, setValues] = React.useState<PostQuery>(offerModel)
 
     const [open, setOpen] = React.useState(false);
-    const allCategories = [
-        'Pog',
-        'PogPog'
-    ];
+    const [allCategories, setAllCategories] = React.useState<string[]>([]);
+
+    React.useEffect(() => {
+        axios.get("/api/category").then((x) => x.data.categories.map((y: any) => {
+            return y;
+        })).then(setAllCategories);
+    }, []);
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -44,7 +49,7 @@ const CreateVoucher = () =>{
             setOpen(false);
         }
     };
-    const [imagePath, setImagePath] = React.useState<string>("/public/brain.png");
+    const [imagePath, setImagePath] = React.useState<string>("/public/Migros.svg.png");
 
     const handleChange = (prop: keyof PostQuery) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({...offer, [prop]:event.target.value});
@@ -61,8 +66,9 @@ const CreateVoucher = () =>{
         }else if(offer.price<0){
             alert("enter a non-negative price");
 
-        }else{
-            
+        }else if(offer.stock<=0){
+            alert("enter a valid amount")}
+        else{
             PostOffer(offer);
         }
 
@@ -105,7 +111,7 @@ const CreateVoucher = () =>{
                                 value={offer.categories}
                                 onChange={handleCategoryChange}
                                 input={<OutlinedInput label="categories"/>}
-                                renderValue={(selected) => selected.join(', ')}
+                                renderValue={(selected) => Array.isArray(selected)?selected.join(', '):selected}
                             >
                                 {allCategories.map((category) => (
                                     <MenuItem key={category} value={category}>

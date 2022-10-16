@@ -13,7 +13,7 @@ import { getAvailableVouchers, getAvailableVouchersCount } from "./order";
 
 type GetCategoriesQuery = { categories: Category | Category[] };
 
-type GetIdQuery = { id: number };
+export type GetIdQuery = { id: number };
 
 type GetAllQuery = {};
 
@@ -22,7 +22,7 @@ export type PostQuery = {
 	/** supplier id of whoever posts the offer */
 	supplier_id: number;
 	/** categories of the offer */
-	categories: Category[];
+	categories: Category | Category[];
 	description: string;
 	/** Value of each voucher */
 	price: number;
@@ -57,8 +57,8 @@ function isPostQuery(query: any): query is PostQuery {
 		typeof query.stock === "string" &&
 		isInteger(query.stock) &&
 		typeof query.name === "string" &&
-		Array.isArray(query.categories) &&
-		query.categories.every((c: any) => typeof c === "string")
+		(!Array.isArray(query.categories) ||
+			query.categories.every((c: any) => typeof c === "string"))
 	);
 }
 
@@ -132,7 +132,6 @@ export default async function handler(
 	res: NextApiResponse<Data>
 ) {
 	const query = req.query;
-
 	switch (req.method) {
 		case "GET":
 			if (isGetIdQuery(query)) {
@@ -278,7 +277,10 @@ export default async function handler(
 			}
 
 		case "POST":
-			if (!isPostQuery(query)) break;
+			if (!isPostQuery(query)){
+				console.log("not a post", query)
+				break;
+			} 
 			try {
 				console.log("BALL");
 				let result = await db.query(
@@ -304,7 +306,9 @@ export default async function handler(
 						console.log("inserted category");
 					}
 				}
-			} catch (e) {}
+			} catch (e) {
+				console.error(e);
+			}
 			return res.status(201).send(undefined);
 		case "DELETE":
 			if (!isDeleteQuery(query)) break;

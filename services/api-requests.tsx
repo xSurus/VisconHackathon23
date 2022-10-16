@@ -1,14 +1,25 @@
 import axios from "axios";
-import { PostQuery } from "../pages/api/order";
+import { GetIdQuery, PostQuery } from "../pages/api/offer";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
 import { resourceLimits } from "worker_threads";
+import { PostData } from "../pages/api/order";
+import qs from "qs";
 
 export const FetchOffers = async () => {
     const result = await axios.get(
       '/api/offer',
     );
     return result;
+}
+
+
+export const FetchOffersById = async (query : GetIdQuery) => {
+  const params ={params: query}
+  const result = await axios.get(
+    '/api/offer', params
+  );
+  return result;
 }
 
 export const SendLogin = () => {
@@ -25,24 +36,22 @@ export const SendLoginSup = () => {
 }
 
 export const FetchOrders = async (seeker_id : number) => {
-  const result = await axios.get(
-    '/api/order', { params: {seeker_id} }
+  const params = {params: seeker_id}
+  const result =  axios.get(
+    '/api/order', params
   );
   return result;
 }
 
-export const SendSupplierRegistration = (data: any) => {
-  const params = new URLSearchParams();
-  for (const key in data) {
-    params.append(key, data[key]);
-  }
-    console.log(data);
-    const result = axios.post('/api/supplier', params).then((response) => {
+export const SendSupplierRegistration = (data: PostQuery) => {
+  const params = {params: data}
+    const result = axios.post('/api/supplier', null, params).then((response) => {
         console.log(response);
     });
     console.log('lol');
     return result;
 }
+
 
 
 export const editOrder = async (id : number, status : number) => {
@@ -51,3 +60,11 @@ export const editOrder = async (id : number, status : number) => {
   );
   return res;
 }
+export const PostOffer = async (offer : PostQuery) => {
+  const params = {paramsSerializer: {serialize: (params :any)=>{ return qs.stringify(params, {arrayFormat: 'repeat'})}} , params: offer}
+  console.log(offer);
+  const result = await axios.post('api/offer', null, params ).then((response:any) => {
+    console.log(response);
+});
+  return result;
+};
