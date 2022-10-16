@@ -28,7 +28,7 @@ const SupplierOffers = () => {
             
             <Grid container spacing={3} alignItems={'center'}
                   style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '6em', marginTop: '0.3em'}}>
-                {vouchers?.map((offer: Offer) => {
+                {vouchers?.filter( x=> x.active).map((offer: Offer) => {
                     return <Grid item xs={12} sm={6} md={6} lg={4} key={offer.id}>
                         <VoucherCard companyName={offer.name} voucherPrice={offer.price_per_voucher}
                                    companyImageUrl={offer.supplier ? offer.supplier.img : ''}

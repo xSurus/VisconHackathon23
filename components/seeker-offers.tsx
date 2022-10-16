@@ -34,7 +34,7 @@ const SeekerOffers = () => {
             </Grid>
             <Grid container spacing={3} alignItems={'center'}
                   style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '6em', marginTop: '0.3em'}}>
-                {vouchers?.filter(x => 
+                {vouchers?.filter(x=>x.active).filter(x => 
                     categories.filter(x => x.checked).map(x => x.cat).filter(value => x.categories.includes(value)).length > 0
                 ).map((offer: Offer) => {
                     return <Grid item xs={12} sm={6} md={6} lg={4} key={offer.id}>
