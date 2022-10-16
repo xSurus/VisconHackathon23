@@ -17,7 +17,6 @@ export const PostOrder = (seekeridG : number, id : number, num : number) => {
     '/api/order', null, { params: {offer_id: id, amount: num, seeker_id : seekeridG} }
   ).then (res => {
     console.log(res);
-    console.log(res.data);
   });
   return res;
 }

@@ -14,29 +14,28 @@ const SeparatorBar = styled(Grid)`
   margin-right: 1em;
   margin-left: 1em;
 `
+const HeaderM = styled(Grid)`
+background-color: #white;
+height: 3em;
+width: 100%;
+margin-bottom: 1em; 
+`
+const HeaderText = styled(Grid)`
+font-size: 1.5em;
+font-weight: bold;
+text-align: center;
+fontSize: large;
+`
+const AccountIcon = styled(IconButton)`
+float: right;
+margin-top: 0.5em;
+margin-right: 0.5em;
+`
 
 const Seeker = () => {
 
     const [page, showPage] = useState(<SeekerOrders/>);
     const [whichPage, setWhichPage] = useState<number>(1);
-
-    const HeaderM = styled(Grid)`
-        background-color: #white;
-        height: 3em;
-        width: 100%;
-        margin-bottom: 1em; 
-    `
-    const HeaderText = styled(Grid)`
-        font-size: 1.5em;
-        font-weight: bold;
-        text-align: center;
-        fontSize: large;
-    `
-    const AccountIcon = styled(IconButton)`
-        float: right;
-        margin-top: 0.5em;
-        margin-right: 0.5em;
-    `
     return (
         <Grid container>
             <AppBar

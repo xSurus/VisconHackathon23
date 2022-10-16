@@ -43,10 +43,10 @@ const OfferCard = (props: OfferCardProps) => {
         } else if (vouchersToOrder > availableVouchers) {
             alert('There are not enough vouchers available');
         } else {
-            /* TODO ADD COOKIE */
+            /* TODO ADD COOKIE NOT USE ALERT*/
             PostOrder(2, offerid, vouchersToOrder);
+            alert('Order submitted');
         }
-        console.log(vouchersToOrder);
 }
    
 
@@ -95,7 +95,7 @@ const OfferCard = (props: OfferCardProps) => {
                             Order Vouchers
                         </Typography>
                     </Grid>
-                    <Grid item style={{minHeight: '3em', maxHeight: '5em'}}>
+                    <Grid item style={{minHeight: '3em', maxHeight: '5em', marginTop: '2em'}}>
                         <TextField
                             sx={{display: 'flex', alignSelf: 'center'}}
                             id="outlined-basic"
@@ -112,10 +112,11 @@ const OfferCard = (props: OfferCardProps) => {
                             helperText={vouchersToOrder < 0 ? 'Please enter a number' : ''}
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid item margin={'3em'} style={{minHeight: '3em', maxHeight: '5em'}}>
                         <Button
                             variant="contained"
                             onMouseDown={event => event.stopPropagation()}
+                            size="large"
                             onClick={event => {
                                 event.stopPropagation();
                                 event.preventDefault();
