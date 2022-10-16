@@ -115,12 +115,6 @@ VALUES
     ) ON CONFLICT DO NOTHING;
 
 INSERT INTO
-    Ordine (status, seeker_id)
-VALUES
-    (0, 1),
-    (0, 2) ON CONFLICT DO NOTHING;
-
-INSERT INTO
     Offer (name, description, supplier_id)
 VALUES
     (
@@ -131,6 +125,12 @@ VALUES
     ('Name2', 'Non e una truffa', 2),
     ('Test3', 'cosecose', 1),
     ('TTAGNGGNGOG', 'egawsrar', 1) ON CONFLICT DO NOTHING;
+
+INSERT INTO
+    Ordine (status, seeker_id, offer_id)
+VALUES
+    (0, 1, 1),
+    (0, 2, 2) ON CONFLICT DO NOTHING;
 
 INSERT INTO
     Voucher (name, price, supplier_id, offer_id)
