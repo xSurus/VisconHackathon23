@@ -65,11 +65,10 @@ const VoucherCard = (props: OfferCardProps) => {
                     </Grid>
                     <Grid item>
                         <Grid item container justifyContent={'end'} alignItems={'center'}>
-                            <Grid item>
+                            
                                 <DeleteVoucherButton>
                                     Delete this offer
                                 </DeleteVoucherButton>
-                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
