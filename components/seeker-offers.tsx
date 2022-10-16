@@ -40,7 +40,7 @@ const SeekerOffers = () => {
                     return <Grid item xs={12} sm={6} md={6} lg={4} key={offer.id}>
                         <OfferCard companyName={offer.name} voucherPrice={offer.price_per_voucher}
                                    companyImageUrl={offer.supplier ? offer.supplier.img : ''}
-                                   offerDescription={offer.description}
+                                   offerDescription={offer.description} availableVouchers={offer.available}
                                    key={offer.id}/>
                     </Grid>
                 })}

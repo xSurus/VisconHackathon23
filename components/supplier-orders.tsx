@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { TextField, Button, Card, Grid } from "@mui/material";
 import Filter from "./filter";
-import OrderCard from "./order-card-seeker";
+import OrderCard from "./order-card-supplier";
 import type { Order } from "../util/schemas";
-import { FetchOrdersSeeker } from "../services/api-requests";
+import { FetchOrdersSupplier } from "../services/api-requests";
 import type { Seeker } from "../util/schemas";
 import { OrderStatus } from "../util/schemas";
 import Typography from "@mui/material/Typography";
 import type { FilterElement } from "./filter";
 
-const SeekerOrders = () => {
+const SupplierOrders = () => {
 	const [orders, setOrders] = useState<Order[]>([]);
 
 	const [categories, setCategories] = useState<FilterElement[]>([
@@ -31,12 +31,19 @@ const SeekerOrders = () => {
 		},
 	]);
 
-    useEffect(() => {
-		FetchOrdersSeeker(1).then((res) => {
+	useEffect(() => {
+		FetchOrdersSupplier(1).then((res) => {
 			setOrders(res.data);
 		});
 	}, []);
 
+	const setOrderStatus = (id: number, status: number) => {
+		const order_idx = orders.findIndex((o) => o.id == id);
+		if (order_idx != -1) {
+			orders[order_idx].status = status;
+		}
+		setOrders([...orders]);
+	};
 
 	return (
 		<Grid
@@ -76,6 +83,7 @@ const SeekerOrders = () => {
 					return (
 						<Grid item xs={12} key={order.id}>
 							<OrderCard
+								setOrderStatus={setOrderStatus}
 								orderNumber={order.id}
 								orderStatus={order.status}
 								seeker={order.seeker ? order.seeker.name : ""}
@@ -89,4 +97,4 @@ const SeekerOrders = () => {
 	);
 };
 
-export default SeekerOrders;
+export default SupplierOrders;

@@ -33,20 +33,21 @@ CREATE TABLE IF NOT EXISTS Seeker (
     homepage text
 );
 
+CREATE TABLE IF NOT EXISTS Offer (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    supplier_id INTEGER REFERENCES Supplier(id)
+);
+
 CREATE TABLE IF NOT EXISTS Ordine (
     id SERIAL PRIMARY KEY,
     -- pending=0, confirmed=1, declined=2, paid=3
     status INTEGER NOT NULL,
     seeker_id INTEGER REFERENCES Seeker(id) ON DELETE
     SET
-        NULL
-);
-
-CREATE TABLE IF NOT EXISTS Offer (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    description TEXT NOT NULL,
-    supplier_id INTEGER REFERENCES Supplier(id)
+        NULL,
+        offer_id SERIAL REFERENCES Offer(id) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Voucher (

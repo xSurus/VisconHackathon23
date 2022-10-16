@@ -5,10 +5,29 @@ import styled from '@emotion/styled'
 import {SendSupplierRegistration} from '../services/api-requests';
 import {useState} from "react";
 import {PostQuery} from "../pages/api/supplier";
+import Router from "next/router";
+
+const CustomButton = styled(Button)`
+      color: #fff;
+      font-weight: bold;
+      background-color: black;
+      border-radius: -1;
+      width: 18em;
+      height: 5em;
+      :hover {
+        background-color: black;
+      }
+    `
+const PaperContainer = styled(Paper)`
+      height: auto;
+      width: 499px;
+      margin-top: 0em;
+      border-radius: 1em;
+      background-color: #d1cece;
+    `
 
 
 const RegisterFormSupplier = () => {
-
     const registerModel: PostQuery = {
         img: '',
         cap: 0,
@@ -24,28 +43,9 @@ const RegisterFormSupplier = () => {
 
     const [model, setModel] = useState<any>(registerModel);
 
-    const CustomButton = styled(Button)`
-      color: #fff;
-      font-weight: bold;
-      background-color: black;
-      border-radius: 0;
-      width: 15em;
-      margin-right: 0.1em;
-      height: 3em;
-
-      :hover {
-        background-color: black;
-      }
-    `
-    const PaperContainer = styled(Paper)`
-      height: auto;
-      width: 500px;
-      margin-top: 1em;
-      border-radius: 1em;
-      background-color: #d0cece;
-    `
-    const handleClickButton = () => {
-        SendSupplierRegistration(model)
+        const handleClickButton = () => {
+        SendSupplierRegistration(model);
+        Router.push('/supplier');
     }
 
     return (
@@ -153,7 +153,36 @@ const RegisterFormSupplier = () => {
                             </FormControl>
                         </Grid>
                         <Grid item>
-                            <Paper style={{borderRadius: 0, width: '13em', marginTop: '1.3em', marginLeft: '1em'}}>
+                            <Paper style={{borderRadius: 0, width: '13em', marginTop: '0.7em', marginLeft: '1em'}}>
+                                <Grid container justifyContent={'center'} alignItems={'center'}>
+                                    <Grid item>
+                                        <input
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                            id="raised-button-file"
+                                            multiple
+                                            type="file"
+                                            color='red'
+                                            />
+                                            <label htmlFor="raised-button-file">
+                                            <Button component="span" style={{
+                                                color: 'black',
+                                                backgroundColor: '#d1cece',
+                                                fontWeight: 'bold',
+                                                borderRadius: 0,
+                                                width: '15em',
+                                                height: '3em',
+                                                border: '1px solid grey',
+                                                }}>
+                                                Upload Logo
+                                            </Button>
+                                        </label> 
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                        <Grid item>
+                            <Paper style={{borderRadius: 0, width: '13em', marginTop: '0.7em', marginLeft: '1em'}}>
                                 <Grid container justifyContent={'center'} alignItems={'center'}>
                                     <Grid item>
 
@@ -165,7 +194,6 @@ const RegisterFormSupplier = () => {
                             <Paper style={{
                                 borderRadius: 0,
                                 width: '13em',
-                                marginTop: '1.3em',
                                 marginLeft: '1em',
                                 marginBottom: '2em'
                             }}>

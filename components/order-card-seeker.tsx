@@ -12,7 +12,6 @@ interface OrderCardProps {
     orderNumber: number,
     orderStatus: number,
     seeker: string,
-    setOrderStatus: (id: number, status: number) => void,
 }
 
 const OrderCard = (props: OrderCardProps) => {
@@ -29,13 +28,6 @@ const OrderCard = (props: OrderCardProps) => {
             case 3: return 'success';
             default: return undefined;
         }
-    }
-
-    const setStatusAPI = (order_id : number) => {
-        editOrder(order_id, 0).then( res => {
-            console.log('Diomerda')
-            props.setOrderStatus(order_id, 0)
-        })
     }
 
     return (
@@ -58,11 +50,6 @@ const OrderCard = (props: OrderCardProps) => {
                                     label={getLabel(orderStatus)}
                                     color={getColor(orderStatus)}
                                 />
-                                <Button 
-                                    onClick = {() => setStatusAPI(orderNumber)}
-                                >
-                                    Set status to paid
-                                </Button>
                             </Grid>
                         </Grid>
                     </CardContent>

@@ -11,6 +11,47 @@ import { useState, useEffect, useRef } from "react";
 import Router from "next/router";
 
 
+const LoginButton = styled(Button)`
+color: #fff;
+font-weight: bold;
+background-color: black;
+border-radius: 0;
+width: 15em;
+margin-right: 0.1em;
+height: 3em;
+
+:hover {
+  background-color: black;
+}
+`
+const PaperGoogle = styled(Paper)`
+padding: 0.5em 1.5em;
+margin-top: 2em;
+border-radius: 2em;
+background-color: #000000;
+
+:hover {
+  cursor: pointer;
+}
+`
+const PaperEmail = styled(Paper)`
+padding: 0.5em 1.5em;
+margin-top: 1em;
+border-radius: 2em;
+background-color: #000000;
+margin-bottom: 3.5em;
+
+:hover {
+  cursor: pointer;
+}
+`
+const PaperContainer = styled(Paper)`
+height: auto;
+width: 500px;
+margin-top: 1em;
+border-radius: 1em;
+background-color: #d0cece;
+`
 
 const LoginForm = () => {
 
@@ -18,47 +59,11 @@ const LoginForm = () => {
     const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
     const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
 
-    const LoginButton = styled(Button)`
-      color: #fff;
-      font-weight: bold;
-      background-color: black;
-      border-radius: 0;
-      width: 15em;
-      margin-right: 0.1em;
-      height: 3em;
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [seeker, setSeeker] = useState<Seeker[]>([]);
+    const [supplier, setSupplier] = useState<Supplier[]>([]);
 
-      :hover {
-        background-color: black;
-      }
-    `
-    const PaperGoogle = styled(Paper)`
-      padding: 0.5em 1.5em;
-      margin-top: 2em;
-      border-radius: 2em;
-      background-color: #000000;
-
-      :hover {
-        cursor: pointer;
-      }
-    `
-    const PaperEmail = styled(Paper)`
-      padding: 0.5em 1.5em;
-      margin-top: 1em;
-      border-radius: 2em;
-      background-color: #000000;
-      margin-bottom: 3.5em;
-
-      :hover {
-        cursor: pointer;
-      }
-    `
-    const PaperContainer = styled(Paper)`
-      height: auto;
-      width: 500px;
-      margin-top: 1em;
-      border-radius: 1em;
-      background-color: #d0cece;
-    `
     const handleGoogleAuth = () => {
 
     }
@@ -69,50 +74,29 @@ const LoginForm = () => {
         setPassword(event.target.value);
     }
     const onSubmitHandler = () => {
+        console.log(email);
         SendLogin().then((res) => {
             setSeeker(res.data);
         })
         console.log(seeker);
         const have_email = seeker?.filter(x => x.email === email).length > 0;
-        if (have_email) 
+        if (have_email) {Router.push('/seeker')}
         SendLoginSup().then((res) => {
             setSupplier(res.data);
         })
         const have_email_sup = supplier?.filter(x => x.email === email).length > 0;
         if (have_email_sup) {Router.push('/seeker')}
-        else {alert('Account not found')};
     }
     return (
-        <div style={{marginTop: '4em'}}>
-            <Grid container direction={matchesMD ? 'column' : 'row'} justifyContent={'center'} alignItems={'center'}>
-                <Grid item xs={!matchesMD ? 4 : 12}>
-                    <Grid item container direction={'column'} sx={{
-                        paddingLeft: '2em',
-                        paddingRight: '2em'
-                    }}>
-                        <Grid item>
-                            <Typography textAlign={matchesMD ? 'center' : 'inherit'} style={{
-                                lineHeight: '2em',
-                                letterSpacing: '0.1em',
-                                fontFamily: 'Roboto',
-                                fontWeight: 'bold',
-                                fontSize: matchesSM ? '1em' : matchesMD ? '2em' : '3em'
-                            }} variant={'h3'}>
-                                Hey!
-                            </Typography>
-                        </Grid>
-                        <Typography textAlign={matchesMD ? 'center' : 'inherit'} variant={'overline'}
-                                    style={{marginBottom: '1em'}}>
-                            In order to see our offers, please LOGIN or REGISTER yourself!
-                        </Typography>
-                        <Typography textAlign={matchesMD ? 'center' : 'inherit'} variant={'overline'}
-                                    style={{marginBottom: matchesMD ? '2em' : 0}}>
-                            In our webapp you will be able to add vouchers, see different offers provided by our partner
-                            suppliers, and purchase them!
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid item xs={!matchesMD ? 5 : 12} sx={{width: matchesSM ? '70%' : '100%', marginTop: !matchesMD ? '2em' : 0}}>
+        <Grid
+            container
+            spacing={0} 
+            alignItems="center"
+            justifyContent="center"
+            style={{ minHeight: '100vh' }}
+            >
+            <Grid justifyContent={'center'} alignItems={'center'} marginTop={'10em'} spacing={0}>
+                <Grid item xs={12}>
                     <Grid item container justifyContent={'center'} alignItems={'center'}>
                         <PaperContainer elevation={10} sx={{width: matchesMD ? '5em' : '13em'}}>
                             <Grid container justifyContent={'center'} alignItems={'center'} direction={'column'}>
@@ -127,11 +111,13 @@ const LoginForm = () => {
                                     }}>LOGIN</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <FormControl sx={{m: 1}} variant="standard">
+                                    <FormControl fullWidth  sx={{m: 1}} variant="standard">
                                         <InputLabel htmlFor="email-field">Email</InputLabel>
                                         <Input
                                             type="email"
                                             id="email-field"
+                                            value={email}
+                                            onChange={handleChange}
                                         />
                                     </FormControl>
                                 </Grid>
@@ -141,6 +127,8 @@ const LoginForm = () => {
                                         <Input
                                             type="password"
                                             id="password-field"
+                                            value={password}
+                                            onChange={handleChangePw}
                                         />
                                     </FormControl>
                                 </Grid>
@@ -154,7 +142,7 @@ const LoginForm = () => {
                                         }}>
                                         <Grid container justifyContent={'center'} alignItems={'center'}>
                                             <Grid item>
-                                                <LoginButton>
+                                                <LoginButton type='submit' onClick={onSubmitHandler}>
                                                     Access
                                                     <LoginIcon style={{marginLeft: '0.5em'}}/>
                                                 </LoginButton>
@@ -182,7 +170,7 @@ const LoginForm = () => {
                                             </Typography>
                                         </Grid>
                                     </PaperGoogle>
-                                    <Link href={'/registration'}>
+                                    <Link href={'/register'}>
                                         <PaperEmail>
                                             <Grid container justifyContent={'start'} alignItems={'center'}>
                                                 <Grid item style={{marginRight: '1em'}}>
@@ -200,8 +188,35 @@ const LoginForm = () => {
                         </PaperContainer>
                     </Grid>
                 </Grid>
+                <Grid item xs={12}>
+                    <Grid item container direction={'column'} maxWidth={'35em'} sx={{
+                        paddingLeft: '2em',
+                        paddingRight: '2em'
+                    }}>
+                        <Grid item>
+                            <Typography textAlign={matchesMD ? 'center' : 'inherit'} style={{
+                                lineHeight: '2em',
+                                letterSpacing: '0.1em',
+                                fontFamily: 'Roboto',
+                                fontWeight: 'bold',
+                                fontSize: matchesSM ? '1em' : matchesMD ? '2em' : '3em'
+                            }} variant={'h3'}>
+                                Hey!
+                            </Typography>
+                        </Grid>
+                        <Typography textAlign={matchesMD ? 'center' : 'inherit'} variant={'overline'}
+                                    style={{marginBottom: '1em'}}>
+                            In order to see our offers, please LOGIN or REGISTER yourself!
+                        </Typography>
+                        <Typography textAlign={matchesMD ? 'center' : 'inherit'} variant={'overline'}
+                                    style={{marginBottom: matchesMD ? '2em' : 0}}>
+                            In our webapp you will be able to add vouchers, see different offers provided by our partner
+                            suppliers, and purchase them!
+                        </Typography>
+                    </Grid>
+                </Grid>
             </Grid>
-        </div>
+        </Grid>
     );
 };
 export default LoginForm;

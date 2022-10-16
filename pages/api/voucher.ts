@@ -45,7 +45,7 @@ export default async function handler(
 			if (!isDeleteQuery(query)) break;
 			try {
 				let result = await db.query(
-					"DELETE FROM Voucher WHERE id = $1::integer",
+					"DELETE FROM Voucher WHERE id = $1::uuid",
 					[query.id]
 				);
 			} catch (e) {}

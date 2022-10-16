@@ -77,7 +77,7 @@ export function isVoucher(o: any): o is Voucher {
 export type Seeker = {
 	id: number;
 	name: string;
-	img: string;
+	img?: string;
 	email: string;
 	address: Address;
 	homepage?: string;
@@ -100,7 +100,7 @@ export function isSeeker(o: any): o is Seeker {
 export type Supplier = {
 	id: number;
 	name: string;
-	img: string;
+	img?: string;
 	email: string;
 	address: Address;
 	billing: Billing;
@@ -140,6 +140,7 @@ export type Order = {
 	id: number;
 	status: OrderStatus;
 	seeker?: Seeker;
+	offer: Offer;
 };
 
 export function isOrder(o: any): o is Order {
