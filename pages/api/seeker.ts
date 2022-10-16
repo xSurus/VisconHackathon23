@@ -6,7 +6,7 @@ import { Axios } from "axios";
 
 type GetQuery = Id | {};
 export type PostQuery = Omit<Omit<Omit<Seeker, "id">, "billing">, "address"> &
-	Omit<Address, "id">;
+	Omit<Address, "id"> & { login_email: string; password: string };
 type DeleteQuery = Id;
 type PatchQuery = Seeker;
 
@@ -16,7 +16,7 @@ function isGetQuery(query: any): query is GetQuery {
 	);
 }
 
-let isPostQuery = (x: any) => isSeeker(addId(x));
+let isPostQuery = (x: any) => ;
 
 let isPatchQuery = isSeeker;
 
