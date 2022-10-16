@@ -3,7 +3,8 @@ import { GetIdQuery, GetSupplierIdQuery, PostQuery } from "../pages/api/offer";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
 import { resourceLimits } from "worker_threads";
-import { PostData } from "../pages/api/order";
+import {PostData } from "../pages/api/order";
+import { DeleteQuery } from "../pages/api/offer";
 import qs from "qs";
 
 export const FetchOffers = async () => {
@@ -11,6 +12,15 @@ export const FetchOffers = async () => {
       '/api/offer',
     );
     return result;
+}
+
+export const DeleteOffer = async (query: DeleteQuery) => {
+  console.log("lol");
+  const params= {params : query}
+  const result = await axios.delete(
+    '/api/offer', params
+  );
+
 }
 
 export const FetchOffersBySupplierId = async (query : GetSupplierIdQuery ) =>{

@@ -8,16 +8,19 @@ import Button from '@mui/material/Button';
 import {CardActionArea, Grid} from '@mui/material';
 import {useMemo, useState} from "react";
 import styled from "@emotion/styled";
+import { DeleteOffer } from '../services/api-requests';
+import { DeleteQuery } from '../pages/api/order';
 
 interface OfferCardProps {
     companyName: string,
     voucherPrice: number,
     companyImageUrl: string,
     offerDescription: string,
-    availableVouchers: number
+    availableVouchers: number,
+    orderId: number
 }
-const BuyVoucherButton = styled(Button)`
-color: #545050;
+const DeleteVoucherButton = styled(Button)`
+color: #ff5050;
 
 &:hover {
   background-color: inherit;
@@ -25,21 +28,17 @@ color: #545050;
 }
 `
 
-const OfferCard = (props: OfferCardProps) => {
-
-    const {companyName, voucherPrice, companyImageUrl, offerDescription, availableVouchers} = props;
-    const [active, setActive] = useState(false);
-
-    const [vouchersToOrder, setVouchersToOrder] = useState('');
-
-    const handleTextFieldChange = (e: any) => {
-        console.log(e)
-        setVouchersToOrder(e.target.value);
+const VoucherCard = (props: OfferCardProps) => {
+    const deleteOnClick = () => {
+        DeleteOffer({id : orderId})
+    
     }
+    const {companyName, voucherPrice, companyImageUrl, offerDescription, availableVouchers, orderId} = props;
+    const [active, setActive] = useState(false);
 
    
 
-    const contentUnclicked = 
+    const contentUnclicked = <ul>
             <CardContent>
                 <Grid item container direction={'column'}>
                     <Grid item>
@@ -67,53 +66,36 @@ const OfferCard = (props: OfferCardProps) => {
                     <Grid item>
                         <Grid item container justifyContent={'end'} alignItems={'center'}>
                             <Grid item>
-                                <BuyVoucherButton>
-                                    Click to buy vouchers
-                                </BuyVoucherButton>
+                                <DeleteVoucherButton>
+                                    Delete this offer
+                                </DeleteVoucherButton>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
             </CardContent>
+        </ul>
 
-    const contentClicked = 
+    const contentClicked = <ul>
             <CardContent>
                 <Grid container direction={'column'} justifyContent={'center'} alignItems={'center'} spacing={2}>
                     <Grid item>
                         <Typography>
-                            Order Vouchers
+                            Are you sure?
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <TextField
-                            sx={{display: 'flex', alignSelf: 'center'}}
-                            id="outlined-basic"
-                            label="Amount of vouchers"
-                            variant="outlined"
-                            value={vouchersToOrder}
-                            onChange={handleTextFieldChange}
-                            onMouseDown={event => event.stopPropagation()}
-                            onClick={event => {
-                                event.stopPropagation();
-                                event.preventDefault();
-                            }}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Button
+                        <Button type="submit"
                             variant="contained"
                             onMouseDown={event => event.stopPropagation()}
-                            onClick={event => {
-                                event.stopPropagation();
-                                event.preventDefault();
-                                console.log({vouchersToOrder});
-                            }}
+                            onClick={deleteOnClick}
                         >
-                            Place Order!
+                            Delete
                         </Button>
                     </Grid>
                 </Grid>
             </CardContent>
+        </ul>
 
 
 
@@ -144,4 +126,4 @@ const OfferCard = (props: OfferCardProps) => {
         </Card>
     );
 }
-export default OfferCard;
+export default VoucherCard;

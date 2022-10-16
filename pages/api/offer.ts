@@ -36,7 +36,7 @@ export type PostQuery = {
 	name: string;
 };
 
-type DeleteQuery = { id: number };
+export type DeleteQuery = { id: number };
 
 function isGetIdQuery(query: any): query is GetIdQuery {
 	return query && typeof query.id === "string" && isInteger(query.id);
@@ -156,6 +156,7 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<Data>
 ) {
+	console.log("start of handler")
 	const query = req.query;
 	switch (req.method) {
 		case "GET":
@@ -348,11 +349,15 @@ export default async function handler(
 			}
 			return res.status(201).send(undefined);
 		case "DELETE":
-			if (!isDeleteQuery(query)) break;
+			if (!isDeleteQuery(query)){
+				console.error("not a delete query")
+				break;
+			} 
 			try {
-				let _result = await db.query("");
+				let _result = await db.query("DELETE FROM Offer WHERE id=$1::integer", [query.id]);
 			} catch (e) {
 				// TODO: PRint
+				console.error("can not delete Offer because there are transactions in progress");
 			}
 			return res.status(200).send(undefined);
 	}

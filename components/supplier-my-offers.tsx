@@ -7,6 +7,7 @@ import {Offer} from "../util/schemas";
 import Typography from "@mui/material/Typography";
 import { FilterElement } from "./filter";
 import { getOffersBySupplierId } from "../pages/api/offer";
+import VoucherCard from "./voucher-card";
 
 const SupplierOffers = () => {
     const [vouchers, setVouchers] = useState<Offer[]>();
@@ -29,10 +30,11 @@ const SupplierOffers = () => {
                   style={{paddingRight: '3em', paddingLeft: '3em', marginBottom: '6em', marginTop: '0.3em'}}>
                 {vouchers?.map((offer: Offer) => {
                     return <Grid item xs={12} sm={6} md={6} lg={4} key={offer.id}>
-                        <OfferCard companyName={offer.name} voucherPrice={offer.price_per_voucher}
+                        <VoucherCard companyName={offer.name} voucherPrice={offer.price_per_voucher}
                                    companyImageUrl={offer.supplier ? offer.supplier.img : ''}
                                    offerDescription={offer.description}
-                                   key={offer.id}/>
+                                   availableVouchers={offer.available}
+                                   orderId={offer.id}/>
                     </Grid>
                 })}
             </Grid>
