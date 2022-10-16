@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import axios from "axios";
-import type { Voucher, Supplier } from "../../util/schemas";
+import type { Voucher, Supplier, Seeker } from "../../util/schemas";
 type Data =
 	| {
 			name: string;
@@ -27,6 +27,7 @@ export default async function handler(
 
 	if (query && typeof query.uuid === "string") {
 		const uuid = query.uuid;
+        const seeker_id = query.seeker_id;
 		res.writeHead(200, {
 			"Content-Type": "application/pdf",
 		});
@@ -38,21 +39,27 @@ export default async function handler(
 			})
 		).data;
 
-		console.log(voucher);
-
 		const value = voucher[0].price;
 		const activity = voucher[0].name;
 		const supplier_id = voucher[0].supplier_id;
-		const offer_id = voucher[0].offer_id;
 
-		const supplier_s: Supplier = (
+		const supplier_s: [Supplier] = (
 			await axios.get("http://localhost:3000/api/supplier", {
 				params: { id: supplier_id },
 			})
 		).data;
-		const supplier_img = supplier_s.img;
+		const supplier_img = supplier_s[0].img;
+
+        const seeker_s: [Seeker] = (await axios.get("http://localhost:3000/api/seeker", {
+            params: { id: seeker_id},
+        })).data;
+        const seeker_img = seeker_s[0].img;
 
 		console.log(supplier_s);
+        console.log(seeker_s);
+
+        console.log(seeker_img);
+        console.log(supplier_img);
 
 		doc.fontSize(40).text("Gift Voucher\n\n");
 		doc.fontSize(50).text(value + "CHF.-");
@@ -64,7 +71,7 @@ export default async function handler(
 			"http://balls.axelmontini.dev/redeem/" + uuid,
 			150
 		);
-		const seeker = await fetchImage(
+		const seeker = await fetchImage(seeker_img || 
 			"https://www.mrw.it/img/cope/0iwkf4_1609360688.jpg"
 		);
 		const supplier = await fetchImage(
