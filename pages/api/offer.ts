@@ -13,7 +13,7 @@ import { getAvailableVouchers, getAvailableVouchersCount } from "./order";
 
 type GetCategoriesQuery = { categories: Category | Category[] };
 
-type GetIdQuery = { id: number };
+export type GetIdQuery = { id: number };
 
 type GetAllQuery = {};
 

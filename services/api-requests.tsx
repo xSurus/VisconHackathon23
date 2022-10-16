@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PostQuery } from "../pages/api/offer";
+import { GetIdQuery, PostQuery } from "../pages/api/offer";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
 import { resourceLimits } from "worker_threads";
@@ -13,14 +13,9 @@ export const FetchOffers = async () => {
     return result;
 }
 
-export const GetCategories = async () => {
-  const result = await axios.get(
-    '/api/category'
-  )
-}
 
-export const FetchMyOffers = async (seeker_id : number) => {
-  const params ={params: seeker_id}
+export const FetchOffersById = async (query : GetIdQuery) => {
+  const params ={params: query}
   const result = await axios.get(
     '/api/offer', params
   );
@@ -41,8 +36,9 @@ export const SendLoginSup = () => {
 }
 
 export const FetchOrders = async (seeker_id : number) => {
-  const result = await axios.get(
-    '/api/order', { params: {seeker_id} }
+  const params = {params: seeker_id}
+  const result =  axios.get(
+    '/api/order', params
   );
   return result;
 }

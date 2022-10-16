@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import {Grid} from '@mui/material';
-import {FetchMyOffers, FetchOffers} from '../services/api-requests';
+import {FetchOffers, FetchOffersById} from '../services/api-requests';
 import OfferCard from "./offer-card";
 import Filter from "./filter";
 import {Offer} from "../util/schemas";
@@ -13,7 +13,7 @@ const SupplierOffers = () => {
 
     //placeholder, later replaced through login data
     useEffect(() => {
-        FetchMyOffers(1).then(res => {
+        FetchOffersById({id : 1}).then(res => {
             setVouchers(res.data)
         })
     }, [])
