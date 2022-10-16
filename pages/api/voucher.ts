@@ -32,7 +32,7 @@ export default async function handler(
 					!Object.keys(query).length
 						? await db.query("SELECT * FROM Voucher")
 						: await db.query(
-								"SELECT * FROM Voucher WHERE id = $1::integer",
+								"SELECT * FROM Voucher WHERE id = $1::uuid",
 								[query.id]
 						  )
 				).rows;
@@ -45,7 +45,7 @@ export default async function handler(
 			if (!isDeleteQuery(query)) break;
 			try {
 				let result = await db.query(
-					"DELETE FROM Voucher WHERE id = $1::integer",
+					"DELETE FROM Voucher WHERE id = $1::uuid",
 					[query.id]
 				);
 			} catch (e) {}

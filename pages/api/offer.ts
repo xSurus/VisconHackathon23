@@ -22,7 +22,7 @@ export type PostQuery = {
 	/** supplier id of whoever posts the offer */
 	supplier_id: number;
 	/** categories of the offer */
-	categories: Category | Category[];
+	categories?: Category | Category[];
 	description: string;
 	/** Value of each voucher */
 	price: number;
@@ -57,7 +57,10 @@ function isPostQuery(query: any): query is PostQuery {
 		typeof query.stock === "string" &&
 		isInteger(query.stock) &&
 		typeof query.name === "string" &&
-		(!Array.isArray(query.categories) ||
+		typeof query.description === "string" &&
+		(typeof query.categories === "string" ||
+			typeof query.categories === "undefined" ||
+			!Array.isArray(query.categories) ||
 			query.categories.every((c: any) => typeof c === "string"))
 	);
 }
@@ -297,7 +300,9 @@ export default async function handler(
 				}
 
 				const categories =
-					typeof query.categories === "string"
+					typeof query.categories === "undefined"
+						? []
+						: typeof query.categories === "string"
 						? [query.categories]
 						: query.categories;
 
@@ -310,7 +315,10 @@ export default async function handler(
 						console.log("inserted category");
 					}
 				}
-			} catch (e) {}
+			} catch (e) {
+				console.error(e);
+				return res.status(500).send(undefined);
+			}
 			return res.status(201).send(undefined);
 		case "DELETE":
 			if (!isDeleteQuery(query)) break;
