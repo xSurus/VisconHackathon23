@@ -15,7 +15,7 @@ type GetCategoriesQuery = { categories: Category | Category[] };
 
 export type GetIdQuery = { id: number };
 
-type GetSupplierIdQuery = { supplier_id: number };
+export type GetSupplierIdQuery = { supplier_id: number };
 
 export function isGetSupplierIdQuery(q: any): q is GetSupplierIdQuery {
 	return q && isInteger(q.supplier_id);
