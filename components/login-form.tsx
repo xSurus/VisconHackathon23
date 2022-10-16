@@ -189,7 +189,7 @@ const LoginForm = () => {
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                    <Grid item container direction={'column'} maxWidth={'35em'} sx={{
+                    <Grid item container direction={'column'} maxWidth={'35em'} color={'rgba(0, 0, 0, 0.87)'} sx={{
                         paddingLeft: '2em',
                         paddingRight: '2em'
                     }}>

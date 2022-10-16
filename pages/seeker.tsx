@@ -1,4 +1,4 @@
-import {Button, Grid, Icon, IconButton} from "@mui/material";
+import {AppBar, Button, Grid, Icon, IconButton, Link, Toolbar, Typography} from "@mui/material";
 import {useState} from "react";
 import SeekerOffers from "../components/seeker-offers";
 import SeekerOrders from "../components/seeker-orders";
@@ -39,7 +39,71 @@ const Seeker = () => {
     `
     return (
         <Grid container>
-            <Grid item container justifyContent={'center'} alignItems={'center'} style={{backgroundColor: '#0C7B93'}}>
+            <AppBar
+            position="static"
+            color="default"
+            elevation={0}
+            sx={{ borderBottom: `1px solid black` }}
+            >
+            <Toolbar sx={{ flexWrap: 'wrap' }}>
+            <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+                OUR NAME
+            </Typography>
+            <nav>
+                <Link
+                variant="button"
+                color="text.primary"
+                href="#"
+                style={{
+                    opacity: whichPage === 1 ? 1 : 0.4,
+                }}
+                onClick={() => {
+                    showPage(<SeekerOrders/>);
+                    setWhichPage(1)
+                }}
+                sx={{ my: 1, mx: 1.5 }}
+                >
+                Orders
+                </Link>
+                <Link
+                variant="button"
+                color="text.primary"
+                href="#"
+                style={{
+                    opacity: whichPage === 2 ? 1 : 0.4,
+                }}
+                onClick={() => {
+                    showPage(<SeekerOffers/>);
+                    setWhichPage(2)
+                }}
+                sx={{ my: 1, mx: 1.5 }}
+                >
+                Offers
+                </Link>
+            </nav>
+            <Button onClick={() => {
+                            showPage(<LoginForm/>);
+                            setWhichPage(3)
+                        }} variant="outlined" href="#" sx={{ my: 1, mx: 1.5 }} 
+                        style={{
+                            opacity: whichPage === 3 ? 1 : 0.4,
+                        }}>
+                Login/Profile
+            </Button>
+            </Toolbar>
+            </AppBar>
+            <Grid container style={{marginTop: whichPage === 3 ? '-3em' : 0}}>
+                {page}
+            </Grid>
+        </Grid>
+    )
+}
+
+export default Seeker;
+
+
+// THIS IS THE PREVIOUS CODE IN CASE SOMEONE COMPLAINS ABOUT THE NEW CODE
+{/* <Grid item container justifyContent={'center'} alignItems={'center'} style={{backgroundColor: '#0C7B93'}}>
                 <Grid>
                     <Button
                         onClick={() => {
@@ -47,10 +111,11 @@ const Seeker = () => {
                             setWhichPage(1)
                         }}
                         style={{
-                            color: whichPage === 1 ? 'darkred' : 'rgba(0,0,0,1)',
+                            color: 'rgba(0,0,0,1)',
                             cursor: 'pointer',
                             display: 'inline',
-                            fontSize: '1.5em'
+                            fontSize: '1.5em',
+                            opacity: whichPage === 1 ? 1 : 0.4,
                         }}>
                         Orders
                     </Button>
@@ -65,10 +130,11 @@ const Seeker = () => {
                             setWhichPage(2)
                         }}
                         style={{
-                            color: whichPage === 2 ? 'darkred' : 'rgba(0,0,0,1)',
+                            color: 'rgba(0,0,0,1)',
                             cursor: 'pointer',
                             display: 'inline',
-                            fontSize: '1.5em'
+                            fontSize: '1.5em',
+                            opacity: whichPage === 2 ? 1 : 0.4,
                         }}>
                         Offers
                     </Button>
@@ -82,7 +148,7 @@ const Seeker = () => {
                             showPage(<LoginForm/>);
                             setWhichPage(3)
                         }}
-                        style={{color: whichPage === 3 ? 'darkred' : 'rgba(0,0,0,1)', fontSize: '1.5em'}}>
+                        style={{opacity: whichPage === 3 ? 1 : 0.4, fontSize: '1.5em'}}>
                         <AccountBoxIcon/>
                     </IconButton>
                 </Grid>
@@ -90,8 +156,4 @@ const Seeker = () => {
             <Grid container style={{marginTop: whichPage === 3 ? '-3em' : 0}}>
                 {page}
             </Grid>
-        </Grid>
-    )
-}
-
-export default Seeker;
+        </Grid>*/}
