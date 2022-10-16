@@ -1,12 +1,23 @@
 import * as React from 'react';
-import {AppBar, Button, Grid, Link, Toolbar, Typography} from "@mui/material";
-import CreateVoucher from '../source/components/SupplierComponents/createVoucher';
+import {AppBar, Button, Grid, Link, Toolbar, Typography, IconButton } from "@mui/material";
+import Cookies from "cookies";
+import { COOKIE_ID, COOKIE_TOKEN, COOKIE_V } from "./api/login";
+import { GetServerSideProps } from "next";
+import CreateVoucher from "../components/createVoucher";
+import styled from "@emotion/styled";
+import SupplierOrders from "../components/supplier-orders";
+import LoginForm from "../components/login-form";
 
-const Supplier = () => {
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import { style } from "@mui/system";
+import SupplierOffers from "../components/supplier-my-offers";
+import { useState } from "react";
 
+type Data = { token: string; id: number; userType: string };
 
-    const [activeIndex, setActiveIndex] = React.useState<number>(1);
-
+const Supplier = (data: Data) => {
+	const [page, showPage] = useState(<SupplierOrders />);
+	const [whichPage, setWhichPage] = useState<number>(1); 
     return (
         <Grid container>
             <AppBar
@@ -63,10 +74,26 @@ const Supplier = () => {
             </Toolbar>
             </AppBar>
             <Grid item>
-                <CreateVoucher/>s
+                <CreateVoucher/>
             </Grid>
         </Grid>
     )
 }
+
+export const getServerSideProps: GetServerSideProps<Data> = async (context) => {
+	const cookies = new Cookies(context.req, context.res);
+	const id = cookies.get(COOKIE_ID);
+	const token = cookies.get(COOKIE_TOKEN);
+	const userType = cookies.get(COOKIE_V);
+	if (!id || !token || !userType || userType === "seeker") {
+		cookies.set(COOKIE_ID);
+		cookies.set(COOKIE_TOKEN);
+		cookies.set(COOKIE_V);
+
+		return { redirect: { destination: "/", permanent: true } };
+	} else {
+		return { props: { id: parseInt(id, 10), token, userType } };
+	}
+};
 
 export default Supplier;

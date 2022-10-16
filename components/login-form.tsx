@@ -1,91 +1,105 @@
-import {FormControl, Grid, Input, InputLabel, Paper, Button, useTheme, useMediaQuery} from '@mui/material';
+import {
+	FormControl,
+	Grid,
+	Input,
+	InputLabel,
+	Paper,
+	Button,
+	useTheme,
+	useMediaQuery,
+	Select,
+	MenuItem,
+	SelectChangeEvent,
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import GoogleIcon from '@mui/icons-material/Google';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import LoginIcon from '@mui/icons-material/Login';
-import styled from '@emotion/styled'
+import GoogleIcon from "@mui/icons-material/Google";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import LoginIcon from "@mui/icons-material/Login";
+import styled from "@emotion/styled";
 import Link from "next/link";
-import { SendLogin, SendLoginSup } from '../services/api-requests';
-import { Seeker, Supplier } from '../util/schemas';
-import { useState, useEffect, useRef } from "react";
-import Router from "next/router";
-
+import { sendLogin } from "../services/api-requests";
+import { Seeker, Supplier } from "../util/schemas";
+import React, { useState, useEffect, useRef } from "react";
+import Router, { useRouter } from "next/router";
 
 const LoginButton = styled(Button)`
-color: #fff;
-font-weight: bold;
-background-color: black;
-border-radius: 0;
-width: 15em;
-margin-right: 0.1em;
-height: 3em;
+	color: #fff;
+	font-weight: bold;
+	background-color: black;
+	border-radius: 0;
+	width: 15em;
+	margin-right: 0.1em;
+	height: 3em;
 
-:hover {
-  background-color: black;
-}
-`
+	:hover {
+		background-color: black;
+	}
+`;
 const PaperGoogle = styled(Paper)`
-padding: 0.5em 1.5em;
-margin-top: 2em;
-border-radius: 2em;
-background-color: #000000;
+	padding: 0.5em 1.5em;
+	margin-top: 2em;
+	border-radius: 2em;
+	background-color: #000000;
 
-:hover {
-  cursor: pointer;
-}
-`
+	:hover {
+		cursor: pointer;
+	}
+`;
 const PaperEmail = styled(Paper)`
-padding: 0.5em 1.5em;
-margin-top: 1em;
-border-radius: 2em;
-background-color: #000000;
-margin-bottom: 3.5em;
+	padding: 0.5em 1.5em;
+	margin-top: 1em;
+	border-radius: 2em;
+	background-color: #000000;
+	margin-bottom: 3.5em;
 
-:hover {
-  cursor: pointer;
-}
-`
+	:hover {
+		cursor: pointer;
+	}
+`;
 const PaperContainer = styled(Paper)`
-height: auto;
-width: 500px;
-margin-top: 1em;
-border-radius: 1em;
-background-color: #d0cece;
-`
+	height: auto;
+	width: 500px;
+	margin-top: 1em;
+	border-radius: 1em;
+	background-color: #d0cece;
+`;
 
 const LoginForm = () => {
+	const theme = useTheme();
+	const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
+	const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
 
-    const theme = useTheme();
-    const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
-    const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [userType, setUserType] = useState<"seeker" | "supplier">("seeker");
+	const router = useRouter();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [seeker, setSeeker] = useState<Seeker[]>([]);
-    const [supplier, setSupplier] = useState<Supplier[]>([]);
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setEmail(event.target.value);
+	};
+	const handleChangePw = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setPassword(event.target.value);
+	};
+	const handleChangeType = (
+		event: SelectChangeEvent<"seeker" | "supplier">
+	) => {
+		setUserType(event.target.value as any);
+	};
 
     const handleGoogleAuth = () => {
 
     }
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(event.target.value);
-    }
-    const handleChangePw = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
-    }
-    const onSubmitHandler = () => {
-        console.log(email);
-        SendLogin().then((res) => {
-            setSeeker(res.data);
-        })
-        console.log(seeker);
-        const have_email = seeker?.filter(x => x.email === email).length > 0;
-        if (have_email) {Router.push('/seeker')}
-        SendLoginSup().then((res) => {
-            setSupplier(res.data);
-        })
-        const have_email_sup = supplier?.filter(x => x.email === email).length > 0;
-        if (have_email_sup) {Router.push('/seeker')}
+
+	const onSubmitHandler = () => {
+		console.log(email);
+		sendLogin(email, password, userType).then((res : any) => {
+			if (res.status === 200) {
+				console.log("Login succeeded, redirecting...");
+				router.push(`/${userType}`);
+			} else {
+				console.log("Failed login");
+            }
+        });
     }
     return (
         <Grid
@@ -218,5 +232,5 @@ const LoginForm = () => {
             </Grid>
         </Grid>
     );
-};
+}
 export default LoginForm;
