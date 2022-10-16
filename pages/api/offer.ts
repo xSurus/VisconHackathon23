@@ -132,7 +132,6 @@ export default async function handler(
 	res: NextApiResponse<Data>
 ) {
 	const query = req.query;
-
 	switch (req.method) {
 		case "GET":
 			if (isGetIdQuery(query)) {
@@ -278,7 +277,10 @@ export default async function handler(
 			}
 
 		case "POST":
-			if (!isPostQuery(query)) break;
+			if (!isPostQuery(query)){
+				console.log("not a post", query)
+				break;
+			} 
 			try {
 				console.log("BALL");
 				let result = await db.query(

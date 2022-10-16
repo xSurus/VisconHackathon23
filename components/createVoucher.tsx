@@ -19,7 +19,7 @@ const CreateVoucher = () =>{
         stock:0,
 	    categories: []
     }
-    const [offer, setValues] = React.useState<any>(offerModel)
+    const [offer, setValues] = React.useState<PostQuery>(offerModel)
 
     const [open, setOpen] = React.useState(false);
     const allCategories = [
@@ -45,7 +45,7 @@ const CreateVoucher = () =>{
             setOpen(false);
         }
     };
-    const [imagePath, setImagePath] = React.useState<string>("/public/brain.png");
+    const [imagePath, setImagePath] = React.useState<string>("/public/Migros.svg.png");
 
     const handleChange = (prop: keyof PostQuery) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({...offer, [prop]:event.target.value});
@@ -62,8 +62,9 @@ const CreateVoucher = () =>{
         }else if(offer.price<0){
             alert("enter a non-negative price");
 
-        }else{
-            
+        }else if(offer.stock<=0){
+            alert("enter a valid amount")}
+        else{
             PostOffer(offer);
         }
 

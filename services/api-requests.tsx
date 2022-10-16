@@ -3,6 +3,8 @@ import { PostQuery } from "../pages/api/offer";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
 import { resourceLimits } from "worker_threads";
+import { PostData } from "../pages/api/order";
+import qs from "qs";
 
 export const FetchOffers = async () => {
     const result = await axios.get(
@@ -12,8 +14,9 @@ export const FetchOffers = async () => {
 }
 
 export const FetchMyOffers = async (seeker_id : number) => {
+  const params ={params: seeker_id}
   const result = await axios.get(
-    '/api/offer', {params: {seeker_id}}
+    '/api/offer', params
   );
   return result;
 }
@@ -48,22 +51,17 @@ export const SendSupplierRegistration = (data: PostQuery) => {
 }
 
 
+
 export const editOrder = async (id : number, status : number) => {
   const res = await axios.patch(
     '/api/order', null, { params: {id, status} }
   );
   return res;
 }
-export const PostOffer = async (offer : any) => {
-  const params = new URLSearchParams();
-  for(const key in offer){
-    params.append(key, offer[key]);
-  }
+export const PostOffer = async (offer : PostQuery) => {
+  const params = {paramsSerializer: {serialize: (params :any)=>{ return qs.stringify(params, {arrayFormat: 'repeat'})}} , params: offer}
   console.log(offer);
-  const result = await axios.post(
-    'api/offer',
-    params
-  ).then((response) => {
+  const result = await axios.post('api/offer', null, params ).then((response:any) => {
     console.log(response);
 });
   return result;
