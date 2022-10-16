@@ -1,17 +1,17 @@
 import axios from "axios";
-import { GetIdQuery, PostQuery } from "../pages/api/offer";
+import {  PostQuery } from "../pages/api/offer";
 import {Offer} from "../util/schemas";
 import type {Seeker} from '../util/schemas';
 import { resourceLimits } from "worker_threads";
-import { PostData } from "../pages/api/order";
+import { PostData} from "../pages/api/order";
+import {GetIdQuery} from '../pages/api/offer'
 /* import qs from "qs"; */
+import { PostBody as LoginPostBody } from "../pages/api/login";
 
 export const FetchOffers = async () => {
-    const result = await axios.get(
-      '/api/offer',
-    );
-    return result;
-}
+	const result = await axios.get("/api/offer");
+	return result;
+};
 
 
 export const FetchOffersById = async (query : GetIdQuery) => {
@@ -22,12 +22,7 @@ export const FetchOffersById = async (query : GetIdQuery) => {
   return result;
 }
 
-export const SendLogin = () => {
-  const result = axios(
-    '/api/seeker',
-  );
-  return result;
-}
+
 export const SendLoginSup = () => {
   const result = axios(
     '/api/supplier',
@@ -48,24 +43,40 @@ export const FetchOrdersSupplier = async (supplier_id : number) => {
   );
   return result;
 }
+export const sendLogin = async (
+	email: string,
+	password: string,
+	userType: LoginPostBody["v"]
+) => {
+	const body: LoginPostBody = { email, password, v: userType };
+	const result = await axios.post("/api/login", body);
+	return result;
+};
+
+export const FetchOrders = async (seeker_id: number) => {
+	const result = await axios.get("/api/order", { params: { seeker_id } });
+	return result;
+};
 
 export const SendSupplierRegistration = (data: PostQuery) => {
-  const params = {params: data}
-  const result = axios.post('/api/supplier', null, params).then((response) => {
-      console.log(response);
-  });
-  console.log('lol');
-  return result;
-}
+	const params = { params: data };
+	const result = axios
+		.post("/api/supplier", null, params)
+		.then((response) => {
+			console.log(response);
+		});
+	console.log("lol");
+	return result;
+};
 
 export const SendSeekerRegistration = (data: PostQuery) => {
-  const params = {params: data}
-  const result = axios.post('/api/seeker', null, params).then((response) => {
-      console.log(response);
-  });
-  console.log('lol');
-  return result;
-}
+	const params = { params: data };
+	const result = axios.post("/api/seeker", null, params).then((response) => {
+		console.log(response);
+	});
+	console.log("lol");
+	return result;
+};
 
 
 export const editOrder = async (id : number, status : number) => {

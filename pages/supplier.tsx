@@ -1,16 +1,16 @@
-import * as React from 'react';
-import {Button, Grid, IconButton} from "@mui/material";
-import CreateVoucher from '../components/createVoucher';
-import styled from '@emotion/styled';
-import SupplierOrders from '../components/supplier-orders';
-import LoginForm from '../components/login-form';
+import * as React from "react";
+import { Button, Grid, IconButton, styled } from "@mui/material";
+import CreateVoucher from "../source/components/SupplierComponents/createVoucher";
+import Cookies from "cookies";
+import { COOKIE_ID, COOKIE_TOKEN, COOKIE_V } from "./api/login";
+import { GetServerSideProps } from "next";
+import LoginForm from "../components/login-form";
+import SupplierOffers from "../components/supplier-my-offers";
 
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import { style } from '@mui/system';
-import SupplierOffers from '../components/supplier-my-offers';
+type Data = { token: string; id: number; userType: string };
 
-const Supplier = () => {
-
+const Supplier = ({ data }: { data: Data }) => {
+	const [activeIndex, setActiveIndex] = React.useState<number>(1);
 
     const [page, showPage] = React.useState(<SupplierOrders/>);
     const [whichPage, setWhichPage] = React.useState<number>(1);
@@ -113,6 +113,22 @@ const Supplier = () => {
             </Grid>
         </Grid>
     )
-}
+};
 
 export default Supplier;
+export const getServerSideProps: GetServerSideProps<Data> = async (context) => {
+	const cookies = new Cookies(context.req, context.res);
+	const id = cookies.get(COOKIE_ID);
+	const token = cookies.get(COOKIE_TOKEN);
+	const userType = cookies.get(COOKIE_V);
+
+	if (!id || !token || !userType || userType === "seeker") {
+		cookies.set(COOKIE_ID);
+		cookies.set(COOKIE_TOKEN);
+		cookies.set(COOKIE_V);
+
+		return { redirect: { destination: "/", permanent: true } };
+	} else {
+		return { props: { id: parseInt(id, 10), token, userType } };
+	}
+};

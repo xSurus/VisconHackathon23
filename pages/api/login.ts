@@ -32,6 +32,7 @@ const handler: NextApiHandler = async (req, res) => {
 		// hashed password (safe)
 
 		if (body.v === "seeker") {
+			console.log("Seeker login attempt");
 			const result = await db.query(
 				"SELECT seeker_id AS id, token, password FROM SeekerCredential WHERE email=$1::text",
 				[email]
@@ -49,6 +50,7 @@ const handler: NextApiHandler = async (req, res) => {
 				}
 			}
 		} else {
+			console.log("supplier login attempt");
 			const result = await db.query(
 				"SELECT supplier_id AS id, token, password FROM SupplierCredential WHERE email=$1::text",
 				[email]
@@ -67,6 +69,7 @@ const handler: NextApiHandler = async (req, res) => {
 			}
 		}
 	}
+
 	res.status(403).send(undefined);
 };
 
