@@ -13,7 +13,7 @@ import { getAvailableVouchers, getAvailableVouchersCount } from "./order";
 
 type GetCategoriesQuery = { categories: Category | Category[] };
 
-type GetIdQuery = { id: number };
+export type GetIdQuery = { id: number };
 
 type GetSupplierIdQuery = { supplier_id: number };
 
@@ -157,7 +157,6 @@ export default async function handler(
 	res: NextApiResponse<Data>
 ) {
 	const query = req.query;
-
 	switch (req.method) {
 		case "GET":
 			if (isGetSupplierIdQuery(query)) {
@@ -306,7 +305,10 @@ export default async function handler(
 			}
 
 		case "POST":
-			if (!isPostQuery(query)) break;
+			if (!isPostQuery(query)){
+				console.log("not a post", query)
+				break;
+			} 
 			try {
 				console.log("BALL");
 				let result = await db.query(
