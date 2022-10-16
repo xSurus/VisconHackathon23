@@ -5,7 +5,8 @@ import { isSeeker, addId, isEmptyObj, isId } from "../../util/schemas";
 import { Axios } from "axios";
 
 type GetQuery = Id | {};
-type PostQuery = Omit<Seeker, "id">;
+export type PostQuery = Omit<Omit<Omit<Seeker, "id">, "billing">, "address"> &
+	Omit<Address, "id">;
 type DeleteQuery = Id;
 type PatchQuery = Seeker;
 
@@ -27,7 +28,7 @@ function rowToSeeker(x: any): Seeker {
 	return {
 		id: x.sid,
 		name: x.sname,
-		img: x.sigm,
+		img: x.simg,
 		email: x.semail,
 		homepage: x.shomepage,
 		address: {

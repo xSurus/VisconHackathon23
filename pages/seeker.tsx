@@ -39,7 +39,7 @@ const Seeker = () => {
     `
     return (
         <Grid container>
-            <Grid item container justifyContent={'center'} alignItems={'center'} style={{backgroundColor: 'darkgrey'}}>
+            <Grid item container justifyContent={'center'} alignItems={'center'} style={{backgroundColor: '#0C7B93'}}>
                 <Grid>
                     <Button
                         onClick={() => {
