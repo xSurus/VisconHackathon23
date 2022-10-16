@@ -5,14 +5,15 @@ import InputAdornment from '@mui/material/InputAdornment';
 import * as React from 'react';
 import Image from 'next/image';
 import { Offer, Supplier } from "../util/schemas";
-import { PostOffer } from "../services/api-requests";
+import { GetCategories, PostOffer } from "../services/api-requests";
 import Filter from "./filter";
 import {PostQuery} from "../pages/api/offer";
+import axios from "axios";
 
 
 const CreateVoucher = () =>{
     const offerModel:PostQuery = {
-        supplier_id:0,
+        supplier_id:1,
 	    name: '',
         description:'',
 	    price: 0,
@@ -22,10 +23,13 @@ const CreateVoucher = () =>{
     const [offer, setValues] = React.useState<PostQuery>(offerModel)
 
     const [open, setOpen] = React.useState(false);
-    const allCategories = [
-        'Pog',
-        'PogPog'
-    ];
+    const [allCategories, setAllCategories] = React.useState<string[]>([]);
+
+    React.useEffect(() => {
+        axios.get("/api/category").then((x) => x.data.categories.map((y: any) => {
+            return y;
+        })).then(setAllCategories);
+    }, []);
 
     const handleClickOpen = () => {
         setOpen(true)

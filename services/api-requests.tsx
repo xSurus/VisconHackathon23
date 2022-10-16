@@ -13,6 +13,12 @@ export const FetchOffers = async () => {
     return result;
 }
 
+export const GetCategories = async () => {
+  const result = await axios.get(
+    '/api/category'
+  )
+}
+
 export const FetchMyOffers = async (seeker_id : number) => {
   const params ={params: seeker_id}
   const result = await axios.get(

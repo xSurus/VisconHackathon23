@@ -306,7 +306,9 @@ export default async function handler(
 						console.log("inserted category");
 					}
 				}
-			} catch (e) {}
+			} catch (e) {
+				console.error(e);
+			}
 			return res.status(201).send(undefined);
 		case "DELETE":
 			if (!isDeleteQuery(query)) break;
