@@ -36,7 +36,13 @@ const VoucherCard = (props: OfferCardProps) => {
     const {companyName, voucherPrice, companyImageUrl, offerDescription, availableVouchers, orderId} = props;
     const [active, setActive] = useState(false);
 
-   
+    const handleClick = () => {
+        if (!active) {
+            setActive(true);
+            return;
+        }
+        setActive(false);
+    }
 
     const contentUnclicked = <ul>
             <CardContent>
@@ -66,7 +72,7 @@ const VoucherCard = (props: OfferCardProps) => {
                     <Grid item>
                         <Grid item container justifyContent={'end'} alignItems={'center'}>
                             
-                                <DeleteVoucherButton>
+                                <DeleteVoucherButton onClick={handleClick}>
                                     Delete this offer
                                 </DeleteVoucherButton>
                         </Grid>
@@ -98,20 +104,14 @@ const VoucherCard = (props: OfferCardProps) => {
 
 
 
-    const handleClick = () => {
-        if (!active) {
-            setActive(true);
-            return;
-        }
-        setActive(false);
-    }
+    
 
    
 
 
     return (
         <Card elevation={4} style={{borderRadius: '1em', minHeight: '15em', maxHeight: '25em'}}>
-            <CardActionArea onClick={handleClick}>
+            <CardActionArea onClick={active?handleClick:()=>{}}>
                 <>
                 <CardMedia
                     component="img"

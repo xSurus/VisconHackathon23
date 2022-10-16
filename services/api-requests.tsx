@@ -18,6 +18,8 @@ export const DeleteOffer = async (query: DeleteQuery) => {
   const result = await axios.delete(
     '/api/offer', params
   );
+}
+  /*
 export const sendLogin = async (
 	email: string,
 	password: string,
@@ -28,8 +30,8 @@ export const sendLogin = async (
 	return result;
 };
 
-}
 
+*/
 export const FetchOffersBySupplierId = async (query : GetSupplierIdQuery ) =>{
   const params= {params : query}
   const result = await axios.get(
@@ -51,11 +53,6 @@ export const FetchOrders = async (seeker_id: number) => {
 	return result;
 };
 
-export const FetchOffersById = async (query: GetIdQuery) => {
-	const params = { params: query };
-	const result = await axios.get("/api/offer", params);
-	return result;
-};
 
 export const FetchOrdersSeeker = async (seeker_id: number) => {
 	const result = await axios.get("/api/order", { params: { seeker_id } });
@@ -93,7 +90,7 @@ export const editOrder = async (id: number, status: number) => {
 	});
 	return res;
 };
-/* export const PostOffer = async (offer : PostQuery) => {
+export const PostOffer = async (offer : PostQuery) => {
   const params = {paramsSerializer: {serialize: (params :any)=>{ return qs.stringify(params, {arrayFormat: 'repeat'})}} , params: offer}
   console.log(offer);
   const result = await axios.post('api/offer', null, params ).then((response:any) => {
@@ -101,4 +98,4 @@ export const editOrder = async (id: number, status: number) => {
 });
   return result;
 };
- */
+ 
