@@ -8,10 +8,13 @@ import Button from '@mui/material/Button';
 import {CardActionArea, Grid} from '@mui/material';
 import {useMemo, useState} from "react";
 import styled from "@emotion/styled";
+import { PostOrder } from '../services/api-requests';
+import Seeker from '../pages/seeker';
 
 interface OfferCardProps {
     companyName: string,
     voucherPrice: number,
+    offerid: number,
     companyImageUrl: string,
     offerDescription: string,
     availableVouchers: number
@@ -27,16 +30,24 @@ color: #545050;
 
 const OfferCard = (props: OfferCardProps) => {
 
-    const {companyName, voucherPrice, companyImageUrl, offerDescription, availableVouchers} = props;
+    const {companyName, voucherPrice, offerid, companyImageUrl, offerDescription, availableVouchers} = props;
     const [active, setActive] = useState(false);
 
-    const [vouchersToOrder, setVouchersToOrder] = useState('');
-
-    const handleTextFieldChange = (e) => {
-        console.log(e)
+    const [vouchersToOrder, setVouchersToOrder] = useState(-1);
+    const handleTextFieldChange = (e : any) => {
         setVouchersToOrder(e.target.value);
     }
-
+    const submitOrder = () => {
+        if (vouchersToOrder < 0) {
+            alert('Please enter a number of vouchers to order');
+        } else if (vouchersToOrder > availableVouchers) {
+            alert('There are not enough vouchers available');
+        } else {
+            /* TODO ADD COOKIE */
+            PostOrder(2, offerid, vouchersToOrder);
+        }
+        console.log(vouchersToOrder);
+}
    
 
     const contentUnclicked = 
@@ -84,7 +95,7 @@ const OfferCard = (props: OfferCardProps) => {
                             Order Vouchers
                         </Typography>
                     </Grid>
-                    <Grid item>
+                    <Grid item style={{minHeight: '3em', maxHeight: '5em'}}>
                         <TextField
                             sx={{display: 'flex', alignSelf: 'center'}}
                             id="outlined-basic"
@@ -97,6 +108,8 @@ const OfferCard = (props: OfferCardProps) => {
                                 event.stopPropagation();
                                 event.preventDefault();
                             }}
+                            error={vouchersToOrder == -1}
+                            helperText={vouchersToOrder < 0 ? 'Please enter a number' : ''}
                         />
                     </Grid>
                     <Grid item>
@@ -106,7 +119,7 @@ const OfferCard = (props: OfferCardProps) => {
                             onClick={event => {
                                 event.stopPropagation();
                                 event.preventDefault();
-                                console.log({vouchersToOrder});
+                                submitOrder();
                             }}
                         >
                             Place Order!
