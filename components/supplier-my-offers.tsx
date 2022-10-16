@@ -15,7 +15,7 @@ const SupplierOffers = () => {
 
     //placeholder, later replaced through login data
     useEffect(() => {
-        FetchOffersBySupplierId({supplier_id: 1}).then(res => {
+        FetchOffersBySupplierId({supplier_id: 2}).then(res => {
             setVouchers(res.data)
         })
     }, [])

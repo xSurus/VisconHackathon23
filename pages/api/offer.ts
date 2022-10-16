@@ -110,6 +110,7 @@ export async function getOfferById(id: number): Promise<Offer | undefined> {
 		[id]
 	);
 
+	if(res_price.rowCount===0) return undefined;
 	const price_per_voucher = res_price.rows[0].price;
 	await db.query("COMMIT");
 
@@ -354,7 +355,7 @@ export default async function handler(
 				break;
 			} 
 			try {
-				let _result = await db.query("DELETE FROM Offer WHERE id=$1::integer", [query.id]);
+				//let _result = await db.query("DELETE FROM Offer WHERE id=$1::integer", [query.id]);
 			} catch (e) {
 				// TODO: PRint
 				console.error("can not delete Offer because there are transactions in progress");
