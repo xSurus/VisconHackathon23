@@ -9,15 +9,40 @@ const Reedem = () => {
 	const { uuid } = router.query;
 
 	const [voucherState, setVoucherState] = useState(false);
-    const [name, setName] = useState("");
+	const [name, setName] = useState("");
 
-    useEffect(() => {
-        axios.get("/api/voucher", { params: { id: uuid} })
-        .then((res) => {setVoucherState(true); setName(res.data[0].name)})
-        .catch((res) => {setVoucherState(false); setName("")})
-    }, [])
+	useEffect(() => {
+		axios
+			.get("/api/voucher", { params: { id: uuid } })
+			.then((res) => {
+				if (res.status === 200) {
+					setVoucherState(true);
+					setName(res.data[0].name);
+				} else {
+					setVoucherState(false);
+					setName("");
+				}
+			})
+			.catch((res) => {
+				setVoucherState(false);
+				setName("");
+			});
+	}, [uuid]);
 
-	return <><h1>Reedem voucher</h1><h3>{voucherState ? "Voucher accepted! :)" : "Voucher rejected! :("}</h3><div>{voucherState ? <CheckCircleIcon/>: <CancelIcon/>}</div><div>Activity: {name}<br/>UUID: {uuid}</div></>
+	return (
+		<>
+			<h1>Reedem voucher</h1>
+			<h3>
+				{voucherState ? "Voucher accepted! :)" : "Voucher rejected! :("}
+			</h3>
+			<div>{voucherState ? <CheckCircleIcon /> : <CancelIcon />}</div>
+			<div>
+				Activity: {name}
+				<br />
+				UUID: {uuid}
+			</div>
+		</>
+	);
 };
 
 export default Reedem;
