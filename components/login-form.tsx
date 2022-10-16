@@ -18,6 +18,11 @@ const LoginForm = () => {
     const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
     const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
 
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [seeker, setSeeker] = useState<Seeker[]>([]);
+    const [supplier, setSupplier] = useState<Supplier[]>([]);
+
     const LoginButton = styled(Button)`
       color: #fff;
       font-weight: bold;
@@ -63,18 +68,21 @@ const LoginForm = () => {
 
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value);
         setEmail(event.target.value);
     }
     const handleChangePw = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value);
         setPassword(event.target.value);
     }
     const onSubmitHandler = () => {
+        console.log(email);
         SendLogin().then((res) => {
             setSeeker(res.data);
         })
         console.log(seeker);
         const have_email = seeker?.filter(x => x.email === email).length > 0;
-        if (have_email) 
+        if (have_email) {Router.push('/seeker')}
         SendLoginSup().then((res) => {
             setSupplier(res.data);
         })
@@ -132,6 +140,8 @@ const LoginForm = () => {
                                         <Input
                                             type="email"
                                             id="email-field"
+                                            value={email}
+                                            onChange={handleChange}
                                         />
                                     </FormControl>
                                 </Grid>
@@ -141,6 +151,8 @@ const LoginForm = () => {
                                         <Input
                                             type="password"
                                             id="password-field"
+                                            value={password}
+                                            onChange={handleChangePw}
                                         />
                                     </FormControl>
                                 </Grid>
@@ -154,7 +166,7 @@ const LoginForm = () => {
                                         }}>
                                         <Grid container justifyContent={'center'} alignItems={'center'}>
                                             <Grid item>
-                                                <LoginButton>
+                                                <LoginButton type='submit' onClick={onSubmitHandler}>
                                                     Access
                                                     <LoginIcon style={{marginLeft: '0.5em'}}/>
                                                 </LoginButton>
